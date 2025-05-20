@@ -10,7 +10,7 @@
 <body class="bg-black text-white">
     <div class="flex">
         <!-- Left Sidebar -->
-        <section class="nav-bar w-[275px] min-h-screen fixed left-0 px-2 border-r border-gray-800">
+        <section class="side-bar w-[275px] min-h-screen fixed left-0 px-2 border-r border-gray-800">
             <div class="flex flex-col items-start h-full space-y-2">
                 <!--Twitter Logo -->
                 <div class="p-3 hover:bg-gray-900 rounded-full cursor-pointer">
@@ -20,43 +20,41 @@
                 <!-- Navigation -->
                 <nav class="space-y-1">
                     <a href="#" class="flex items-center space-x-4 p-3">
-                        <i class="bi bi-house-door-fill text-4xl"></i>
+                        <img src="{{asset('icons/Home-Fill.svg')}}" alt="">
                         <span class="text-xl">Home</span>
                     </a>
                     <a href="" class="flex items-center space-x-4 p-3 ">
-                        <i class="bi bi-hash text-4xl"></i>
+                        <img src="{{asset('icons/Fill.svg')}}" alt="">
                         <span class="capitalize">explore</span>
 
                     </a>
                     <a href="" class="flex items-center space-x-4 p-3 ">
-                        <i class="bi bi-bell text-4xl"></i>
+                        <img src="{{asset('icons/Notifications-Fill.svg')}}" alt="">
                         <span class="capitalize">notifications</span>
 
                     </a>
                     <a href="" class="flex items-center space-x-4 p-3 ">
-                        <i class="bi bi-envelope text-4xl"></i>
+                        <img src="{{asset('icons/Messages-Fill.svg')}}" alt="">
                         <span class="capitalize">message</span>
 
                     </a>
                     <a href="" class="flex items-center space-x-4 p-3 ">
-                        <i class="bi bi-bookmark text-4xl"></i>
+                        <img src="{{asset('icons/Bookmarks-Fill.svg')}}" alt="">
                         <span class="capitalize">bookmarks</span>
 
                     </a>
                     <a href="" class="flex items-center space-x-4 p-3 ">
-                        <i class="bi bi-card-list text-4xl"></i>
+                        <img src="{{asset('icons/Lists-Fill.svg')}}" alt="">
                         <span class="capitalize">lists</span>
 
                     </a>
                     <a href="" class="flex items-center space-x-4 p-3 ">
-                        <i class="bi bi-person text-4xl"></i>
+                        <img src="{{asset('icons/Profile-Fill.svg')}}" alt="">
                         <span class="capitalize">profile</span>
 
                     </a>
                     <a href="" class="flex items-center space-x-4 p-3 ">
-                        <div class="w-10 h-10 flex items-center justify-center rounded-full border border-gray-300 cursor-pointer">
-                            <i class="bi bi-three-dots text-2xl"></i>
-                          </div>
+                        <img src="{{asset('icons/More.svg')}}" alt="">
                         <span class="capitalize">more</span>
 
                     </a>
