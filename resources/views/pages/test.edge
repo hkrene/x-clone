@@ -22,76 +22,78 @@
 </head>
 <body class="bg-black text-white flex min-h-screen max-w-7xl mx-auto">
     <!-- Left Sidebar -->
-    <section class="hidden md:block w-[88px] lg:w-[275px] min-h-screen px-2 border-r border-gray-800 sticky top-0">
-        <div class="flex flex-col items-start h-full space-y-2 py-4">
+    <!-- Left Sidebar with icons -->
+<!-- Left Sidebar -->
+<!-- Left Sidebar - Fixed Version -->
+<section class="hidden md:block w-[88px] lg:w-[275px] min-h-screen px-2 border-r border-gray-800 sticky top-0 overflow-y-auto h-screen">
+    <div class="flex flex-col h-full justify-between py-4"> <!-- Changed to flex-col justify-between -->
+        
+        <!-- Top Content -->
+        <div class="space-y-2">
             <!-- Twitter Logo -->
             <div class="p-3 hover:bg-gray-900 rounded-full cursor-pointer mx-auto lg:mx-0">
-                <img src="{{asset('icons/Twitter.svg')}}" class="w-6 lg:w-10" alt="X logo">
+                <img src="{{asset('icons/Twitter.svg')}}" class="w-6 lg:w-10" alt="X Logo">
             </div>
 
             <!-- Navigation -->
             <nav class="space-y-1 w-full mt-2">
-                <a href="#" class="flex items-center space-x-4 p-3 hover:bg-gray-900 rounded-full justify-center lg:justify-start">
-                    <img src="{{asset('icons/Home-Fill.svg')}}" alt="Home" class="w-6 h-6">
+                <a href="#" class="flex justify-center lg:justify-start items-center space-x-4 p-3 hover:bg-gray-900 rounded-full">
+                    <img src="{{asset('icons/Home-Fill.svg')}}" class="w-6 h-6" alt="Home">
                     <span class="text-xl hidden lg:block">Home</span>
                 </a>
                 <a href="#" class="flex items-center space-x-4 p-3 hover:bg-gray-900 rounded-full justify-center lg:justify-start">
-                    <img src="{{asset('icons/Fill.svg')}}" alt="Explore" class="w-6 h-6">
-                    <span class="capitalize hidden lg:block">Explore</span>
+                    <img src="{{asset('icons/Fill.svg')}}" class="w-6 h-6" alt="Explore">
+                    <span class="capitalize hidden lg:block">explore</span>
                 </a>
                 <a href="#" class="flex items-center space-x-4 p-3 hover:bg-gray-900 rounded-full justify-center lg:justify-start">
-                    <img src="{{asset('icons/Notifications-Fill.svg')}}" alt="Notifications" class="w-6 h-6">
-                    <span class="capitalize hidden lg:block">Notifications</span>
+                    <img src="{{asset('icons/Notifications-Fill.svg')}}" class="w-6 h-6" alt="Notifications">
+                    <span class="capitalize hidden lg:block">notifications</span>
                 </a>
                 <a href="#" class="flex items-center space-x-4 p-3 hover:bg-gray-900 rounded-full justify-center lg:justify-start">
-                    <img src="{{asset('icons/Messages-Fill.svg')}}" alt="Messages" class="w-6 h-6">
-                    <span class="capitalize hidden lg:block">Messages</span>
+                    <img src="{{asset('icons/Messages-Fill.svg')}}" class="w-6 h-6" alt="Messages">
+                    <span class="capitalize hidden lg:block">message</span>
                 </a>
                 <a href="#" class="flex items-center space-x-4 p-3 hover:bg-gray-900 rounded-full justify-center lg:justify-start">
-                    <img src="{{asset('icons/Bookmarks-Fill.svg')}}" alt="Bookmarks" class="w-6 h-6">
-                    <span class="capitalize hidden lg:block">Bookmarks</span>
+                    <img src="{{asset('icons/Bookmarks-Fill.svg')}}" class="w-6 h-6" alt="Bookmarks">
+                    <span class="capitalize hidden lg:block">bookmarks</span>
                 </a>
                 <a href="#" class="flex items-center space-x-4 p-3 hover:bg-gray-900 rounded-full justify-center lg:justify-start">
-                    <img src="{{asset('icons/Lists-Fill.svg')}}" alt="Lists" class="w-6 h-6">
-                    <span class="capitalize hidden lg:block">Lists</span>
+                    <img src="{{asset('icons/Lists-Fill.svg')}}" class="w-6 h-6" alt="Lists">
+                    <span class="capitalize hidden lg:block">lists</span>
                 </a>
                 <a href="#" class="flex items-center space-x-4 p-3 hover:bg-gray-900 rounded-full justify-center lg:justify-start">
-                    <img src="{{asset('icons/Profile-Fill.svg')}}" alt="Profile" class="w-6 h-6">
-                    <span class="capitalize hidden lg:block">Profile</span>
+                    <img src="{{asset('icons/Profile-Fill.svg')}}" class="w-6 h-6" alt="Profile">
+                    <span class="capitalize hidden lg:block">profile</span>
                 </a>
                 <a href="#" class="flex items-center space-x-4 p-3 hover:bg-gray-900 rounded-full justify-center lg:justify-start">
-                    <img src="{{asset('icons/More.svg')}}" alt="More" class="w-6 h-6">
-                    <span class="capitalize hidden lg:block">More</span>
+                    <img src="{{asset('icons/More.svg')}}" class="w-6 h-6" alt="More">
+                    <span class="capitalize hidden lg:block">more</span>
                 </a>
             </nav>
 
-            <!-- Tweet Button -->
             <button class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded-full mt-4 capitalize hidden lg:block transition-colors">
                 Tweet
             </button>
-            <button class="lg:hidden p-3 bg-blue-500 hover:bg-blue-600 rounded-full mt-4 mx-auto transition-colors">
-                <img src="{{asset('icons/Feather.svg')}}" alt="Tweet" class="w-6 h-6">
-            </button>
+        </div>
 
-            <!-- Profile Section -->
-            <div class="mt-auto p-3 hover:bg-gray-900 rounded-full cursor-pointer w-full">
-                <div class="flex justify-between items-center">
-                    <div class="flex items-center space-x-3">
-                        <img src="{{asset('image/profile0.png')}}" alt="Profile" class="w-10 h-10 rounded-full">
-                        <div class="hidden lg:block">
-                            <div class="flex items-center gap-1">
-                                <p class="text-sm font-medium">Bradley Ortiz</p>
-                                <img src="{{ asset('icons/Private.svg')}}" class="w-4 h-4" alt="Verified">
-                            </div>
-                            <p class="text-gray-500 text-sm">@bradley_</p>
+        <!-- Profile Section - Sticks to Bottom -->
+        <div class="p-3 hover:bg-gray-900 rounded-full cursor-pointer w-full">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <img src="{{asset('image/profile0.png')}}" alt="Profile" class="w-10 h-10 rounded-full">
+                    <div class="hidden lg:block">
+                        <div class="flex items-center gap-1">
+                            <p class="text-sm font-medium">Bradley Ortiz</p>
+                            <img src="{{ asset('icons/Private.svg')}}" class="w-4 h-4" alt="Verified">
                         </div>
+                        <p class="text-gray-500 text-sm">@bradley_</p>
                     </div>
-                    <i class="bi bi-three-dots text-gray-500 hidden lg:block"></i>
                 </div>
+                <img src="{{asset('icons/More-2.png')}}" class="hidden lg:block" alt="More options">
             </div>
         </div>
-    </section>
-
+    </div>
+</section>
     <!-- Main Content -->
     <section class="flex-1 border-x border-gray-800 max-w-2xl w-full">
         <header class="sticky top-0 bg-black/80 backdrop-blur-md border-b border-gray-800 p-4 flex justify-between z-10">
