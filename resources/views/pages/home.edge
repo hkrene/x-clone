@@ -7,11 +7,12 @@
     <script src="https://cdn.tailwindcss.com"></script> 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 </head>
-<body class="bg-black text-white flex min-h-screen lg:mx-[10%]">
-    <!-- Left Sidebar -->
-    <section class="w-[275px] min-h-screen px-2 border-r border-gray-800">
-        <div class="flex flex-col items-start h-full space-y-2 sticky top-0">
-            <div class="p-3 hover:bg-gray-900 rounded-full cursor-pointer">
+<body class="bg-black text-white flex min-h-screen max-w-7xl mx-auto">
+
+    <!-- Left Sidebar with icons-->
+    <section class="hidden md:block w-[88px] lg:w-[275px] min-h-screen px-2 border-r border-gray-800 sticky top-0">
+        <div class="flex flex-col items-start h-full space-y-2 py-4">
+            <div class="p-3 hover:bg-gray-900 rounded-full cursor-pointer mx-auto lg:mx-0">
                 <img src="{{asset('icons/Twitter.svg')}}" class="w-[3rem]" alt="">
             </div>
 
@@ -58,13 +59,28 @@
                 
             </nav>
 
-            <button class="w-full bg-blue-500 text-white font-bold py-4 rounded-full mt-4 capitalize">
+            <button class="w-1/2 bg-blue-500 text-white font-bold py-4 rounded-full mt-4 capitalize">
                 tweet
             </button>
+
+            {{--  profile   --}}
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                <img src="{{asset('image/profile0.png')}}" alt="CNN logo">
+                    <div>
+                       <div class="flex items-center gap-[3px]">
+                        <p class="text-sm">Bradley Ortiz</p>
+                        <img src="{{ asset('icons/Private.svg')}}" class="w-5 h-5" alt="cnn logo">
+                       </div>
+                        <p class="text-gray-500 text-sm">@bradley_</p>
+                    </div>
+                </div>
+                <i class="bi bi-three-dots"></i>
+            </div>
         </div>
     </section>
 
-    <!-- Main Content -->
+    
     <section class="flex-1 border-x border-gray-800">
         <header class="sticky top-0 bg-black/80 backdrop-blur-md border-b border-gray-800 p-4 flex justify-between">
             <h1 class="text-xl font-bold">Home</h1>
@@ -77,11 +93,15 @@
             </div>
             <div class="flex-1">
                 <div class="mb-4">
-                    <input 
-                        type="text" 
-                        placeholder="What's happening?" 
+                    
+                    <textarea 
+                        name="tweet" 
+                        id="" 
+                        placeholder="What's happening?"
                         class="w-full bg-transparent text-white text-xl outline-none placeholder-gray-500"
                     >
+
+                    </textarea>
                 </div>
                 <div class="flex items-center justify-between pt-2">
                     <div class="flex pb-2">
@@ -126,7 +146,7 @@
                         President Joe Biden touted a new agreement reached with the European Union to ease Trump-era tariffs on aluminum and steel as a "major breakthrough" that would serve to both strengthen the US steel industry and combat the global climate crisis.
                     </p>
         
-                    <div class="flex items-center justify-between mt-3 text-gray-500 max-w-md">
+                    <div class="flex items-center justify-between mt-3 text-gray-500 max-w-lg">
                         <button class="flex items-center space-x-1 group">
                             <div class="p-2 rounded-full group-hover:bg-blue-900/20 group-hover:text-blue-500">
                                 <img src="{{asset('icons/Reply.svg')}}" alt="Reply" class="w-5 h-5">
@@ -177,7 +197,7 @@
                         <img src="{{asset('image/leaf.png')}}" alt="News image" class="w-full h-auto rounded-3xl">
                     </div>
 
-                    <div class="flex items-center justify-between mt-3 text-gray-500 max-w-md">
+                    <div class="flex items-center justify-between mt-3 text-gray-500 max-w-lg">
                         <button class="flex items-center space-x-1 group">
                             <div class="p-2 rounded-lg group-hover:bg-blue-900/20 group-hover:text-blue-500">
                                 <img src="{{asset('icons/Reply.svg')}}" alt="Reply" class="w-5 h-5">
@@ -229,7 +249,7 @@
                         lol jk still Twitter
                     </p>
 
-                    <div class="flex items-center justify-between mt-3 text-gray-500 max-w-md">
+                    <div class="flex items-center justify-between mt-3 text-gray-500 max-w-lg">
                         <button class="flex items-center space-x-1 group">
                             <div class="p-2 rounded-lg group-hover:bg-blue-900/20 group-hover:text-blue-500">
                                 <img src="{{asset('icons/Reply.svg')}}" alt="Reply" class="w-5 h-5">
@@ -278,7 +298,7 @@
                         Hello literally everyone
                     </p>
 
-                    <div class="flex items-center justify-between mt-3 text-gray-500 max-w-md">
+                    <div class="flex items-center justify-between mt-3 text-gray-500 max-w-lg">
                         <button class="flex items-center space-x-1 group">
                             <div class="p-2 rounded-lg group-hover:bg-blue-900/20 group-hover:text-blue-500">
                                 <img src="{{asset('icons/Reply.svg')}}" alt="Reply" class="w-5 h-5">
@@ -434,6 +454,18 @@
                 <div class="mt-4">
                     <a href="#" class="text-blue-500 hover:underline font-bold">Show more</a>
                 </div>
+            </div>
+        </div>
+
+        <div class="mt-4 text-xs text-gray-500 mx-5">
+            <div class="flex flex-wrap gap-x-4 gap-y-1">
+                <a href="#" class="hover:underline">Terms of Service</a>
+                <a href="#" class="hover:underline">Privacy Policy</a>
+                <a href="#" class="hover:underline">Cookie Policy</a>
+                <a href="#" class="hover:underline">Imprint</a>
+                <a href="#" class="hover:underline">Ads Info</a>
+                <a href="#" class="hover:underline">More...</a>
+                <span>&copy; 2021 Twitter, Inc.</span>
             </div>
         </div>
     </section>
