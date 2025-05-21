@@ -59,26 +59,27 @@
                     <span class="capitalize hidden lg:block">more</span>
 
                 </a>
-                
             </nav>
 
-            <button class="w-1/2 bg-blue-500 text-white font-bold py-4 rounded-full mt-4 capitalize">
+            <button class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded-full mt-4 capitalize hidden lg:block">
                 tweet
             </button>
 
-            {{--  profile   --}}
-            <div class="flex justify-between items-center">
-                <div class="flex items-center space-x-3">
-                <img src="{{asset('image/profile0.png')}}" alt="CNN logo">
-                    <div>
-                       <div class="flex items-center gap-[3px]">
-                        <p class="text-sm">Bradley Ortiz</p>
-                        <img src="{{ asset('icons/Private.svg')}}" class="w-5 h-5" alt="cnn logo">
-                       </div>
-                        <p class="text-gray-500 text-sm">@bradley_</p>
+            <!-- Profile picture Section -->
+            <div class="mt-auto p-3 hover:bg-gray-900 rounded-full cursor-pointer w-full">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center space-x-3">
+                        <img src="{{asset('image/profile0.png')}}" alt="Profile" class="w-10 h-10 rounded-full">
+                        <div class="hidden lg:block">
+                            <div class="flex items-center gap-1">
+                                <p class="text-sm font-medium">Bradley Ortiz</p>
+                                <img src="{{ asset('icons/Private.svg')}}" class="w-4 h-4" alt="Verified">
+                            </div>
+                            <p class="text-gray-500 text-sm">@bradley_</p>
+                        </div>
                     </div>
+                    <i class="bi bi-three-dots text-gray-500 hidden lg:block"></i>
                 </div>
-                <i class="bi bi-three-dots"></i>
             </div>
         </div>
     </section>
