@@ -1,0 +1,50 @@
+<div class="flex space-x-2 border-b border-gray-800">
+  <img src="{{asset('icons/Profile-Photo.svg')}}" alt="">
+  <div class="">
+      <span class="mb-4">
+          What's happening?
+      </span>
+      <div class="flex justify-between">
+          <div class="flex">
+              <img src="{{asset('icons/Top-Tweets.svg')}}" alt="">
+              <img src="{{asset('icons/Gif.svg')}}" alt="">
+              <img src="{{asset('icons/Poll.svg')}}" alt="">
+              <img src="{{asset('icons/Emoji.svg')}}" alt="">
+              <img src="{{asset('icons/Schedule.svg')}}" alt="">
+          </div>
+      </div>
+  </div>
+  <div>
+      <button class=" bg-blue-500 text-white rounded-full capitalize px-4 py-2">
+          tweet
+      </button>
+  </div>
+</div>
+
+<div class="p-4 hover:bg-gray-900 cursor-pointer border-b border-gray-800">
+  <div class="flex space-x-4">
+      <div class="w-12 h-12">
+          <img src="{{asset('image/cnn.png')}}" alt="">
+      </div>
+      
+      <div class="flex-1">
+          <div class="flex items-center space-x-2">
+              <span class="font-bold">CNN</span>
+              <img src="{{ asset('icons/Verified.svg')}}" alt="cnn logo">
+              <span class="text-gray-500">@CNN</span>
+              <span class="text-gray-500">· 7m</span>
+          </div>
+          <p class="mt-2">
+              President Joe Biden touted a new agreement reached with the European Union to ease Trump-era tariffs on aluminum and steel as a "major breakthrough" that would serve to both strengthen the US steel industry and combat the global climate crisis.
+              
+          </p>
+          <div class="flex items-center justify-between mt-4 text-gray-500">
+              <button class="hover:text-blue-500"><i class="bi bi-chat"></i> 57</button>
+              <button class="hover:text-green-500"><i class="bi bi-arrow-repeat"></i> 144</button>
+              <button class="hover:text-red-500"><i class="bi bi-heart"></i> 184</button>
+              <button class="hover:text-blue-500"><i class="bi bi-upload"></i></button>
+          </div>
+      </div>
+  </div>
+</div>
+{{--  <i class="bi bi-search absolute right-4 top-3 text-gray-500"></i>  --}}
