@@ -5,9 +5,8 @@
 
   @slot('main')
 
-    <!-- Main Content -->
     <section class="flex-1 border-x border-gray-800 max-w-2xl w-full">
-      <!-- Profile Header -->
+      
       <header class="sticky top-0 bg-black/80 backdrop-blur-md border-b border-gray-800 p-4 z-10">
         <div class="flex flex-col">
           <h1 class="text-xl font-bold">Mister Loop</h1>
@@ -15,12 +14,12 @@
         </div>
       </header>
 
-      <!-- Profile Banner -->
+      
       <div class="h-48 bg-cover bg-center bg-gray-800" style="background-image: url('https://images.unsplash.com/photo-1639762681057-408e52192e55?q=80&w=2232&auto=format&fit=crop')"></div>
 
-      <!-- Profile Info Section -->
+      
       <div class="px-4 relative">
-        <!-- Profile Picture -->
+
         <div class="absolute -top-16 left-4 border-4 border-black rounded-full overflow-hidden w-32 h-32">
           <img 
             src="https://images.unsplash.com/photo-1533738363-b7f9aef128ce?q=80&w=2235&auto=format&fit=crop" 
@@ -41,39 +40,31 @@
           <div class="flex items-center gap-2">
             <h2 class="text-xl font-bold">Mister Loop</h2>
             <button class="px-2 py-0.5 bg-gray-800 hover:bg-gray-700 rounded-full text-sm font-bold flex items-center">
+              <img src="{{asset('icons/Verified.svg')}}" class="w-4 h-4 mr-1" alt="Verified">
               <span>Get verified</span>
-              <img src="{{asset('icons/Verified.svg')}}" class="w-4 h-4 ml-1" alt="Verified">
             </button>
           </div>
           <p class="text-gray-500">@hamster_keyz</p>
 
           <p class="my-3">BITCOIN and blockchain enthusiast</p>
 
-          <!-- Profile Metadata -->
+          
           <div class="flex flex-wrap gap-y-1 gap-x-4 text-gray-500 text-sm">
             <div class="flex items-center gap-1">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10"/>
-                <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
-              </svg>
+              <i class="bi bi-geo-alt"></i>
               <span>lubumbashi, DRCongo</span>
             </div>
-            <div class="flex items-center gap-1 text-blue-500 hover:underline">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                <path d="M4.715 6.542 3.343 7.914a3 3 0 1 0 4.243 4.243l1.828-1.829A3 3 0 0 0 8.586 5.5L8 6.086a1 1 0 0 0-.154.199 2 2 0 0 1 .861 3.337L6.88 11.45a2 2 0 1 1-2.83-2.83l.793-.792a4 4 0 0 1-.128-1.287z"/>
-                <path d="M6.586 4.672A3 3 0 0 0 7.414 9.5l.775-.776a4 4 0 0 1-.096-1.287l1.047-1.046a4 4 0 1 1 2.828 2.829l-1.207 1.207a4 4 0 0 1-1.702.433 4 4 0 0 1-1.03-.13l-.835-.836a3 3 0 0 0 1.025-.307l1.19-1.189a3 3 0 1 0-4.243-4.243z"/>
-              </svg>
+            <div class="flex items-center gap-1 text-blue-500 hover:underline cursor-pointer">
+              <i class="bi bi-link-45deg"></i>
               <span>github.com/hkrene</span>
             </div>
             <div class="flex items-center gap-1">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
-              </svg>
+              <i class="bi bi-calendar-week"></i>
               <span>Joined August 2024</span>
             </div>
           </div>
 
-          <!-- Follow Stats -->
+          
           <div class="flex gap-4 mt-3 text-sm">
             <div class="hover:underline cursor-pointer">
               <span class="font-bold">10</span> <span class="text-gray-500">Following</span>
@@ -85,7 +76,7 @@
         </div>
       </div>
 
-      <!-- Profile Tabs -->
+      
       <div class="flex border-b border-gray-800 mt-4">
         <div class="flex-1 text-center py-4 font-medium border-b-4 border-blue-500">Posts</div>
         <div class="flex-1 text-center py-4 text-gray-500 hover:bg-gray-900 cursor-pointer">Replies</div>
@@ -95,29 +86,57 @@
         <div class="flex-1 text-center py-4 text-gray-500 hover:bg-gray-900 cursor-pointer">Likes</div>
       </div>
 
-      <!-- Pinned Post -->
-      <div class="p-4 border-b border-gray-800 text-gray-500 text-sm">
-        <div class="flex items-center mb-1">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" class="mr-2">
-            <path d="M14 4.577v6.846L8 15l-6-3.577V4.577L8 1zM8.5.134a1 1 0 0 0-1 0l-6 3.577a1 1 0 0 0-.5.866v6.846a1 1 0 0 0 .5.866l6 3.577a1 1 0 0 0 1 0l6-3.577a1 1 0 0 0 .5-.866V4.577a1 1 0 0 0-.5-.866z"/>
-          </svg>
-          <span>You reposted</span>
-        </div>
-        <div class="pl-6">
-          <p class="text-white">Constant Mutamba parody @constantmutamba - Mar 1</p>
-        </div>
-      </div>
 
       <!-- Tweet Feed -->
-      <div>
-        <!-- Tweets would appear here -->
+      <div class="divide-y divide-gray-800">
+        <!-- CNN  -->
+        <div class="p-4 hover:bg-gray-900/50 cursor-pointer">
+          <div class="flex space-x-3">
+              <div class="flex-shrink-0 w-12 h-12 rounded-full overflow-hidden">
+                  <img src="{{asset('image/cnn.png')}}" alt="CNN profile" class="w-full h-full object-cover">
+              </div>
+              
+              <div class="flex-1 min-w-0">
+                  <div class="flex items-center space-x-1">
+                      <span class="font-bold text-white">CNN</span>
+                      <img src="{{ asset('icons/Verified.svg')}}" alt="Verified" class="w-4 h-4">
+                      <span class="text-gray-500">@CNN .</span>
+                      <span class="text-gray-500">7m</span>
+                  </div>
+                  <p class="mt-1 text-white text-base leading-snug">
+                      President Joe Biden touted a new agreement reached with the European Union to ease Trump-era tariffs on aluminum and steel as a "major breakthrough" that would serve to both strengthen the US steel industry and combat the global climate crisis.
+                  </p>
+      
+                  <div class="flex items-center justify-between mt-3 text-gray-500 max-w-md">
+                      <button class="flex items-center space-x-1 group">
+                          <div class="p-2 rounded-full group-hover:bg-blue-900/20">
+                              <img src="{{asset('icons/Reply.svg')}}" alt="Reply" class="w-5 h-5">
+                          </div>
+                          <span class="text-xs hover:text-blue-500">57</span>
+                      </button>
+                      <button class="flex items-center space-x-1 group">
+                          <div class="p-2 rounded-full group-hover:bg-green-900/20">
+                              <img src="{{asset('icons/Retweet.svg')}}" alt="Retweet" class="w-5 h-5">
+                          </div>
+                          <span class="text-xs hover:text-green-500">144</span>
+                      </button>
+                      <button class="flex items-center space-x-1 group">
+                          <div class="p-2 rounded-full group-hover:bg-red-900/20">
+                              <img src="{{asset('icons/React.svg')}}" alt="Like" class="w-5 h-5">
+                          </div>
+                          <span class="text-xs hover:text-red-500">184</span>
+                      </button>
+                      <button class="flex items-center space-x-1 group">
+                          <div class="p-2 rounded-full group-hover:bg-blue-900/20">
+                              <img src="{{asset('icons/Share.svg')}}" alt="Share" class="w-5 h-5">
+                          </div>
+                      </button>
+                  </div>
+              </div>
+          </div>
+      </div>
       </div>
     </section>
-
-    <!-- Right Sidebar (Trending) -->
-    <div class="w-80 p-4 hidden lg:block">
-      <!-- Trending section would go here -->
-    </div>
   </div>
   @endslot
 @end
