@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ title || "Twitter Home Page" }}</title>
+  @if ($slots.meta)
+    {{{ await $slots.meta() }}}
+  @endif
+  <script src="https://cdn.tailwindcss.com"></script> 
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+</head>
+<body class="bg-black text-white flex min-h-screen max-w-7xl mx-auto">
+  <!-- Left Sidebar  -->
+    <section class="hidden md:block w-[88px] lg:w-[275px] min-h-screen px-2 border-r border-gray-800 sticky top-0 overflow-y-auto h-screen">
+        <div class="flex flex-col h-full justify-between py-4"> 
+            
+            <div class="space-y-2">
+                <!-- Twitter Logo -->
+                <div class="p-3 hover:bg-gray-900 rounded-full cursor-pointer mx-auto lg:mx-0 md:ml-2">
+                    <img src="{{asset('icons/Twitter.svg')}}" class="w-6 lg:w-10" alt="Twitter Logo">
+                </div>
+
+                <!-- Navbar-->
+                <nav class="space-y-1 w-full mt-2">
+                    <a href="#" class="flex justify-center lg:justify-start items-center space-x-4 p-3 hover:bg-gray-900 rounded-full">
+                        <img src="{{asset('icons/Home-Fill.svg')}}" class="w-6 h-6" alt="Home">
+                        <span class="text-xl hidden lg:block">Home</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-4 p-3 hover:bg-gray-900 rounded-full justify-center lg:justify-start">
+                        <img src="{{asset('icons/Fill.svg')}}" class="w-6 h-6" alt="Explore">
+                        <span class="capitalize hidden lg:block">explore</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-4 p-3 hover:bg-gray-900 rounded-full justify-center lg:justify-start">
+                        <img src="{{asset('icons/Notifications-Fill.svg')}}" class="w-6 h-6" alt="Notifications">
+                        <span class="capitalize hidden lg:block">notifications</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-4 p-3 hover:bg-gray-900 rounded-full justify-center lg:justify-start">
+                        <img src="{{asset('icons/Messages-Fill.svg')}}" class="w-6 h-6" alt="Messages">
+                        <span class="capitalize hidden lg:block">message</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-4 p-3 hover:bg-gray-900 rounded-full justify-center lg:justify-start">
+                        <img src="{{asset('icons/Bookmarks-Fill.svg')}}" class="w-6 h-6" alt="Bookmarks">
+                        <span class="capitalize hidden lg:block">bookmarks</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-4 p-3 hover:bg-gray-900 rounded-full justify-center lg:justify-start">
+                        <img src="{{asset('icons/Lists-Fill.svg')}}" class="w-6 h-6" alt="Lists">
+                        <span class="capitalize hidden lg:block">lists</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-4 p-3 hover:bg-gray-900 rounded-full justify-center lg:justify-start">
+                        <img src="{{asset('icons/Profile-Fill.svg')}}" class="w-6 h-6" alt="Profile">
+                        <span class="capitalize hidden lg:block">profile</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-4 p-3 hover:bg-gray-900 rounded-full justify-center lg:justify-start">
+                        <img src="{{asset('icons/More.svg')}}" class="w-6 h-6" alt="More">
+                        <span class="capitalize hidden lg:block">more</span>
+                    </a>
+                </nav>
+
+                <button class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded-full mt-4 capitalize hidden lg:block transition-colors">
+                    Tweet
+                </button>
+            </div>
+
+            <!-- Profile Section - Sticks to Bottom -->
+            <div class="p-3 hover:bg-gray-900 rounded-full cursor-pointer w-full">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center space-x-3">
+                        <img src="{{asset('image/profile0.png')}}" alt="Profile" class="w-10 h-10 rounded-full">
+                        <div class="hidden lg:block">
+                            <div class="flex items-center gap-1">
+                                <p class="text-sm font-medium">Bradley Ortiz</p>
+                                <img src="{{ asset('icons/Private.svg')}}" class="w-4 h-4" alt="Verified">
+                            </div>
+                            <p class="text-gray-500 text-sm">@bradley_</p>
+                        </div>
+                    </div>
+                    <img src="{{asset('icons/More-2.png')}}" class="hidden lg:block" alt="More options">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {{{ await $slots.main() }}}
+
+  <!-- Right Sidebar -->
+    <footer class="hidden lg:block w-[370px] min-h-screen p-4 border-l border-gray-800 sticky top-0 overflow-y-auto h-screen">
+
+        <div class="mb-4 relative">
+
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center">
+                    <img src="{{asset('icons/Search.svg')}}" class="w-5 h-5" alt="Search icon">
+                </div>
+                
+                <input 
+                    type="text" 
+                    placeholder="Search Twitter" 
+                    class="w-full bg-[rgb(32,35,39)] rounded-full pl-12 pr-5 py-3 text-white placeholder-gray-500"
+                >
+            </div>
+        </div>
+
+        <!-- Trends Section -->
+        <div class="bg-[rgb(32,35,39)] rounded-2xl mb-6 overflow-hidden">
+            <div class="flex justify-between items-center p-4">
+                <h2 class=" text-xl font-bold">Trends for you</h2>
+            <img src="{{asset('icons/Settings.svg')}}" class="cursor-pointer pr-4" alt="Setting icon">
+            </div>
+            <div class="space-y-4">
+                <div class="px-4 hover:bg-gray-800 pointer-cursor flex justify-between">
+                    <div class="space-y-[1px]">
+                        <div class="text-sm text-gray-500">Trending in Turkey</div>
+                        <div class="font-bold uppercase">#squid</div>
+                        <div class="text-sm text-gray-500">2,066 Tweets</div>
+                    </div>
+                    <i class="bi bi-three-dots text-xl"></i>
+                </div>
+                <div class="px-4 hover:bg-gray-800 cursor-pointer flex justify-between">
+                    <div class="space-y-[1px]">
+                        <div class="text-sm text-gray-500">Trending in Turkey</div>
+                        <div class="font-bold uppercase">#squid</div>
+                        <div class="text-sm text-gray-500">2,066 Tweets</div>
+                    </div>
+                    <i class="bi bi-three-dots text-xl"></i>
+                </div>
+                <div class="px-4 hover:bg-gray-800 cursor-pointer flex justify-between">
+                    <div class="space-y-[1px]">
+                        <div class="text-sm text-gray-500">Trending in Turkey</div>
+                        <div class="font-bold uppercase">#squid</div>
+                        <div class="text-sm text-gray-500">2,066 Tweets</div>
+                    </div>
+                    <i class="bi bi-three-dots text-xl"></i>
+                </div>
+                <div class="px-4 hover:bg-gray-800 cursor-pointer flex justify-between">
+                    <div class="space-y-[1px]">
+                        <div class="text-sm text-gray-500">Trending in Turkey</div>
+                        <div class="font-bold uppercase">#squid</div>
+                        <div class="text-sm text-gray-500">2,066 Tweets</div>
+                    </div>
+                    <i class="bi bi-three-dots text-xl"></i>
+                </div>
+                <button class="font-bold text-blue-500 px-4 pb-4">
+                    show more
+                </button>
+            </div>
+        </div>
+
+
+        {{--  who to follow   --}}
+        <div class="bg-[rgb(32,35,39)] rounded-xl overflow-hidden">
+            <div class="max-w-md mx-auto p-4">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-bold">Who to follow</h2>
+                </div>
+
+                <div class="space-y-4">
+                    
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center space-x-3">
+                        <img src="{{asset('image/nyt.png')}}" alt="new york times logo">
+                            <div>
+                                <div class="flex items-center gap-[3px]">
+                                    <p class="capitalize text-sm hover:underline">the new york times</p>
+                                    <img src="{{ asset('icons/Verified.svg')}}" class="w-4 h-4" alt="cnn logo">
+                                </div>
+                                <p class="text-gray-500">@nytimes</p>
+                            </div>
+                        </div>
+                        <button class="bg-white text-black px-4 py-1 rounded-full text-sm">
+                            Follow
+                        </button>
+                        
+                    </div>
+
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center space-x-3">
+                        <img src="{{asset('image/cnn.png')}}" alt="CNN logo">
+                            <div>
+                               <div class="flex items-center gap-[3px]">
+                                <p class="text-sm hover:underline">CNN</p>
+                                <img src="{{ asset('icons/Verified.svg')}}" class="w-4 h-4" alt="cnn logo">
+                               </div>
+                                <p class="text-gray-500 text-sm">@CNN</p>
+                            </div>
+                        </div>
+                        <button class="bg-white text-black px-4 py-1 rounded-full text-sm">
+                            Follow
+                        </button>
+                    </div>
+
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center space-x-3">
+                        <img src="{{asset('image/twitter-logo.png')}}" alt="CNN logo">
+                            <div>
+                               <div class="flex items-center gap-[3px]">
+                                <p class="text-sm hover:underline">Twitter</p>
+                                <img src="{{ asset('icons/Verified.svg')}}" class="w-4 h-4" alt="cnn logo">
+                               </div>
+                                <p class="text-gray-500 text-sm">@Twitter</p>
+                            </div>
+                        </div>
+                        <button class="bg-white text-black px-4 py-1 rounded-full text-sm">
+                            Follow
+                        </button>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <a href="#" class="text-blue-500 hover:underline font-bold">Show more</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Links -->
+        <div class="mt-4 text-xs text-gray-600 px-4">
+            <div class="flex flex-wrap gap-x-4 gap-y-1 px-2">
+                <a href="#" class="hover:underline">Terms of Service</a>
+                <a href="#" class="hover:underline">Privacy Policy</a>
+                <a href="#" class="hover:underline">Cookie Policy</a>
+                <a href="#" class="hover:underline">Imprint</a>
+                <a href="#" class="hover:underline">Ads Info</a>
+                <a href="#" class="hover:underline">More...</a>
+                <span>&copy; 2021 Twitter, Inc.</span>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
