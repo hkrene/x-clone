@@ -6,20 +6,32 @@
   @slot('main')
 
     <section class="flex-1 border-x border-gray-800 max-w-2xl w-full">
-      
-      <header class="sticky top-0 bg-black/40 backdrop-blur-md  px-4 py-1 z-10">
-        <div class="flex gap-x-8">
-          <a href="#" class="">
-            <i class="bi bi-arrow-left text-2xl"></i>
-          </a>
-          <div class="hidden md:flex md:flex-col lg:flex lg:flex-col">
-          <h1 class="text-xl font-semibold">Mister Loop</h1>
-          <p class="text-gray-500 text-sm">3.6k posts</p>
-          </div>
-        </div>
-      </header>
 
-      <div class="h-48 bg-cover bg-center bg-gray-800" style="background-image: url('image/leopard.jpeg')"></div>
+      <!-- Background Image Section -->
+      <div class="relative h-48 bg-cover bg-center bg-gray-800" style="background-image: url('image/leopard.jpeg')">
+        <!-- Header: Positioned absolutely on mobile, sticky on md+ -->
+        <header class="absolute top-0 left-0 right-0 z-10 px-4 py-2 bg-transparent md:sticky md:bg-black/40 md:backdrop-blur-md">
+          <div class="flex justify-between items-center w-full">
+            <a href="#" class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-900">
+              <i class="bi bi-arrow-left text-2xl text-white"></i>
+            </a>
+            <div class="flex items-center gap-x-4">
+              <div class="flex items-center justify-center w-8 h-8 rounded-full bg-gray-900">
+                <img src="{{ asset('icons/Search.svg') }}" class="w-5 h-5" alt="Search icon">
+              </div>
+              <div class="flex items-center justify-center w-8 h-8 rounded-full bg-gray-900 text-white">
+                <i class="bi bi-three-dots-vertical text-base"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hidden on mobile, shown on md+ -->
+          <div class="hidden md:flex md:flex-col mt-2">
+            <h1 class="text-xl font-semibold text-white">Jeanne Cruz</h1>
+            <p class="text-sm text-gray-300">3.6k posts</p>
+          </div>
+        </header>
+      </div>
 
       <div class="px-4 relative">
 
@@ -41,16 +53,16 @@
         <!-- Profile Details -->
         <div class="mt-4 md:mt-16 lg:mt-16">
           <div class="flex items-center gap-2">
-            <h2 class="text-xl font-bold">Mister Loop</h2>
-            <button class="px-3 py-0.5 md:border md:border-gray-600 lg:border  lg:border-gray-600 rounded-full text-sm font-bold hover:bg-gray-900 flex gap-1 items-center">
+            <h2 class="text-xl font-bold">Newton Renesto</h2>
+            <button class=" py-0.5 md:border md:border-gray-600 lg:border  lg:border-gray-600 rounded-full text-sm font-bold hover:bg-gray-900 flex gap-1 items-center">
               {{--  <img src="{{asset('icons/Verified.svg')}}" class="w-4 h-4 mr-1" alt="Verified">  --}}
-              <i class="bi bi-patch-check-fill text-blue-500"></i>
-              <span class="text-blue-500 md:text-white lg:text-white">Get verified</span>
+              <i class="bi bi-patch-check-fill text-blue-500 text-xl"></i>
+              {{--  <span class="text-blue-500 md:text-white lg:text-white">Get verified</span>  --}}
             </button>
           </div>
-          <p class="text-gray-500 text-sm">@hamster_keyz</p>
+          <p class="text-gray-500 text-sm">@nrenesto</p>
 
-          <p class="my-3">BITCOIN and blockchain enthusiast</p>
+          <p class="my-3">Developer, blockchain, BTC, and Tech enthusiast</p>
 
           
           <div class="flex flex-wrap gap-y-1 gap-x-4 text-gray-500 text-sm">
@@ -60,25 +72,29 @@
             </div>
             <div class="flex items-center gap-1">
               <i class="bi bi-link-45deg text-2xl"></i>
-              <span class="text-blue-500 hover:underline cursor-pointer">github.com/hkrene</span>
+              <span class="text-blue-500 hover:underline cursor-pointer">github.com/nrenesto</span>
             </div>
             <div class="flex items-center gap-1">
               <i class="bi bi-balloon text-xl"></i>
-              <span class="capitalize">born december 2,1974</span>
+              <span class="capitalize">born February 29,1963</span>
             </div>
             <div class="flex items-center gap-1">
               <i class="bi bi-calendar4-week text-l"></i>
-              <span class="capitalize">joined august 2024</span>
+              <span class="capitalize">joined august 2009</span>
             </div>
           </div>
 
           
           <div class="flex gap-4 mt-3 text-sm">
             <div class="hover:underline cursor-pointer">
-              <span class="font-bold">10</span> <span class="text-gray-500">Following</span>
+              <span class="font-bold">9</span> <span class="text-gray-500">Following</span>
             </div>
             <div class="hover:underline cursor-pointer">
-              <span class="font-bold">11.3k</span> <span class="text-gray-500">Followers</span>
+              <span class="font-bold">963.3k</span> <span class="text-gray-500">Followers</span>
+            </div>
+            <div class="hover:underline cursor-pointer">
+              <span class="font-bold">39.6k</span> <span class="text-gray-500">Subscription
+              </span>
             </div>
           </div>
         </div>
