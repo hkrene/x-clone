@@ -10,12 +10,12 @@
       <!-- Background Image Section -->
       <div class="relative h-48 bg-cover bg-center bg-gray-800" style="background-image: url('image/leopard.jpeg')">
         <!-- Header: Positioned absolutely on mobile, sticky on md+ -->
-        <header class="absolute top-0 left-0 right-0 z-10 px-4 py-2 bg-transparent md:sticky md:bg-black/40 md:backdrop-blur-md">
-          <div class="flex justify-between items-center w-full">
+        <header class="absolute top-0 left-0 right-0 z-10 px-4 py-2 bg-transparent md:sticky md:bg-black/40 md:backdrop-blur-md md:">
+          <div class="flex justify-between items-center w-full md:hidden lg:h">
             <a href="#" class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-900">
               <i class="bi bi-arrow-left text-2xl text-white"></i>
             </a>
-            <div class="flex items-center gap-x-4">
+            <div class="flex items-center gap-x-4 md:hidden lg:hidden">
               <div class="flex items-center justify-center w-8 h-8 rounded-full bg-gray-900">
                 <img src="{{ asset('icons/Search.svg') }}" class="w-5 h-5" alt="Search icon">
               </div>
@@ -27,7 +27,7 @@
 
           <!-- Hidden on mobile, shown on md+ -->
           <div class="hidden md:flex md:flex-col mt-2">
-            <h1 class="text-xl font-semibold text-white">Jeanne Cruz</h1>
+            <h1 class="text-xl font-semibold text-white ">Newton Renesto</h1>
             <p class="text-sm text-gray-300">3.6k posts</p>
           </div>
         </header>
@@ -54,17 +54,16 @@
         <div class="mt-4 md:mt-16 lg:mt-16">
           <div class="flex items-center gap-2">
             <h2 class="text-xl font-bold">Newton Renesto</h2>
-            <button class=" py-0.5 md:border md:border-gray-600 lg:border  lg:border-gray-600 rounded-full text-sm font-bold hover:bg-gray-900 flex gap-1 items-center">
+            <button class="px-2 py-0.5 md:border md:border-gray-600 lg:border  lg:border-gray-600 rounded-full text-sm font-bold hover:bg-gray-900 flex gap-1 items-center">
               {{--  <img src="{{asset('icons/Verified.svg')}}" class="w-4 h-4 mr-1" alt="Verified">  --}}
               <i class="bi bi-patch-check-fill text-blue-500 text-xl"></i>
-              {{--  <span class="text-blue-500 md:text-white lg:text-white">Get verified</span>  --}}
+              <span class="text-blue-500 md:text-white lg:text-white">Get verified</span>
             </button>
           </div>
           <p class="text-gray-500 text-sm">@nrenesto</p>
 
           <p class="my-3">Developer, blockchain, BTC, and Tech enthusiast</p>
 
-          
           <div class="flex flex-wrap gap-y-1 gap-x-4 text-gray-500 text-sm">
             <div class="flex items-center gap-1">
               <i class="bi bi-geo-alt text-xl"></i>
@@ -101,7 +100,7 @@
       </div>
 
       
-      <div class="flex border-b border-gray-800 mt-4">
+      <div class="flex border-b border-gray-800 mt-4 ">
         <div class="flex-1 text-center py-4 font-medium border-b-4 border-blue-500">Posts</div>
         <div class="flex-1 text-center py-4 text-gray-500 hover:bg-gray-900 cursor-pointer">Replies</div>
         <div class="flex-1 text-center py-4 text-gray-500 hover:bg-gray-900 cursor-pointer">Highlights</div>
@@ -117,14 +116,14 @@
         <div class="p-4 hover:bg-gray-900/50 cursor-pointer">
           <div class="flex space-x-3">
               <div class="flex-shrink-0 w-12 h-12 rounded-full overflow-hidden">
-                  <img src="{{asset('image/cnn.png')}}" alt="CNN profile" class="w-full h-full object-cover">
+                  <img src="{{asset('image/mrloop.jpg')}}" alt="Newton Renesto" class="w-full h-full object-cover">
               </div>
               
               <div class="flex-1 min-w-0">
                   <div class="flex items-center space-x-1">
-                      <span class="font-bold text-white">CNN</span>
+                      <span class="font-bold text-white">Newton Renesto</span>
                       <img src="{{ asset('icons/Verified.svg')}}" alt="Verified" class="w-4 h-4">
-                      <span class="text-gray-500">@CNN .</span>
+                      <span class="text-gray-500">@nrenesto .</span>
                       <span class="text-gray-500">7m</span>
                   </div>
                   <p class="mt-1 text-white text-base leading-snug">
@@ -160,18 +159,18 @@
           </div>
         </div>
 
-        <!-- NY Times -->
+        <!-- Newton Renesto 1st tweet-->
         <div class="p-4 hover:bg-gray-900/50 cursor-pointer ">
           <div class="flex space-x-3">
               <div class="flex-shrink-0 w-12 h-12 rounded-full overflow-hidden">
-                  <img src="{{asset('image/nyt.png')}}" alt="New york Times" class="w-full h-full object-cover">
+                  <img src="{{asset('image/mrloop.jpg')}}" alt="Newton Renesto" class="w-full h-full object-cover">
               </div>
               
               <div class="flex-1 min-w-0">
                   <div class="flex items-center space-x-1">
-                      <span class="font-bold text-white">The New York Times</span>
+                      <span class="font-bold text-white">Newton Renesto</span>
                       <img src="{{ asset('icons/Verified.svg')}}" alt="Verified" class="w-4 h-4">
-                      <span class="text-gray-500">@nytimes .</span>
+                      <span class="text-gray-500">@nrenesto .</span>
                       <span class="text-gray-500"> 2h</span>
                   </div>
 
@@ -213,18 +212,18 @@
           </div>
       </div>
       
-      <!-- NY Times -->
+      <!-- Newton Renesto 2nd tweet -->
       <div class="p-4 hover:bg-gray-900/50 cursor-pointer ">
         <div class="flex space-x-3">
             <div class="flex-shrink-0 w-12 h-12 rounded-full overflow-hidden">
-                <img src="{{asset('image/nyt.png')}}" alt="New york Times" class="w-full h-full object-cover">
+                <img src="{{asset('image/mrloop.jpg')}}" alt="Newton Renesto" class="w-full h-full object-cover">
             </div>
             
             <div class="flex-1 min-w-0">
                 <div class="flex items-center space-x-1">
-                    <span class="font-bold text-white">The New York Times</span>
+                    <span class="font-bold text-white">Newton Renesto</span>
                     <img src="{{ asset('icons/Verified.svg')}}" alt="Verified" class="w-4 h-4">
-                    <span class="text-gray-500">@nytimes .</span>
+                    <span class="text-gray-500">@nrenesto .</span>
                     <span class="text-gray-500"> 2h</span>
                 </div>
 
@@ -233,7 +232,7 @@
                 </p>
     
                 <div class="mt-3 rounded-xl overflow-hidden border border-gray-800">
-                    <img src="{{asset('image/leaf.png')}}" alt="News image" class="w-full h-auto">
+                    <img src="{{asset('image/nasdak.jpeg')}}" alt="News image" class="w-full h-auto">
                 </div>
 
                 <div class="flex items-center justify-between mt-3 text-gray-500 max-w-md">
