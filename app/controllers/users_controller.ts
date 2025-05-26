@@ -5,10 +5,12 @@ export default class UsersController {
     return view.render('pages/profile')
   }
 
-  public async store({view}: HttpContext) {
+  public async showHome({view}: HttpContext) {
+    return view.render('pages/home')
   }
 
   public async show({view}: HttpContext) {
+    return view.render('pages/')
   }
 
 }

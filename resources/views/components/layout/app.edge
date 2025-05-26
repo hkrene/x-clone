@@ -23,7 +23,7 @@
 
                 <!-- Navbar-->
                 <nav class="space-y-1 w-full mt-2">
-                    <a href="/" class="flex justify-center lg:justify-start items-center space-x-4 p-3 hover:bg-gray-900 rounded-full">
+                    <a href="/home" class="flex justify-center lg:justify-start items-center space-x-4 p-3 hover:bg-gray-900 rounded-full">
                         <img src="{{asset('icons/Home-Fill.svg')}}" class="w-6 h-6" alt="Home">
                         <span class="text-xl hidden lg:block">Home</span>
                     </a>
@@ -66,12 +66,14 @@
             <div class="p-3 hover:bg-gray-900 rounded-full cursor-pointer w-full">
                 <div class="flex justify-between items-center">
                     <div class="flex items-center space-x-3">
-                        <img src="{{asset('image/profile0.png')}}" alt="Profile" class="w-10 h-10 rounded-full">
+                        <a href="/profile">
+                            <img src="{{asset('image/profile0.png')}}" alt="Profile" class="w-10 h-10 rounded-full">
+                        </a>
                         <div class="hidden lg:block">
-                            <div class="flex items-center gap-1">
+                            <a href="/profile" class="flex items-center gap-1">
                                 <p class="text-sm font-medium">Bradley Ortiz</p>
                                 <img src="{{ asset('icons/Private.svg')}}" class="w-4 h-4" alt="Verified">
-                            </div>
+                            </a>
                             <p class="text-gray-500 text-sm">@bradley_</p>
                         </div>
                     </div>
