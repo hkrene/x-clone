@@ -11,16 +11,19 @@ import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
 import UsersController from '#controllers/users_controller'
 import AuthController from '#controllers/auth_controller'
-import TweetsController from '#controllers/posts_controller'
 
+router.on('/').render('pages/login')
 
+router.get('/signup', [AuthController, 'showSignupForm'])
+router.post('/signup', [AuthController, 'store'])
 
-router.get('/profile', [UsersController, 'showProfile'])
-router.get('/home', [UsersController, 'showHome'])
-router.get('/posts/:id', [UsersController, 'show'])
+router.get('/login', [AuthController, 'showLoginForm'])
+router.post('/login', [AuthController, 'login'])
 
 
 router.group(() => {
-  router.on('/').render('pages/home')
+  router.get('/profile', [UsersController, 'showProfile'])
+  router.get('/home', [UsersController, 'showHome'])
+  
   
 }) .use(middleware.auth())

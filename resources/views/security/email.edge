@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Welcome</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body style="margin: 0; padding: 0; background-color: #f9f9f9; font-family: sans-serif;">
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr>
+        <td align="center" style="padding: 40px 0;">
+          <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="600" style="background: #ffffff; border-radius: 8px; padding: 40px;">
+            <tr>
+              <td align="center" style="padding-bottom: 20px;">
+                <h1 style="margin: 0; font-size: 24px; color: #21201c;">
+                  Welcome, {{ user.full_name || user.email || 'User' }}!
+                </h1>
+              </td>
+            </tr>
+            <tr>
+              <td align="center" style="padding: 0 20px 30px;">
+                <p style="font-size: 16px; color: #444444; line-height: 1.5; margin: 0;">
+                  Thank you for joining our platform. We’re excited to have you on board.
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td align="center">
+                <a
+                  href="/login"
+                  style="background-color: #5A45FF; color: #ffffff; text-decoration: none; padding: 12px 24px; border-radius: 4px; font-size: 16px; display: inline-block;"
+                >
+                  Go to App
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td align="center" style="padding-top: 30px;">
+                <p style="font-size: 14px; color: #888888;">
+                  If you didn’t sign up, you can ignore this email.
+                </p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
