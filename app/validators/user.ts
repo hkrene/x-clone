@@ -5,7 +5,7 @@ export const createUserValidator = vine.compile(
     username: vine.string().trim().minLength(3).maxLength(50),
     email: vine.string().trim().email().maxLength(50),
     password: vine.string().trim().minLength(8).maxLength(50),
-    fullName: vine.string().trim().minLength(3).maxLength(25),
+    fullname: vine.string().trim().minLength(3).maxLength(25),
     dateOfBirth: vine.date(),
     city: vine.string().trim().maxLength(100).nullable(),
     website: vine.string().trim().url().maxLength(255).nullable(),

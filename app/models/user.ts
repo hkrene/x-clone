@@ -24,7 +24,7 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare password: string
 
   @column()
-  declare fullName: string | null
+  declare fullname: string | null
 
   @column.date()
   declare dateOfBirth: DateTime | null

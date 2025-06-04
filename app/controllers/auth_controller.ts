@@ -8,19 +8,40 @@ export default class AuthController {
   
 
   public async showSignupForm({ view }: HttpContext) {
-    return view.render('security/signin')
+    // console.log('showSignupForm called');
+    return view.render('security/signupForm')
+    
   }
 
   public async store({ request, response}:HttpContext) {
+    console.log('store called');
 
       const payload = await request.validateUsing(createUserValidator)
+
+      console.log('payload is called');
+      
       
       const user = await User.create({
-        fullName: payload.fullName,
-        email: payload.email,
-        password: payload.password
+        username: payload.username,
+      email: payload.email,
+      password: payload.password,
+      fullname: payload.fullname,
+      // dateOfBirth: payload.dateOfBirth,
+      city: payload.city,
+      website: payload.website,
+      bio: payload.bio,
+      // avatar: payload.avatar,
+      // bannerImage: payload.bannerImage,
+      isVerified: payload.isVerified,
+      isPrivate: payload.isPrivate,
+      followersCount: payload.followersCount,
+      followingCount: payload.followingCount,
+      postsCount: payload.postsCount,
+      likesCount: payload.likesCount,
       })
       console.log(user);
+      console.log(payload);
+      
 
       await mail.send((message) => {
         message

@@ -12,7 +12,7 @@ import { middleware } from './kernel.js'
 import UsersController from '#controllers/users_controller'
 import AuthController from '#controllers/auth_controller'
 
-router.on('/').render('pages/login')
+router.on('/').render('security/login')
 
 router.get('/signup', [AuthController, 'showSignupForm'])
 router.post('/signup', [AuthController, 'store'])
@@ -22,8 +22,8 @@ router.post('/login', [AuthController, 'login'])
 
 
 router.group(() => {
-  router.get('/profile', [UsersController, 'showProfile'])
   router.get('/home', [UsersController, 'showHome'])
+  router.get('/profile', [UsersController, 'showProfile'])
   
   
 }) .use(middleware.auth())
