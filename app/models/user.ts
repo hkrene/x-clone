@@ -44,6 +44,24 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @column()
   declare bio: string | null
 
+  @column()
+  declare isVerified: boolean
+
+  @column()
+  declare isPrivate: boolean
+
+  @column({ serializeAs: 'followersCount' })
+  declare followersCount: number
+
+  @column({ serializeAs: 'followingCount' })
+  declare followingCount: number
+
+  @column({ serializeAs: 'postsCount' })
+  declare postsCount: number
+
+  @column({ serializeAs: 'likesCount' })
+  declare likesCount: number
+
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
