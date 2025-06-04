@@ -10,7 +10,7 @@ export default class UsersController {
   }
 
   public async show({view}: HttpContext) {
-    return view.render('pages/')
+    return view.render('pages/signup')
   }
 
 }
