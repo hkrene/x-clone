@@ -573,3 +573,44 @@ export default class extends BaseSchema {
     
   }
 }
+
+
+
+dateOfBirth: payload.dateOfBirth ? DateTime.fromJSDate(payload.dateOfBirth) : null,
+city: payload.city,
+website: payload.website,
+bio: payload.bio,
+isVerified: payload.isVerified,
+isPrivate: payload.isPrivate,
+followersCount: payload.followersCount,
+followingCount: payload.followingCount,
+postsCount: payload.postsCount,
+avatar: '', // you'll need to handle uploaded file URL if provided
+bannerImage: '',
+
+
+validator 
+
+
+dateOfBirth: vine.date().nullable(), // Optional, can be null
+city: vine.string().trim().maxLength(100).nullable(),
+website: vine.string().trim().url().maxLength(255).nullable(),
+avatar: vine
+.file({
+  size: '2mb',
+  extnames: ['jpg', 'png', 'jpeg', 'webp'],
+})
+.nullable(),
+
+bannerImage: vine
+.file({
+  size: '5mb',
+  extnames: ['jpg', 'png', 'jpeg', 'webp'],
+})
+.nullable(),
+bio: vine.string().trim().maxLength(100).nullable(),
+isVerified: vine.boolean(),
+isPrivate: vine.boolean(),
+followersCount: vine.number().withoutDecimals(),
+followingCount: vine.number().withoutDecimals(),
+postsCount: vine.number().withoutDecimals(),

@@ -26,4 +26,4 @@ router.group(() => {
   router.get('/profile', [UsersController, 'showProfile'])
   
   
-}) .use(middleware.auth())
+}).use(middleware.auth())
