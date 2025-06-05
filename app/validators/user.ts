@@ -5,8 +5,9 @@ export const createUserValidator = vine.compile(
     username: vine.string().trim().minLength(3).maxLength(50),
     email: vine.string().trim().email().maxLength(50),
     password: vine.string().trim().minLength(8).maxLength(50),
-    fullname: vine.string().trim().minLength(3).maxLength(25),
-    dateOfBirth: vine.date(),
+    surname: vine.string().trim().maxLength(20).nullable(), // Optional, can be null
+    firstName: vine.string().trim().maxLength(20).nullable(), // Optional, can be null
+    dateOfBirth: vine.date().nullable(), // Optional, can be null
     city: vine.string().trim().maxLength(100).nullable(),
     website: vine.string().trim().url().maxLength(255).nullable(),
     avatar: vine
@@ -28,6 +29,5 @@ export const createUserValidator = vine.compile(
     followersCount: vine.number().withoutDecimals(),
     followingCount: vine.number().withoutDecimals(),
     postsCount: vine.number().withoutDecimals(),
-    likesCount: vine.number().withoutDecimals(),
   })
 )

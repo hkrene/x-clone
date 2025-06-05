@@ -22,9 +22,13 @@ export default class User extends compose(BaseModel, AuthFinder) {
   
   @column({ serializeAs: null })
   declare password: string
+  
+  @column()
+  declare surname: string | null
 
   @column()
-  declare fullname: string | null
+  declare firstName: string | null
+
 
   @column.date()
   declare dateOfBirth: DateTime | null
@@ -58,9 +62,6 @@ export default class User extends compose(BaseModel, AuthFinder) {
 
   @column({ serializeAs: 'postsCount' })
   declare postsCount: number
-
-  @column({ serializeAs: 'likesCount' })
-  declare likesCount: number
 
 
   @column.dateTime({ autoCreate: true })
