@@ -1,7 +1,6 @@
-// import type { HttpContext } from '@adonisjs/core/http'
+import type { HttpContext } from '@adonisjs/core/http'
 
-// export default class ProfilesController {
-// }
+export default class ProfilesController {
+}
 
-// start/app/controllers/profiles_controller.ts
 
