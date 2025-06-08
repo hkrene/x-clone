@@ -7,8 +7,6 @@ export default class ProfilesController {
     const user = await User.findBy('user_id', auth.user?.id)
     console.log('user', user);
     
-
-    // For now, we will just pass the username to the view
     return view.render('pages/profile', { user })
   }
 }
