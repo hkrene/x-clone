@@ -8,7 +8,6 @@ export default class ProfilesController {
     console.log('user', user);
     
 
-    // Here you would typically fetch the user profile from the database
     // For now, we will just pass the username to the view
     return view.render('pages/profile', { user })
   }
