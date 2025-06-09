@@ -33,25 +33,25 @@ export default class Tweet extends BaseModel {
   declare updatedAt: DateTime
 
   /**
-   * 👤 Relation vers l'auteur du tweet
+    Relation vers l'auteur du tweet
    */
   @belongsTo(() => User)
   declare author: BelongsTo<typeof User>
 
   /**
-   * ❤️ Relation vers les likes
+    Relation vers les likes
    */
   @hasMany(() => Like)
   declare likes: HasMany<typeof Like>
 
   /**
-   * 🔁 Relation vers les retweets
+   Relation vers les retweets
    */
   @hasMany(() => Retweet)
   declare retweets: HasMany<typeof Retweet>
 
   /**
-   * 💬 Relation vers les commentaires
+   Relation vers les commentaires
    */
   @hasMany(() => Comment)
   declare comments: HasMany<typeof Comment>
