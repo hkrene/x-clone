@@ -21,9 +21,6 @@ router.post('/signup', [AuthController, 'store'])
 router.get('/login', [AuthController, 'showLoginForm'])
 router.post('/login', [AuthController, 'login'])
 
-// start/routes.ts
-// Route.get('/:username', 'ProfileController.show').middleware('auth')
-
 router.group(() => {
   router.get('/home', [UsersController, 'showHome'])
   router.get('/profile', [UsersController, 'showProfile'])
