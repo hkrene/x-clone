@@ -21,8 +21,6 @@ export default class ProfilesController {
 
 
   public async showHome({view}: HttpContext) {
-
-    // database query
     return view.render('pages/home')
   }
 
@@ -30,7 +28,7 @@ export default class ProfilesController {
     return view.render('pages/profile')
   }
 
-  
+
   public async show({ params, view, auth }: HttpContext) {
     const username = params.username
 
