@@ -18,6 +18,19 @@ import type { HttpContext } from '@adonisjs/core/http'
 import { DateTime } from 'luxon'
 
 export default class ProfilesController {
+
+
+  public async showHome({view}: HttpContext) {
+
+    // database query
+    return view.render('pages/home')
+  }
+
+  public async showProfile({view}: HttpContext){
+    return view.render('pages/profile')
+  }
+
+  
   public async show({ params, view, auth }: HttpContext) {
     const username = params.username
 
