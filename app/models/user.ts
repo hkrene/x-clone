@@ -7,10 +7,10 @@ import type { HasMany } from '@adonisjs/lucid/types/relations'
 
 
 // Importer les modèles liés (ex: Tweet, Comment, Like, etc.)
-// import Tweet from '#models/tweet'
-// import Comment from '#models/comment'
-// import Like from '#models/like'
-// import Retweet from '#models/retweet'
+import Tweet from '#models/tweet'
+import Comment from '#models/comment'
+import Like from '#models/like'
+import Retweet from '#models/retweet'
 
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
