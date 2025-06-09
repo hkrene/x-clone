@@ -5,10 +5,26 @@ export default class extends BaseSchema {
 
   async up() {
     this.schema.createTable(this.tableName, (table) => {
-      table.increments('id')
+      table.increments('id').primary()
 
-      table.timestamp('created_at')
-      table.timestamp('updated_at')
+      // L'utilisateur qui a posté le tweet
+      table
+        .integer('user_id')
+        .unsigned()
+        .references('id')
+        .inTable('users')
+        .onDelete('CASCADE') // Supprimer les tweets si l'utilisateur est supprimé
+        .notNullable()
+
+      // Contenu du tweet
+      table.text('content').notNullable()
+
+      // Compteurs
+      table.integer('likes_count').defaultTo(0)
+      table.integer('retweets_count').defaultTo(0)
+      table.integer('comments_count').defaultTo(0)
+
+      table.timestamps(true) // created_at & updated_at gérés automatiquement
     })
   }
 
