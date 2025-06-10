@@ -7,8 +7,24 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
 
-      table.timestamp('created_at')
-      table.timestamp('updated_at')
+      table
+        .integer('follower_id')
+        .unsigned()
+        .notNullable()
+        .references('id')
+        .inTable('users')
+        .onDelete('CASCADE')
+
+      table
+        .integer('following_id')
+        .unsigned()
+        .notNullable()
+        .references('id')
+        .inTable('users')
+        .onDelete('CASCADE')
+
+      table.unique(['follower_id', 'following_id']) // empêche les doublons
+      table.timestamps(true, true)
     })
   }
 
