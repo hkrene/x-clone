@@ -1,9 +1,9 @@
 import { DateTime } from 'luxon'
 import hash from '@adonisjs/core/services/hash'
 import { compose } from '@adonisjs/core/helpers'
-import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
+import { BaseModel, column, hasMany, manyToMany } from '@adonisjs/lucid/orm'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
-import type { HasMany } from '@adonisjs/lucid/types/relations'
+import type { HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
 
 
 // Importer les modèles liés (ex: Tweet, Comment, Like, etc.)
@@ -92,4 +92,25 @@ export default class User extends compose(BaseModel, AuthFinder) {
 
   @hasMany(() => Retweet)
   declare retweets: HasMany<typeof Retweet>
+
+
+  /**
+   * Relations de suivi entre utilisateurs
+   */
+
+  // Utilisateurs que je suis
+  @manyToMany(() => User, {
+    pivotTable: 'follows',
+    pivotForeignKey: 'follower_id',
+    pivotRelatedForeignKey: 'following_id',
+  })
+  declare following: ManyToMany<typeof User>
+
+  // Utilisateurs qui me suivent
+  @manyToMany(() => User, {
+    pivotTable: 'follows',
+    pivotForeignKey: 'following_id',
+    pivotRelatedForeignKey: 'follower_id',
+  })
+  declare followers: ManyToMany<typeof User>
 }
