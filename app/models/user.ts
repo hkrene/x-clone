@@ -79,7 +79,7 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare updatedAt: DateTime | null
 
     /**
-   * 📎 Relations ORM
+   * Relations ORM
    */
   @hasMany(() => Tweet)
   declare tweets: HasMany<typeof Tweet>
