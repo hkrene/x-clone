@@ -82,18 +82,18 @@
         </div>
         @end
 
-        @if(user.dateOfBirth)
-        <div class="flex items-center gap-1">
-          <i class="bi bi-balloon text-xl"></i>
-          <span class="capitalize">born {{ user.dateOfBirth.toFormat('MMMM dd, yyyy') }}</span>
-        </div>
+        @if(user.formattedBirthday)
+          <div class="flex items-center gap-1">
+            <i class="bi bi-balloon text-xl"></i>
+            <span class="capitalize">born {{ user.formattedBirthday }}</span>
+          </div>
         @end
 
         <div class="flex items-center gap-1">
           <i class="bi bi-calendar4-week text-l"></i>
-          <span class="capitalize">joined {{ user.createdAt.toFormat('MMMM yyyy') }}</span>
+          <span class="capitalize">joined {{ user.joinedDate }}</span>
         </div>
-      </div>
+
 
       <div class="flex gap-4 mt-3 text-sm">
         <div class="hover:underline cursor-pointer">
@@ -173,3 +173,6 @@
 </section>
 
 @endslot
+
+@end
+

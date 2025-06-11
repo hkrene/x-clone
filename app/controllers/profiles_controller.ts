@@ -1,41 +1,19 @@
-// import User from '#models/user'
-// import auth from '@adonisjs/auth/services/main'
-// import type { HttpContext } from '@adonisjs/core/http'
-
-// export default class ProfilesController {
-//   public async showHome({view}: HttpContext) {
-//     return view.render('pages/home')
-//   }
-
-//   public async showProfile({view}: HttpContext){
-//     return view.render('pages/profile')
-//   }
-
-  
-// }
-
-
-
-
 import User from '#models/user'
 import Tweet from '#models/tweet'
-import auth from '@adonisjs/auth/services/main'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class ProfilesController {
-
-  // Affiche la page d'accueil avec tweets de l'utilisateur et ses abonnements
-  public async showHome({ view }: HttpContext) {
-    const user = await auth.use().authenticate().catch(() => null)
-    let tweets = []
+  // Affiche la page d'accueil avec les tweets de l'utilisateur et de ceux qu'il suit
+  public async showHome({ view, auth }: HttpContext) {
+    const user = await auth.use('web').authenticate().catch(() => null)
+    let tweets: Tweet[] = []
 
     if (user) {
       const following = await user.related('following').query()
-      const followingIds = following.map(u => u.id)
+      const followingIds = following.map((u: User) => u.id)
 
       tweets = await Tweet.query()
-        .where('userId', user.id)
-        .orWhereIn('userId', followingIds)
+        .whereIn('userId', [user.id, ...followingIds])
         .preload('author')
         .orderBy('createdAt', 'desc')
     }
@@ -43,36 +21,57 @@ export default class ProfilesController {
     return view.render('pages/home', { user, tweets })
   }
 
-  // Affiche le profil d'un utilisateur (ou profil connecté par défaut)
-  public async showProfile({ params, view }: HttpContext) {
-    const username = params.username
+  // Affiche le profil d'un utilisateur
+  public async showProfile({ params, view, auth }: HttpContext) {
     let user: User | null = null
 
-    if (username) {
+    if (params.username) {
       user = await User.query()
-        .where('username', username)
-        .preload('tweets', (q) => q.orderBy('createdAt', 'desc'))
+        .where('username', params.username)
+        .preload('tweets', (query) => query.orderBy('createdAt', 'desc'))
+        .preload('followers')
+        .preload('following')
         .first()
     } else {
-      user = await auth.use().authenticate().catch(() => null)
+      user = await auth.use('web').authenticate().catch(() => null)
+      if (user) {
+        await user.load('tweets', (query) => query.orderBy('createdAt', 'desc'))
+        await user.load('followers')
+        await user.load('following')
+      }
     }
 
     if (!user) {
       return view.render('errors/not-found')
     }
 
-    return view.render('pages/profile', { user })
+    const tweets: Tweet[] = user.tweets || []
+    const followersCount = user.followers?.length || 0
+    const followingCount = user.following?.length || 0
+    const postsCount = tweets.length
+
+    return view.render('pages/profile', {
+      user: {
+        ...user.serialize(),
+        avatar: user.avatar || '/image/profile0.png',
+        bannerImage: user.bannerImage || '/default-banner.jpg',
+        postsCount,
+        followersCount,
+        followingCount,
+      },
+      tweets,
+    })
   }
 
-  // Affiche le formulaire d'édition de profil (GET)
+  // Formulaire d'édition de profil
   public async editProfile({ view, auth }: HttpContext) {
-    const user = await auth.use().authenticate()
+    const user = await auth.use('web').authenticate()
     return view.render('pages/edit-profile', { user })
   }
 
-  // Met à jour le profil (POST/PUT)
+  // Mise à jour du profil
   public async updateProfile({ request, response, auth }: HttpContext) {
-    const user = await auth.use().authenticate()
+    const user = await auth.use('web').authenticate()
 
     const data = request.only([
       'username',
@@ -83,6 +82,8 @@ export default class ProfilesController {
       'website',
       'bio',
       'isPrivate',
+      'avatar',
+      'bannerImage',
     ])
 
     user.merge(data)
@@ -93,7 +94,7 @@ export default class ProfilesController {
 
   // Suivre un utilisateur
   public async follow({ params, auth, response }: HttpContext) {
-    const user = await auth.use().authenticate()
+    const user = await auth.use('web').authenticate()
     const userToFollow = await User.find(params.id)
 
     if (!userToFollow || userToFollow.id === user.id) {
@@ -101,13 +102,12 @@ export default class ProfilesController {
     }
 
     await user.related('following').attach([userToFollow.id])
-
     return response.redirect().back()
   }
 
   // Ne plus suivre un utilisateur
   public async unfollow({ params, auth, response }: HttpContext) {
-    const user = await auth.use().authenticate()
+    const user = await auth.use('web').authenticate()
     const userToUnfollow = await User.find(params.id)
 
     if (!userToUnfollow || userToUnfollow.id === user.id) {
@@ -115,11 +115,10 @@ export default class ProfilesController {
     }
 
     await user.related('following').detach([userToUnfollow.id])
-
     return response.redirect().back()
   }
 
-  // Affiche la liste des abonnés d'un utilisateur
+  // Liste des abonnés
   public async followers({ params, view }: HttpContext) {
     const user = await User.query()
       .where('username', params.username)
@@ -133,7 +132,7 @@ export default class ProfilesController {
     return view.render('pages/followers', { user, followers: user.followers })
   }
 
-  // Affiche la liste des abonnements d'un utilisateur
+  // Liste des abonnements
   public async following({ params, view }: HttpContext) {
     const user = await User.query()
       .where('username', params.username)
@@ -147,15 +146,11 @@ export default class ProfilesController {
     return view.render('pages/following', { user, following: user.following })
   }
 
-  // Supprimer le compte de l'utilisateur (optionnel)
+  // Supprimer le compte
   public async deleteAccount({ auth, response }: HttpContext) {
-    const user = await auth.use().authenticate()
-
+    const user = await auth.use('web').authenticate()
     await user.delete()
-
-    await auth.use().logout()
-
+    await auth.use('web').logout()
     return response.redirect().toRoute('home')
   }
 }
-
