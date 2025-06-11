@@ -42,7 +42,7 @@ export default class ProfilesController {
     }
 
     if (!user) {
-      return view.render('errors/not-found')
+      return view.render('pages/profile')
     }
 
     const tweets: Tweet[] = user.tweets || []
@@ -53,11 +53,12 @@ export default class ProfilesController {
     return view.render('pages/profile', {
       user: {
         ...user.serialize(),
-        avatar: user.avatar || '/image/profile0.png',
+        avatar: user.avatar , // || '/image/profile0.png'
         bannerImage: user.bannerImage || '/default-banner.jpg',
         postsCount,
         followersCount,
         followingCount,
+        joinedDate: user.createdAt.toFormat('MMMM yyyy'),
       },
       tweets,
     })

@@ -1,0 +1,262 @@
+@layout.app({ title: "Twitter Home Page" })
+  @slot('meta')
+    <meta name="description" content="A clone of Twitter">
+  @endslot
+
+
+  @slot('main')
+  <!-- Main Content-->
+  <section class="flex-1 border-x border-gray-800 max-w-2xl w-full">
+    <header class="sticky top-0 bg-black/80 backdrop-blur-md border-b border-gray-800 p-4 flex justify-between z-10">
+        <a href="#">
+            <h1 class="text-xl font-bold">Home</h1>
+        </a>
+        <img src="{{asset('icons/Timeline-Prop.svg')}}" class="w-5 h-5" alt="">
+    </header>
+
+    <!-- new tweet textarea -->
+    <div class="flex space-x-3 px-4 pt-4 pb-2 border-b border-gray-800">
+        <a href="/profile" class="flex-shrink-0 w-12 h-12 rounded-full overflow-hidden">
+            <img src="{{asset('image/profile0.png')}}" alt="User profile" class="w-full h-full object-cover">
+        </a>
+
+        <!-- Tweet Form -->
+        <form action="/" method="post" class="flex-1">
+            {{ csrfField() }}
+            
+            <textarea 
+                name="tweet" 
+                placeholder="What's happening?"
+                class="w-full bg-transparent text-white text-xl outline-none placeholder-gray-500 resize-none pt-3 min-h-[60px]"
+            ></textarea>
+            
+            <div class="flex items-center justify-between pt-2 pb-1">
+                <div class="flex space-x-1">
+                    <button class="">
+                        <img src="{{asset('icons/Top-Tweets.svg')}}" alt="Media" class="">
+                    </button>
+                    <button class="">
+                        <img src="{{asset('icons/gif.svg')}}" alt="GIF" class="">
+                    </button>
+                    <button class="">
+                        <img src="{{asset('icons/poll.svg')}}" alt="Poll" class="">
+                    </button>
+                    <button class="">
+                        <img src="{{asset('icons/emoji.svg')}}" alt="Emoji" class="">
+                    </button>
+                    <button class="">
+                        <img src="{{asset('icons/schedule.svg')}}" alt="Schedule" class="">
+                    </button>
+                </div>
+                
+                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white text-sm font-bold rounded-full px-4 py-1.5 capitalize">
+                    Tweet
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Tweet content-->
+    <div class="divide-y divide-gray-800">
+        
+        <!-- CNN  -->
+        <div class="p-4 hover:bg-gray-900/50 cursor-pointer">
+            <div class="flex space-x-3">
+                <div class="flex-shrink-0 w-12 h-12 rounded-full overflow-hidden">
+                    <img src="{{asset('image/cnn.png')}}" alt="CNN profile" class="w-full h-full object-cover">
+                </div>
+                
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-center space-x-1">
+                        <span class="font-bold text-white">CNN</span>
+                        <img src="{{ asset('icons/Verified.svg')}}" alt="Verified" class="w-4 h-4">
+                        <span class="text-gray-500">@CNN .</span>
+                        <span class="text-gray-500">7m</span>
+                    </div>
+                    <p class="mt-1 text-white text-base leading-snug">
+                        President Joe Biden touted a new agreement reached with the European Union to ease Trump-era tariffs on aluminum and steel as a "major breakthrough" that would serve to both strengthen the US steel industry and combat the global climate crisis.
+                    </p>
+        
+                    <div class="flex items-center justify-between mt-3 text-gray-500 max-w-md">
+                        <button class="flex items-center space-x-1 group">
+                            <div class="p-2 rounded-full group-hover:bg-blue-900/20">
+                                <img src="{{asset('icons/Reply.svg')}}" alt="Reply" class="w-5 h-5">
+                            </div>
+                            <span class="text-xs hover:text-blue-500">57</span>
+                        </button>
+                        <button class="flex items-center space-x-1 group">
+                            <div class="p-2 rounded-full group-hover:bg-green-900/20">
+                                <img src="{{asset('icons/Retweet.svg')}}" alt="Retweet" class="w-5 h-5">
+                            </div>
+                            <span class="text-xs hover:text-green-500">144</span>
+                        </button>
+                        <button class="flex items-center space-x-1 group">
+                            <div class="p-2 rounded-full group-hover:bg-red-900/20">
+                                <img src="{{asset('icons/React.svg')}}" alt="Like" class="w-5 h-5">
+                            </div>
+                            <span class="text-xs hover:text-red-500">184</span>
+                        </button>
+                        <button class="flex items-center space-x-1 group">
+                            <div class="p-2 rounded-full group-hover:bg-blue-900/20">
+                                <img src="{{asset('icons/Share.svg')}}" alt="Share" class="w-5 h-5">
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+            <!-- NY Times -->
+        <div class="p-4 hover:bg-gray-900/50 cursor-pointer ">
+            <div class="flex space-x-3">
+                <div class="flex-shrink-0 w-12 h-12 rounded-full overflow-hidden">
+                    <img src="{{asset('image/nyt.png')}}" alt="New york Times" class="w-full h-full object-cover">
+                </div>
+                
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-center space-x-1">
+                        <span class="font-bold text-white">The New York Times</span>
+                        <img src="{{ asset('icons/Verified.svg')}}" alt="Verified" class="w-4 h-4">
+                        <span class="text-gray-500">@nytimes .</span>
+                        <span class="text-gray-500"> 2h</span>
+                    </div>
+
+                    <p class="mt-1 text-white text-base leading-snug">
+                        Gardening boomed during the pandemic. Six Black writers share how it has helped them re-establish, and reimagine, a connection to cultivation and the land
+                    </p>
+        
+                    <div class="mt-3 rounded-xl overflow-hidden border border-gray-800">
+                        <img src="{{asset('image/leaf.png')}}" alt="News image" class="w-full h-auto">
+                    </div>
+
+                    <div class="flex items-center justify-between mt-3 text-gray-500 max-w-md">
+                        <button class="flex items-center space-x-1 group">
+                            <div class="p-2 rounded-full group-hover:bg-blue-900/20">
+                                <img src="{{asset('icons/Reply.svg')}}" alt="Reply" class="w-5 h-5">
+                            </div>
+                            <span class="text-xs hover:text-blue-500">19</span>
+                        </button>
+                        <button class="flex items-center space-x-1 group">
+                            <div class="p-2 rounded-full group-hover:bg-green-900/20">
+                                <img src="{{asset('icons/Retweet.svg')}}" alt="Retweet" class="w-5 h-5">
+                            </div>
+                            <span class="text-xs hover:text-green-500">48</span>
+                        </button>
+                        <button class="flex items-center space-x-1 group">
+                            <div class="p-2 rounded-full group-hover:bg-red-900/20">
+                                <img src="{{asset('icons/React.svg')}}" alt="Like" class="w-5 h-5">
+                            </div>
+                            <span class="text-xs hover:text-red-500">482</span>
+                        </button>
+                        <button class="flex items-center space-x-1 group">
+                            <div class="p-2 rounded-full group-hover:bg-blue-900/20">
+                                <img src="{{asset('icons/Share.svg')}}" alt="Share" class="w-5 h-5">
+                            </div>
+                        </button>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
+        {{--  Twitter first post  --}}
+        <div class="p-4 hover:bg-gray-900 cursor-pointer">
+            <div class="flex space-x-3">
+
+                <div class="flex-shrink-0 w-12 h-12 rounded-full overflow-hidden">
+                    <img src="{{asset('image/twitter-logo.png')}}" alt="Twitter logo" class="w-full h-full object-cover">
+                </div>
+                
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-center space-x-1">
+                        <span class="font-bold text-white">Twitter</span>
+                        <img src="{{ asset('icons/Verified.svg')}}" alt="Verified" class="w-4 h-4">
+                        <span class="text-gray-500">@Twitter ·</span>
+                        <span class="text-gray-500">Oct 4</span>
+                    </div>
+                    <p class="mt-1 text-white text-base leading-snug">
+                        <span class="uppercase">big news</span> lol jk still Twitter
+                    </p>
+
+                    <div class="flex items-center justify-between mt-3 text-gray-500 max-w-md">
+                        <button class="flex items-center space-x-1 group">
+                            <div class="p-2 rounded-full group-hover:bg-blue-900/20">
+                                <img src="{{asset('icons/Reply.svg')}}" alt="Reply" class="w-5 h-5">
+                            </div>
+                            <span class="text-xs hover:text-blue-500">6.8K</span>
+                        </button>
+                        <button class="flex items-center space-x-1 group">
+                            <div class="p-2 rounded-full group-hover:bg-green-900/20">
+                                <img src="{{asset('icons/Retweet.svg')}}" alt="Retweet" class="w-5 h-5">
+                            </div>
+                            <span class="text-xs hover:text-green-500">36.6K</span>
+                        </button>
+                        <button class="flex items-center space-x-1 group">
+                            <div class="p-2 rounded-full group-hover:bg-red-900/20">
+                                <img src="{{asset('icons/React.svg')}}" alt="Like" class="w-5 h-5">
+                            </div>
+                            <span class="text-xs hover:text-red-500">267.1K</span>
+                        </button>
+                        <button class="flex items-center space-x-1 group">
+                            <div class="p-2 rounded-full group-hover:bg-blue-900/20">
+                                <img src="{{asset('icons/Share.svg')}}" alt="Share" class="w-5 h-5">
+                            </div>
+                        </button>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
+        {{--  Twitter second post  --}}
+        <div class="p-4 hover:bg-gray-900 cursor-pointer">
+            <div class="flex space-x-3">
+
+                <div class="flex-shrink-0 w-12 h-12 rounded-full overflow-hidden">
+                    <img src="{{asset('image/twitter-logo.png')}}" alt="Twitter logo" class="w-full h-full object-cover">
+                </div>
+                
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-center space-x-1">
+                        <span class="font-bold text-white">Twitter</span>
+                        <img src="{{ asset('icons/Verified.svg')}}" alt="Verified" class="w-4 h-4">
+                        <span class="text-gray-500">@Twitter ·</span>
+                        <span class="text-gray-500">Oct 29</span>
+                    </div>
+                    <p class="mt-1 text-white text-base lowercase leading-snug">
+                        Hello literally everyone
+                    </p>
+
+                    <div class="flex items-center justify-between mt-3 text-gray-500 max-w-md">
+                        <button class="flex items-center space-x-1 group">
+                            <div class="p-2 rounded-full group-hover:bg-blue-900/20">
+                                <img src="{{asset('icons/Reply.svg')}}" alt="Reply" class="w-5 h-5">
+                            </div>
+                            <span class="text-xs hover:text-blue-500">118.7K</span>
+                        </button>
+                        <button class="flex items-center space-x-1 group">
+                            <div class="p-2 rounded-full group-hover:bg-green-900/20">
+                                <img src="{{asset('icons/Retweet.svg')}}" alt="Retweet" class="w-5 h-5">
+                            </div>
+                            <span class="text-xs hover:text-green-500">785.4K</span>
+                        </button>
+                        <button class="flex items-center space-x-1 group">
+                            <div class="p-2 rounded-full group-hover:bg-red-900/20">
+                                <img src="{{asset('icons/React.svg')}}" alt="Like" class="w-5 h-5">
+                            </div>
+                            <span class="text-xs hover:text-red-500">3.3M</span>
+                        </button>
+                        <button class="flex items-center space-x-1 group">
+                            <div class="p-2 rounded-full group-hover:bg-blue-900/20">
+                                <img src="{{asset('icons/Share.svg')}}" alt="Share" class="w-5 h-5">
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+  @endslot
+@end
