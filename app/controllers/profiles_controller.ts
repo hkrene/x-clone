@@ -92,6 +92,7 @@ export default class ProfilesController {
 
     return response.redirect().toRoute('profiles.showProfile', { username: user.username })
   }
+  
 
   // Suivre un utilisateur
   public async follow({ params, auth, response }: HttpContext) {
