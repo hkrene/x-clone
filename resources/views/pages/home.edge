@@ -16,7 +16,18 @@
     <!-- new tweet textarea -->
     <div class="flex space-x-3 px-4 pt-4 pb-2 border-b border-gray-800">
         <a href="/profile" class="flex-shrink-0 w-12 h-12 rounded-full overflow-hidden">
-            <img src="{{ asset('image/profile0.png') }}" alt="User profile" class="w-full h-full object-cover">
+            {{--  <img src="{{ asset('image/profile0.png') }}" alt="User profile" class="w-full h-full object-cover">  --}}
+        @if(user.avatar)
+        <img 
+          src="{{ user.avatar }} || '/image/profile0.png' }}" 
+          alt="Profile picture"
+          class=" h-full object-cover"
+        >
+        @else
+          <div class="w-full h-full bg-gray-700 flex items-center justify-center text-white text-xl font-bold uppercase">
+            {{ user.firstName.charAt(0) }}
+          </div>
+        @endif
         </a>
 
         <!-- Tweet Form -->
