@@ -119,7 +119,7 @@ export default class ProfilesController {
     await user.related('following').detach([userToUnfollow.id])
     return response.redirect().back()
   }
-  
+
 
   // Liste des abonnés
   public async followers({ params, view }: HttpContext) {
@@ -135,6 +135,7 @@ export default class ProfilesController {
     return view.render('pages/followers', { user, followers: user.followers })
   }
 
+  
   // Liste des abonnements
   public async following({ params, view }: HttpContext) {
     const user = await User.query()
