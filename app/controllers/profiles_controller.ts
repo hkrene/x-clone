@@ -22,47 +22,48 @@ export default class ProfilesController {
   }
 
   // Affiche le profil d'un utilisateur
-  public async showProfile({ params, view, auth }: HttpContext) {
-    let user: User | null = null
+  // Affiche le profil d'un utilisateur
+public async showProfile({ params, view, auth }: HttpContext) {
+  let user: User | null = null
 
-    if (params.username) {
-      user = await User.query()
-        .where('username', params.username)
-        .preload('tweets', (query) => query.orderBy('createdAt', 'desc'))
-        .preload('followers')
-        .preload('following')
-        .first()
-    } else {
-      user = await auth.use('web').authenticate().catch(() => null)
-      if (user) {
-        await user.load('tweets', (query) => query.orderBy('createdAt', 'desc'))
-        await user.load('followers')
-        await user.load('following')
-      }
+  if (params.username) {
+    user = await User.query()
+      .where('username', params.username)
+      .preload('tweets', (query) => query.orderBy('createdAt', 'desc'))
+      .preload('followers')
+      .preload('following')
+      .first()
+  } else {
+    user = await auth.use('web').authenticate().catch(() => null)
+    if (user) {
+      await user.load('tweets', (query) => query.orderBy('createdAt', 'desc'))
+      await user.load('followers')
+      await user.load('following')
     }
-
-    if (!user) {
-      return view.render('pages/profile')
-    }
-
-    const tweets: Tweet[] = user.tweets || []
-    const followersCount = user.followers?.length || 0
-    const followingCount = user.following?.length || 0
-    const postsCount = tweets.length
-
-    return view.render('pages/profile', {
-      user: {
-        ...user.serialize(),
-        avatar: user.avatar , // || '/image/profile0.png'
-        bannerImage: user.bannerImage || '/default-banner.jpg',
-        postsCount,
-        followersCount,
-        followingCount,
-        joinedDate: user.createdAt.toFormat('MMMM yyyy'),
-      },
-      tweets,
-    })
   }
+
+  if (!user) {
+    return view.render('pages/profile')
+  }
+
+  const tweets: Tweet[] = user.tweets || []
+  const followersCount = user.followers?.length || 0
+  const followingCount = user.following?.length || 0
+  const postsCount = tweets.length
+
+  return view.render('pages/profile', {
+    user: {
+      ...user.serialize(),
+      avatar: user.avatar, // || '/image/profile0.png'
+      bannerImage: user.bannerImage || '/default-banner.jpg',
+      postsCount,
+      followersCount,
+      followingCount,
+      joinedDate: user.createdAt.toFormat('MMMM yyyy'),
+    },
+    tweets,
+  })
+}
 
   // Formulaire d'édition de profil
   public async editProfile({ view, auth }: HttpContext) {
