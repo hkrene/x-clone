@@ -3,6 +3,10 @@ import Tweet from '#models/tweet'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class ProfilesController {
+
+  public async showEditProfile({ view }: HttpContext) {
+    return view.render('pages/editProfil')
+  }
   // Affiche la page d'accueil avec les tweets de l'utilisateur et de ceux qu'il suit
   public async showHome({ view, auth }: HttpContext) {
     const user = await auth.use('web').authenticate().catch(() => null)
@@ -68,7 +72,7 @@ public async showProfile({ params, view, auth }: HttpContext) {
   // Formulaire d'édition de profil
   public async editProfile({ view, auth }: HttpContext) {
     const user = await auth.use('web').authenticate()
-    return view.render('pages/edit-profile', { user })
+    return view.render('pages/editProfile', { user })
   }
 
   // Mise à jour du profil

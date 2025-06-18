@@ -47,6 +47,7 @@ router.post('/login', [AuthController, 'login'])
 router.group(() => {
   router.get('/home', [ProfilesController, 'showHome'])
   router.get('/profile', [ProfilesController, 'showProfile'])
+  router.get('/editProfile', [ProfilesController, 'showEditProfile'])
   // router.get('/:username', [ProfilesController, 'show'])
   // router.post('/:username/update', [ProfilesController, 'update']).as('profile.update')
 }).use(middleware.auth())
