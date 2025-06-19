@@ -614,3 +614,543 @@ isPrivate: vine.boolean(),
 followersCount: vine.number().withoutDecimals(),
 followingCount: vine.number().withoutDecimals(),
 postsCount: vine.number().withoutDecimals(),
+
+
+
+
+
+
+
+
+
+
+--user controller--
+
+import Commentaire from '#models/commentaire'
+import Following from '#models/following'
+import Like from '#models/like'
+import Publication from '#models/publication'
+import Retweet from '#models/retweet'
+import User from '#models/user'
+import { cuid } from '@adonisjs/core/helpers'
+import type { HttpContext } from '@adonisjs/core/http'
+import app from '@adonisjs/core/services/app'
+
+export default class UsersController {
+  async create({ request, response, auth }: HttpContext) {
+    let data = request.only(['nom', 'prenom', 'email', 'password'])
+
+    await User.create({
+      nom: data.nom,
+      prenom: data.prenom,
+      email: data.email,
+      password: data.password,
+    })
+
+    const user = await User.verifyCredentials(data.email, data.password)
+
+    await auth.use('web').login(user)
+
+    response.redirect('/')
+  }
+  async connexion({ request, auth, response }: HttpContext) {
+    const data = request.all()
+
+    const user = await User.verifyCredentials(data.email, data.password)
+
+    await auth.use('web').login(user)
+
+    response.redirect('/')
+  }
+  async uptade({ request, response, auth }: HttpContext) {
+    let nom = request.input('nom')
+    let prenom = request.input('prenom')
+    let localisation = request.input('localisation')
+    let biographie = request.input('biographie')
+    let lien = request.input('lien')
+    let photoDeProfil = request.file('photoDeProfil')
+    let photoDeCouverture = request.file('photoDeCouverture')
+    let user = await User.findOrFail(auth.user?.id)
+
+    if (nom) {
+      user.nom = nom
+    }
+    if (prenom) {
+      user.prenom = prenom
+    }
+    if (prenom) {
+      user.localisation = localisation
+    }
+    if (biographie) {
+      user.biographie = biographie
+    }
+    if (lien) {
+      user.lien = lien
+    }
+    if (photoDeProfil) {
+      await photoDeProfil.move(app.makePath('public/uploads'), {
+        name: `${cuid()}.${photoDeProfil.extname}`,
+      })
+      let photo = photoDeProfil?.fileName
+      user.photoDeProfil = String(photo)
+    }
+    if (photoDeCouverture) {
+      await photoDeCouverture.move(app.makePath('public/uploads'), {
+        name: `${cuid()}.${photoDeCouverture.extname}`,
+      })
+      let photo = photoDeCouverture?.fileName
+      user.photoDeCouverture = String(photo)
+    }
+
+    await user.save()
+
+    response.redirect().back()
+  }
+
+  async profilUtilisateur({ view, params, auth }: HttpContext) {
+    let id = params.id
+    let users = User.findOrFail(id)
+
+    const abonné = await Following.query()
+      .where('id_utilisateur_abonnement', id)
+      .count('* as total1')
+    const total1 = abonné[0].$extras.total1
+    const abonnement = await Following.query().where('id_utilisateur', id).count('* as total2')
+    const total2 = abonnement[0].$extras.total2
+
+    const count = await Publication.query().where('id_utilisateur', id).count('* as total')
+    const totalPost = count[0].$extras.total
+
+    const publication = await Publication.query()
+      .where('id_utilisateur', id)
+      .preload('retweet', (e) => {
+        e.preload('publication')
+      })
+
+    const existeOuPaslikeVerifie = await Like.findManyBy('id_utilisateur_like', auth.user?.id)
+    const existeOuPasCommentaireVerifie = await Commentaire.findManyBy(
+      'id_utilisateur',
+      auth.user?.id
+    )
+    const existeOuPasretweetVerifie = await Retweet.findManyBy(
+      'id_utilisateur_retweet',
+      auth.user?.id
+    )
+    const existeAbonne = await Following.findManyBy('id_utilisateur', auth.user?.id)
+
+    let likeVerifie = []
+    let CommentaireVerifie = []
+    let retweetVerifie = []
+    let tableauAbonnement = []
+
+    for (let e of existeAbonne) {
+      tableauAbonnement.push(e.idUtilisateurAbonnement)
+    }
+
+    for (let e of existeOuPaslikeVerifie) {
+      likeVerifie.push(e.idPublication)
+    }
+
+    for (let e of existeOuPasCommentaireVerifie) {
+      CommentaireVerifie.push(e.idPublication)
+    }
+    for (let e of existeOuPasretweetVerifie) {
+      retweetVerifie.push(e.idPublication)
+    }
+
+    const userAll = await User.query().whereNot('id', Number(auth.user?.id))
+
+    return view.render('pages/profil_utilisateur', {
+      likeVerifie,
+      retweetVerifie,
+      CommentaireVerifie,
+      users,
+      publication,
+      totalPost,
+      total1,
+      total2,
+      userAll,
+      user: auth.user,
+      tableauAbonnement,
+    })
+  }
+  async profil({ view, auth }: HttpContext) {
+    const abonné = await Following.query()
+      .where('id_utilisateur_abonnement', Number(auth.user?.id))
+      .count('* as total1')
+    const total1 = abonné[0].$extras.total1
+    const abonnement = await Following.query()
+      .where('id_utilisateur', Number(auth.user?.id))
+      .count('* as total2')
+    const total2 = abonnement[0].$extras.total2
+
+    const userAll = (await User.query().whereNot('id', Number(auth.user?.id)).limit(3)).reverse()
+
+    const publication = await Publication.query()
+      .where('id_utilisateur', Number(auth.user?.id))
+      .preload('retweet', (e) => {
+        e.preload('publication')
+      })
+
+    const count = await Publication.query()
+      .where('id_utilisateur', Number(auth.user?.id))
+      .count('* as total')
+    const totalPost = count[0].$extras.total
+
+    const existeOuPas = await Following.findManyBy('id_utilisateur', auth.user?.id)
+    const existeOuPaslikeVerifie = await Like.findManyBy('id_utilisateur_like', auth.user?.id)
+    const existeOuPasCommentaireVerifie = await Commentaire.findManyBy(
+      'id_utilisateur',
+      auth.user?.id
+    )
+    const existeOuPasretweetVerifie = await Retweet.findManyBy(
+      'id_utilisateur_retweet',
+      auth.user?.id
+    )
+
+    let tableauAbonnement = []
+    let likeVerifie = []
+    let CommentaireVerifie = []
+    let retweetVerifie = []
+
+    for (let e of existeOuPaslikeVerifie) {
+      likeVerifie.push(e.idPublication)
+    }
+
+    for (let e of existeOuPasCommentaireVerifie) {
+      CommentaireVerifie.push(e.idPublication)
+    }
+    for (let e of existeOuPasretweetVerifie) {
+      retweetVerifie.push(e.idPublication)
+    }
+
+    for (let e of existeOuPas) {
+      tableauAbonnement.push(e.idUtilisateurAbonnement)
+    }
+
+    return view.render('pages/profil', {
+      retweetVerifie,
+      CommentaireVerifie,
+      likeVerifie,
+      user: auth.user,
+      publication,
+      totalPost,
+      userAll,
+      total1,
+      total2,
+      tableauAbonnement,
+    })
+  }
+}
+
+--follow & followers--
+import Following from '#models/following'
+import User from '#models/user'
+import { HttpContext } from '@adonisjs/core/http'
+
+export default class FollowersAndFollowingsController {
+  async followers({ auth, params, response }: HttpContext) {
+    const userId: number = Number(auth.user?.id)
+    const paramsId = Number(params.id)
+
+    const verification = await Following.query()
+      .where('id_utilisateur', userId)
+      .andWhere('id_utilisateur_abonnement', paramsId)
+      .first()
+
+    if (verification) {
+      await verification.delete()
+    } else {
+      await Following.create({
+        idUtilisateur: userId,
+        idUtilisateurAbonnement: paramsId,
+      })
+    }
+    response.redirect().back()
+  }
+  async getFollowers({ view, auth }: HttpContext) {
+    const userAll = await User.query().whereNot('id', Number(auth.user?.id))
+
+    const existeOuPas = await Following.findManyBy('id_utilisateur', auth.user?.id)
+
+    let tableauAbonnement = []
+
+    for (let e of existeOuPas) {
+      tableauAbonnement.push(e.idUtilisateurAbonnement)
+    }
+
+    const abonné = await Following.query()
+      .where('id_utilisateur_abonnement', Number(auth.user?.id))
+      .whereNot('id_utilisateur', Number(auth.user?.id))
+      .preload('user')
+
+    return view.render('pages/followers', { abonné, tableauAbonnement, userAll, user: auth.user })
+  }
+  async getFollowings({ view, auth }: HttpContext) {
+    const userAll = await User.query().whereNot('id', Number(auth.user?.id))
+
+    const existeOuPas = await Following.findManyBy('id_utilisateur', auth.user?.id)
+
+    let tableauAbonnement = []
+
+    for (let e of existeOuPas) {
+      tableauAbonnement.push(e.idUtilisateurAbonnement)
+    }
+
+    const abonnement = await Following.query()
+      .where('id_utilisateur', Number(auth.user?.id))
+      .preload('userAbonnement')
+
+    return view.render('pages/followings', {
+      abonnement,
+      tableauAbonnement,
+      userAll,
+      user: auth.user,
+    })
+  }
+}
+
+--Tweets--
+import type { HttpContext } from '@adonisjs/core/http'
+import Publication from '#models/publication'
+import app from '@adonisjs/core/services/app'
+import { cuid } from '@adonisjs/core/helpers'
+import User from '#models/user'
+import Following from '#models/following'
+import Like from '#models/like'
+import Retweet from '#models/retweet'
+import Commentaire from '#models/commentaire'
+
+export default class PublicationsController {
+  async home({ view, auth }: HttpContext) {
+    const userPublication = (
+      await Publication.query()
+        .preload('user')
+        .preload('retweet', (e) => {
+          e.preload('publication')
+        })
+    ).reverse()
+
+    const userAll = (await User.query().whereNot('id', Number(auth.user?.id)).limit(3)).reverse()
+
+    const existeOuPaslikeVerifie = await Like.findManyBy('id_utilisateur_like', auth.user?.id)
+    const existeOuPasCommentaireVerifie = await Commentaire.findManyBy(
+      'id_utilisateur',
+      auth.user?.id
+    )
+    const existeOuPasretweetVerifie = await Retweet.findManyBy(
+      'id_utilisateur_retweet',
+      auth.user?.id
+    )
+    const existeAbonne = await Following.findManyBy('id_utilisateur', auth.user?.id)
+
+    let likeVerifie = []
+    let CommentaireVerifie = []
+    let retweetVerifie = []
+    let tableauAbonnement = []
+
+    for (let e of existeAbonne) {
+      tableauAbonnement.push(e.idUtilisateurAbonnement)
+    }
+
+    for (let e of existeOuPaslikeVerifie) {
+      likeVerifie.push(e.idPublication)
+    }
+
+    for (let e of existeOuPasCommentaireVerifie) {
+      CommentaireVerifie.push(e.idPublication)
+    }
+    for (let e of existeOuPasretweetVerifie) {
+      retweetVerifie.push(e.idPublication)
+    }
+
+    return view.render('pages/home', {
+      user: auth.user,
+      userPublication,
+      userAll,
+      likeVerifie,
+      CommentaireVerifie,
+      retweetVerifie,
+      tableauAbonnement,
+    })
+  }
+
+  async create({ request, auth, response }: HttpContext) {
+    const texteTweet: string = request.input('texteTweet')
+    const image = request.file('image')
+
+    if (image) {
+      await image.move(app.makePath('public/uploads'), {
+        name: `${cuid()}.${image.extname}`,
+      })
+    }
+
+    if (texteTweet !== null) {
+      await Publication.create({
+        texte: texteTweet,
+        idUtilisateur: auth.user?.id,
+        media: image?.fileName || 'null',
+      })
+    }
+
+    response.redirect().back()
+  }
+  async like({ params, response, auth }: HttpContext) {
+    const { id } = params
+    const publication = await Publication.findOrFail(id)
+
+    const verification = await Like.query()
+      .where('id_publication', id)
+      .andWhere('id_utilisateur_like', Number(auth.user?.id))
+      .first()
+
+    if (verification) {
+      await verification.delete()
+      publication.nombreLike = publication.nombreLike - 1
+      await publication.save()
+    } else {
+      await Like.create({
+        idPublication: id,
+        idUtilisateur: publication.idUtilisateur,
+        idUtilisateurLike: auth.user?.id,
+      })
+      publication.nombreLike = publication.nombreLike + 1
+
+      await publication.save()
+    }
+    response.redirect().back()
+  }
+  async retweet({ params, response, auth }: HttpContext) {
+    const { id } = params
+    const publication = await Publication.findOrFail(id)
+
+    const verification = await Retweet.query()
+      .where('id_publication', id)
+      .andWhere('id_utilisateur_retweet', Number(auth.user?.id))
+      .first()
+
+    if (verification) {
+      await verification.delete()
+      publication.nombreRetweet = publication.nombreRetweet - 1
+
+      const verification2 = await Publication.findOrFail(verification.idPublicationRetweet)
+      if (verification2) {
+        await verification2.delete()
+      }
+    } else {
+      publication.nombreRetweet = publication.nombreRetweet + 1
+
+      const publications = await Publication.create({
+        idUtilisateur: auth.user?.id,
+        texte: publication.texte,
+        media: publication.media,
+        nombreRetweet: publication.nombreRetweet,
+        nombreLike: publication.nombreLike,
+        nombreCommentaire: publication.nombreCommentaire,
+      })
+
+      await Retweet.create({
+        idPublication: id,
+        idPublicationRetweet: publications.id,
+        idUtilisateur: publication.idUtilisateur,
+        idUtilisateurRetweet: auth.user?.id,
+      })
+    }
+
+    await publication.save()
+
+    response.redirect().back()
+  }
+  async commentaire({ request, params, response, auth }: HttpContext) {
+    const texteTweet: string = request.input('texteTweet')
+    const image = request.file('image_commentaire')
+    const publications = Publication.findOrFail(params.id)
+
+    ;(await publications).nombreCommentaire = (await publications).nombreCommentaire + 1
+    if (image) {
+      await image.move(app.makePath('public/uploads'), {
+        name: `${cuid()}.${image.extname}`,
+      })
+    }
+    ;(await publications).save()
+
+    await Commentaire.create({
+      texte: texteTweet,
+      idUtilisateur: auth.user?.id,
+      idPublication: params.id,
+      media: image?.fileName,
+    })
+
+    response.redirect().back()
+  }
+  async getCommentaire({ view, params, auth }: HttpContext) {
+    const { id } = params
+
+    const publication = await Publication.findOrFail(id)
+
+    const commentaire = await Commentaire.query().where('idPublication', id).preload('user')
+
+    return view.render('pages/tweet', { commentaire, publication, user: auth.user })
+  }
+}
+--Messages--import Message from '#models/message'
+import User from '#models/user'
+import { cuid } from '@adonisjs/core/helpers'
+import type { HttpContext } from '@adonisjs/core/http'
+import app from '@adonisjs/core/services/app'
+
+export default class MessagesController {
+  async index({ view, auth }: HttpContext) {
+    const userAll = (await User.query().whereNot('id', Number(auth.user?.id))).reverse()
+
+    return view.render('pages/messages', { user: auth.user, userAll })
+  }
+  async messageCreate({ params, request, auth, response }: HttpContext) {
+    let texte = request.input('texte')
+    let image = request.file('image')
+
+    let { id } = params
+
+    if (image) {
+      await image.move(app.makePath('public/uploads'), {
+        name: `${cuid()}.${image.extname}`,
+      })
+    }
+
+    if (texte !== 'null') {
+      Message.create({
+        texte: texte,
+        media: image?.fieldName || 'null',
+        idUtilisateurEnvoie: auth.user?.id,
+        idUtilisateurRecu: id,
+      })
+    }
+
+    response.redirect().back()
+  }
+  async getMessage({ params, auth, view }: HttpContext) {
+    const userAll = (await User.query().whereNot('id', Number(auth.user?.id))).reverse()
+
+    let { id } = params
+
+    let userInconu = User.findOrFail(id)
+
+    const messages = await Message.query()
+      .where((groupeEnvoie) => {
+        groupeEnvoie
+          .where('idUtilisateurEnvoie', Number(auth.user?.id))
+          .where('idUtilisateurRecu', id)
+      })
+      .orWhere((groupeRécupération) => {
+        groupeRécupération
+          .where('idUtilisateurEnvoie', id)
+          .where('idUtilisateurRecu', Number(auth.user?.id))
+      })
+      .orderBy('createdAt', 'asc')
+
+    return view.render('pages/message_user', { userInconu, messages, user: auth.user, userAll })
+  }
+}
+
+
+
