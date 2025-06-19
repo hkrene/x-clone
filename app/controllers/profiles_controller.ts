@@ -8,7 +8,7 @@ export default class ProfilesController {
       public async create({ request, response, auth}: HttpContext) {
       const data = await request.validateUsing(createUserValidator)
       
-      await User.create({
+      const user = await User.create({
         firstName: data.firstName,
         surname: data.surname,
         username: data.username,
