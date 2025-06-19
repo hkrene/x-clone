@@ -8,7 +8,7 @@ export default class ProfilesController {
       public async create({ request, response, auth}: HttpContext) {
       const data = await request.validateUsing(createUserValidator)
       
-      const user = await User.create({
+      await User.create({
         firstName: data.firstName,
         surname: data.surname,
         username: data.username,
@@ -16,17 +16,20 @@ export default class ProfilesController {
         password: data.password
       })
 
-      const user = await User.verifyCredentials(data.email, data.password)
+      const users = await User.verifyCredentials(data.email, data.password)
+      await auth.use('web').login(user)
+
       console.log(user);
+      console.log(users);
 
-      await mail.send((message) => {
-        message
-          .to(user.email)
-          .from('shortenitapp@gmail.com')
-          .subject('Verify your email address')
-          .htmlView('pages/signup_mail', { user })
-      })
+      // await mail.send((message) => {
+      //   message
+      //     .to(user.email)
+      //     .from('shortenitapp@gmail.com')
+      //     .subject('Verify your email address')
+      //     .htmlView('pages/signup_mail', { user })
+      // })
 
-      return response.redirect('/list')
+      return response.redirect('/home')
     }
 } 
