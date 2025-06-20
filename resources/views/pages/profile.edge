@@ -103,7 +103,7 @@
           <span class="capitalize">joined {{ user.joinedDate }}</span>
         </div>
 
-        
+
       <div class="flex gap-4 mt-3 ">
         <div class="hover:underline cursor-pointer">
           <span class="font-bold">{{ user.followingCount }}</span> <span class="text-gray-500">Following</span>
@@ -131,18 +131,31 @@
     <div class="p-4 hover:bg-gray-900/50 cursor-pointer">
       <div class="flex space-x-3">
         <div class="flex-shrink-0 w-12 h-12 rounded-full overflow-hidden">
-          <img src="{{ user.avatar || asset('image/profile0.png') }}" alt="{{ user.firstName }}" class="w-full h-full object-cover">
+          {{--  <img src="{{ user.avatar || asset('image/profile0.png') }}" alt="{{ user.firstName }}" class="w-full h-full object-cover">  --}}
+          @if(user.avatar)
+          <img 
+            src="{{ '/uploads/' + user.avatar }}" 
+            alt="{{ user.firstName }}"
+            class="w-full h-full object-cover"
+          >
+          @else
+            <div class="w-full h-full bg-gray-700 flex items-center justify-center text-white text-xl font-bold uppercase">
+              {{ user.firstName.charAt(0) }}
+            </div>
+          @endif
         </div>
-
-        <div class="flex-1 min-w-0">
-          <div class="flex items-center space-x-1">
+        <div class="flex items-center space-x-1">
             <span class="font-bold text-white">{{ user.firstName }} {{ user.surname }}</span>
             @if(user.isVerified)
               <img src="{{ asset('icons/Verified.svg')}}" class="w-4 h-4" alt="Verified">
             @end
-            <span class="text-gray-500">@{{ user.username }} ·</span>
+            <span class="text-gray-500 text-sm">{{ user.username }} ·</span>
             <span class="text-gray-500">{{ tweet.createdAt.toRelative() }}</span>
           </div>
+        </div>
+
+        <div class="flex-1 min-w-0">
+          
           <p class="mt-1 text-white text-base leading-snug">{{ tweet.content }}</p>
 
           <div class="flex items-center justify-between mt-3 text-gray-500 max-w-md">

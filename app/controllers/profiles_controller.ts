@@ -19,6 +19,7 @@ export default class ProfilesController {
       username: user.username || '',
       isVerified: user.isVerified || false,
     },
+    
   })
 }
 

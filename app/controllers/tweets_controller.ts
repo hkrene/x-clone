@@ -2,9 +2,19 @@ import type { HttpContext } from '@adonisjs/core/http'
 import app from '@adonisjs/core/services/app'
 import { cuid } from '@adonisjs/core/helpers'
 import Tweet from '#models/tweet'
-import User from '#models/user'
 
 export default class TweetsController {
+  /**
+   * Show the home page with tweets
+   */
+  public async index({ view }: HttpContext) {
+    const tweets = await Tweet.query()
+      .preload('author')
+      .orderBy('createdAt', 'desc')
+
+    return view.render('home', { tweets })
+  }
+
   /**
    * Store a new tweet with optional media (image/video)
    */
@@ -31,9 +41,9 @@ export default class TweetsController {
 
     await user.related('tweets').create({
       content: tweetText,
-      mediaUrl: mediaUrl,
+      mediaUrl,
     })
 
-    return response.redirect().back()
+    return response.redirect('/home')
   }
 }
