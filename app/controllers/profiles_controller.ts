@@ -5,6 +5,10 @@ import type { HttpContext } from '@adonisjs/core/http'
 
 export default class ProfilesController {
 
+    public async showHome({ view }: HttpContext) {
+        return view.render('pages/home')
+    }
+
       public async create({ request, response, auth}: HttpContext) {
       const data = await request.validateUsing(createUserValidator)
       
