@@ -34,6 +34,7 @@ import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
 // import UsersController from '#controllers/users_controller'
 import AuthController from '#controllers/auth_controller'
+import TweetsController from '#controllers/tweets_controller'
 import ProfilesController from '#controllers/profiles_controller'
 
 router.on('/').render('security/login')
@@ -49,5 +50,6 @@ router.group(() => {
   router.get('/profile', [ProfilesController, 'showProfile'])
   router.get('/editProfile', [ProfilesController, 'showEditProfile'])
   router.post('/update', [ProfilesController, 'update'])
+  router.post('/tweets', [TweetsController, 'create'])
   // router.post('/:username/update', [ProfilesController, 'update']).as('profile.update')
 }).use(middleware.auth())

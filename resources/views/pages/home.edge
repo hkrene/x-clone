@@ -18,7 +18,11 @@
         <a href="/profile" class="flex-shrink-0 w-12 h-12 rounded-full overflow-hidden">
             {{--  <img src="{{ asset('image/profile0.png') }}" alt="User profile" class="w-full h-full object-cover">  --}}
         @if(user?.avatar)
-        <img src="{{ '/uploads/' + (user.avatar || '') }}">
+        <img src="{{ '/uploads/' + (user.avatar || '') }}"
+        
+        alt="Profile picture"
+        class="w-full h-full object-cover"
+        >
 
         @else
           <div class="w-full h-full bg-gray-700 flex items-center justify-center text-white text-xl font-bold uppercase">
@@ -28,26 +32,35 @@
         </a>
 
         <!-- Tweet Form -->
-        <form action="/" method="post" class="flex-1">
-            {{ csrfField() }}
-            <textarea 
-                name="tweet" 
-                placeholder="What's happening?"
-                class="w-full bg-transparent text-white text-xl outline-none placeholder-gray-500 resize-none pt-3 min-h-[60px]"
-            ></textarea>
-            <div class="flex items-center justify-between pt-2 pb-1">
-                <div class="flex space-x-1">
-                    <button><img src="{{ asset('icons/Top-Tweets.svg') }}" alt="Media"></button>
-                    <button><img src="{{ asset('icons/gif.svg') }}" alt="GIF"></button>
-                    <button><img src="{{ asset('icons/poll.svg') }}" alt="Poll"></button>
-                    <button><img src="{{ asset('icons/emoji.svg') }}" alt="Emoji"></button>
-                    <button><img src="{{ asset('icons/schedule.svg') }}" alt="Schedule"></button>
-                </div>
-                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white text-sm font-bold rounded-full px-4 py-1.5 capitalize">
-                    Tweet
-                </button>
-            </div>
-        </form>
+    <form action="/tweets" method="post" enctype="multipart/form-data" class="flex-1">
+      {{ csrfField() }}
+
+      <textarea 
+        name="tweet" 
+        placeholder="What's happening?"
+        class="w-full bg-transparent text-white text-xl outline-none placeholder-gray-500 resize-none pt-3 min-h-[60px]"
+      ></textarea>
+
+      <!-- Hidden File Input for media -->
+      <input type="file" id="mediaInput" name="media" accept="image/*,video/*" class="hidden" />
+
+      <div class="flex items-center justify-between pt-2 pb-1">
+        <div class="flex space-x-1">
+          <!-- Media Upload Button triggers hidden file input -->
+          <button type="button" onclick="document.getElementById('mediaInput').click()">
+            <img src="{{ asset('icons/Top-Tweets.svg') }}" alt="Media">
+          </button>
+          <div><img src="{{ asset('icons/gif.svg') }}" alt="GIF"></div>
+          <div><img src="{{ asset('icons/poll.svg') }}" alt="Poll"></div>
+          <div><img src="{{ asset('icons/emoji.svg') }}" alt="Emoji"></div>
+          <div><img src="{{ asset('icons/schedule.svg') }}" alt="Schedule"></div>
+        </div>
+        <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white text-sm font-bold rounded-full px-4 py-1.5 capitalize">
+          Tweet
+        </button>
+      </div>
+    </form>
+
     </div>
 
     

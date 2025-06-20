@@ -7,9 +7,22 @@ import { cuid } from '@adonisjs/core/helpers'
 
 export default class ProfilesController {
 
-  public async showHome({ view }: HttpContext) {
-            return view.render('pages/home')
-        }
+  public async showHome({ view, auth }: HttpContext) {
+  const user = await auth.use('web').authenticate()
+
+  return view.render('pages/home', {
+    user: {
+      ...user.serialize(),
+      avatar: user.avatar || '',
+      firstName: user.firstName || '',
+      surname: user.surname || '',
+      username: user.username || '',
+      isVerified: user.isVerified || false,
+    },
+  })
+}
+
+
 
   public async showEditProfile({ view, auth }: HttpContext) {
   const user = await auth.use('web').authenticate()

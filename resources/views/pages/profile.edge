@@ -91,33 +91,26 @@
         </div>
         @end
 
-        @if(user.formattedBirthday)
+        @if(user.dateOfBirth)
           <div class="flex items-center gap-1">
             <i class="bi bi-balloon text-xl"></i>
-            <span class="capitalize">born {{ user.formattedBirthday }}</span>
+            <span class="capitalize">born {{ user.dateOfBirth }}</span>
           </div>
         @end
-
-        
-
-
-      <div class="flex gap-4 mt-3 text-sm">
 
         <div class="flex items-center gap-1">
           <i class="bi bi-calendar4-week text-l"></i>
           <span class="capitalize">joined {{ user.joinedDate }}</span>
         </div>
 
-
+        
+      <div class="flex gap-4 mt-3 ">
         <div class="hover:underline cursor-pointer">
           <span class="font-bold">{{ user.followingCount }}</span> <span class="text-gray-500">Following</span>
         </div>
         <div class="hover:underline cursor-pointer">
           <span class="font-bold">{{ user.followersCount }}</span> <span class="text-gray-500">Followers</span>
         </div>
-        {{--  <div class="hover:underline cursor-pointer">
-          <span class="font-bold">{{ user.postsCount }}</span> <span class="text-gray-500">Posts</span>
-        </div>  --}}
       </div>
     </div>
   </div>
