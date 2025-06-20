@@ -16,6 +16,9 @@ export default class Tweet extends BaseModel {
   @column()
   declare content: string
 
+  @column()
+  declare mediaUrl: string | null
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
