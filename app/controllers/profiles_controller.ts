@@ -2,6 +2,8 @@ import User from '#models/user'
 import {createUserValidator} from '#validators/user'
 import Tweet from '#models/tweet'
 import type { HttpContext } from '@adonisjs/core/http'
+import app from '@adonisjs/core/services/app'
+import { cuid } from '@adonisjs/core/helpers'
 
 export default class ProfilesController {
 
@@ -37,7 +39,6 @@ export default class ProfilesController {
 
     return response.redirect('/home')
 }
-
 /**login users */
 public async store({ request, auth, response }: HttpContext) {
      const { email, password } = request.only(['email', 'password'])
@@ -46,5 +47,59 @@ public async store({ request, auth, response }: HttpContext) {
      response.redirect('/home')
   }
 
+  public async update({ request, response, auth }: HttpContext) {
+    let name = request.input('firstName')
+    let bio = request.input('bio')
+    let location = request.input('location')
+    let website = request.input('website')
+    let dateOfBirth = request.input('dateOfBirth')
+    let bannerImage = request.file('bannerImage', {
+      size: '5mb',
+      extnames: ['jpg', 'png', 'jpeg', 'webp'],
+    })
+    let avatar = request.file('avatar', {
+      size: '2mb',
+      extnames: ['jpg', 'png', 'jpeg', 'webp'],
+    })
+
+    let user = await User.findOrFail(auth.use('web').user?.id)
+
+    if (name) {
+      user.firstName = name
+    }
+    if (bio) {
+      user.bio = bio
+    }
+    if (location) {
+      user.location = location
+
+    if (website) {
+      user.website = website
+    }
+    if (dateOfBirth) {
+      user.dateOfBirth = dateOfBirth
+    }
+    if (bannerImage) {
+      await bannerImage.move(app.makePath('public/uploads'), {
+        name: `${cuid()}.${bannerImage.extname}`,
+      })
+      let photo = bannerImage?.fileName
+      user.bannerImage = String(photo)
+    }
+
+    if (avatar) {
+      await avatar.move(app.makePath('public/uploads'), {
+       name: `${cuid()}.${avatar.extname}`,
+      })
+      let photo = bannerImage?.fileName
+      user.avatar = String(photo)
+    }
+
+    await user.save()
+    return response.redirect().back
+
+
+  }
 
 } 
+}
