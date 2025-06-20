@@ -44,7 +44,6 @@ export default class ProfilesController {
 
 
   // Affiche le profil d'un utilisateur
-  // Affiche le profil d'un utilisateur
 public async showProfile({ params, view, auth }: HttpContext) {
   let user: User | null = null
 

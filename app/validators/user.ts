@@ -8,27 +8,27 @@ export const createUserValidator = vine.compile(
     surname: vine.string().trim().maxLength(20).nullable(), // Optional, can be null
     firstName: vine.string().trim().maxLength(20).nullable(), // Optional, can be null
 
-    dateOfBirth: vine.date().nullable(), // Optional, can be null
-    city: vine.string().trim().maxLength(100).nullable(),
-    website: vine.string().trim().url().maxLength(255).nullable(),
-    avatar: vine
-    .file({
-      size: '2mb',
-      extnames: ['jpg', 'png', 'jpeg', 'webp'],
-    })
-    .nullable(),
+    // dateOfBirth: vine.date().nullable(), // Optional, can be null
+    // city: vine.string().trim().maxLength(100).nullable(),
+    // website: vine.string().trim().url().maxLength(255).nullable(),
+    // avatar: vine
+    // .file({
+    //   size: '2mb',
+    //   extnames: ['jpg', 'png', 'jpeg', 'webp'],
+    // })
+    // .nullable(),
 
-    bannerImage: vine
-    .file({
-      size: '5mb',
-      extnames: ['jpg', 'png', 'jpeg', 'webp'],
+    // bannerImage: vine
+    // .file({
+    //   size: '5mb',
+    //   extnames: ['jpg', 'png', 'jpeg', 'webp'],
+    // })
+    // .nullable(),
+    // bio: vine.string().trim().maxLength(100).nullable(),
+    // isVerified: vine.boolean(),
+    // isPrivate: vine.boolean(),
+    // followersCount: vine.number().withoutDecimals(),
+    // followingCount: vine.number().withoutDecimals(),
+    // postsCount: vine.number().withoutDecimals(),
     })
-    .nullable(),
-    bio: vine.string().trim().maxLength(100).nullable(),
-    isVerified: vine.boolean(),
-    isPrivate: vine.boolean(),
-    followersCount: vine.number().withoutDecimals(),
-    followingCount: vine.number().withoutDecimals(),
-    postsCount: vine.number().withoutDecimals(),
-      })
 )

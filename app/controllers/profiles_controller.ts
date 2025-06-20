@@ -1,105 +1,89 @@
 import User from '#models/user'
-import {createUserValidator} from '#validators/user'
+import { createUserValidator } from '#validators/user'
 import Tweet from '#models/tweet'
 import type { HttpContext } from '@adonisjs/core/http'
 import app from '@adonisjs/core/services/app'
 import { cuid } from '@adonisjs/core/helpers'
 
 export default class ProfilesController {
-
-    /**creates users and stores in database */
-    public async showHome({ view }: HttpContext) {
-        return view.render('pages/home')
-    }
-
-    public async create({ request, response, auth}: HttpContext) {
-    const data = await request.validateUsing(createUserValidator)
-    
-    const user = await User.create({
-    firstName: data.firstName,
-    surname: data.surname,
-    username: data.username,
-    email: data.email,
-    password: data.password
-    })
-
-    const users = await User.verifyCredentials(data.email, data.password)
-    await auth.use('web').login(user)
-
-    console.log(user);
-    console.log(users);
-
-    // await mail.send((message) => {
-    //   message
-    //     .to(user.email)
-    //     .from('shortenitapp@gmail.com')
-    //     .subject('Verify your email address')
-    //     .htmlView('pages/signup_mail', { user })
-    // })
-
-    return response.redirect('/home')
-}
-/**login users */
-public async store({ request, auth, response }: HttpContext) {
-     const { email, password } = request.only(['email', 'password'])
-     const user = await User.verifyCredentials(email, password)
-     await auth.use('web').login(user)
-     response.redirect('/home')
-  }
-
+  /** Updates user profile */
   public async update({ request, response, auth }: HttpContext) {
-    let name = request.input('firstName')
-    let bio = request.input('bio')
-    let location = request.input('location')
-    let website = request.input('website')
-    let dateOfBirth = request.input('dateOfBirth')
-    let bannerImage = request.file('bannerImage', {
-      size: '5mb',
-      extnames: ['jpg', 'png', 'jpeg', 'webp'],
-    })
-    let avatar = request.file('avatar', {
-      size: '2mb',
-      extnames: ['jpg', 'png', 'jpeg', 'webp'],
-    })
+    const firstName = request.input('firstName')
+    const surname = request.input('surname')
+    const bio = request.input('bio')
+    const location = request.input('location')
+    const website = request.input('website')
+    const dateOfBirth = request.input('dateOfBirth')
+    const bannerImage = request.file('banner')
+    const avatar = request.file('avatar')
 
-    let user = await User.findOrFail(auth.use('web').user?.id)
+    const user = await User.findOrFail(auth.use('web').user?.id)
 
-    if (name) {
-      user.firstName = name
-    }
-    if (bio) {
-      user.bio = bio
-    }
-    if (location) {
-      user.location = location
+    if (firstName) user.firstName = firstName
+    if (surname) user.surname = surname
+    if (bio) user.bio = bio
+    if (location) user.location = location
+    if (website) user.website = website
+    if (dateOfBirth) user.dateOfBirth = dateOfBirth
 
-    if (website) {
-      user.website = website
-    }
-    if (dateOfBirth) {
-      user.dateOfBirth = dateOfBirth
-    }
     if (bannerImage) {
       await bannerImage.move(app.makePath('public/uploads'), {
         name: `${cuid()}.${bannerImage.extname}`,
       })
-      let photo = bannerImage?.fileName
-      user.bannerImage = String(photo)
+      user.bannerImage = bannerImage.fileName || ''
     }
 
     if (avatar) {
       await avatar.move(app.makePath('public/uploads'), {
-       name: `${cuid()}.${avatar.extname}`,
+        name: `${cuid()}.${avatar.extname}`,
       })
-      let photo = bannerImage?.fileName
-      user.avatar = String(photo)
+      user.avatar = avatar.fileName || ''
     }
 
     await user.save()
-    return response.redirect().back
-
-
+    return response.redirect().back()
   }
 
-} 
+  /** Displays user profile */
+  public async showProfile({ params, view, auth }: HttpContext) {
+    let user: User | null = null
+
+    if (params.username) {
+      user = await User.query()
+        .where('username', params.username)
+        .preload('tweets', (query) => query.orderBy('createdAt', 'desc'))
+        .preload('followers')
+        .preload('following')
+        .first()
+    } else {
+      user = await auth.use('web').authenticate().catch(() => null)
+      if (user) {
+        await user.load('tweets', (query) => query.orderBy('createdAt', 'desc'))
+        await user.load('followers')
+        await user.load('following')
+      }
+    }
+
+    if (!user) {
+      return view.render('pages/profile')
+    }
+
+    const tweets: Tweet[] = user.tweets || []
+    const followersCount = user.followers?.length || 0
+    const followingCount = user.following?.length || 0
+    const postsCount = tweets.length
+
+    return view.render('pages/profile', {
+      user: {
+        ...user.serialize(),
+        avatar: user.avatar,
+        bannerImage: user.bannerImage || '/default-banner.jpg',
+        postsCount,
+        followersCount,
+        followingCount,
+        joinedDate: user.createdAt.toFormat('MMMM yyyy'),
+      },
+      tweets,
+    })
+  }
 }

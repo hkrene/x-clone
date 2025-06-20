@@ -39,15 +39,14 @@ import ProfilesController from '#controllers/profiles_controller'
 router.on('/').render('security/login')
 
 router.get('/signup', [AuthController, 'showSignupForm'])
-router.post('/signup', [AuthController, 'store'])
+router.post('/signup', [AuthController, 'create'])
 
 router.get('/login', [AuthController, 'showLoginForm'])
-router.post('/login', [AuthController, 'login'])
+router.post('/login', [AuthController, 'store'])
 
 router.group(() => {
-  router.get('/home', [ProfilesController, 'showHome'])
-  router.get('/profile', [ProfilesController, 'create'])
-  // router.get('/editProfile', [ProfilesController, 'showEditProfile'])
+  router.get('/home', [AuthController, 'showHome'])
+  router.get('/profile', [ProfilesController, 'showProfile'])
   // router.get('/:username', [ProfilesController, 'show'])
   // router.post('/:username/update', [ProfilesController, 'update']).as('profile.update')
 }).use(middleware.auth())
