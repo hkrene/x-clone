@@ -6,6 +6,29 @@ import app from '@adonisjs/core/services/app'
 import { cuid } from '@adonisjs/core/helpers'
 
 export default class ProfilesController {
+
+  public async showHome({ view }: HttpContext) {
+            return view.render('pages/home')
+        }
+
+  public async showEditProfile({ view, auth }: HttpContext) {
+  const user = await auth.use('web').authenticate()
+
+  return view.render('pages/editProfil', {
+    user: {
+      ...user.serialize(),
+      bannerImage: user.bannerImage || '',
+      avatar: user.avatar || '',
+      firstName: user.firstName || '',
+      surname: user.surname || '',
+      bio: user.bio || '',
+      location: user.location || '',
+      website: user.website || '',
+      dateOfBirth: user.dateOfBirth || '',
+    },
+  })
+}
+
   /** Updates user profile */
   public async update({ request, response, auth }: HttpContext) {
     const firstName = request.input('firstName')

@@ -9,7 +9,7 @@
 <section class="flex-1 border-x border-gray-800 max-w-2xl w-full">
 
   <!-- Background Image Section -->
-  <div class="relative h-48 bg-cover bg-center bg-gray-800" style="background-image: url('image/leopard.jpeg')">
+  <div class="relative h-48 bg-cover bg-center bg-gray-800" style="background-image: url('{{ '/uploads/' + user.bannerImage || '/image/leopard.jpeg' }}')">
 
     <!-- Header -->
     <header class="absolute top-0 left-0 right-0 z-10 px-4 py-2 bg-transparent md:sticky md:bg-black md:backdrop-blur-md md:flex">
@@ -38,7 +38,7 @@
     <div class="absolute -top-16 left-6 border-4 border-black rounded-full overflow-hidden w-28 h-28 md:w-40 md:h-40">
     @if(user.avatar)
       <img 
-        src="{{ user.avatar }}" 
+        src="{{ '/uploads/' + user.avatar }}" 
         alt="Profile picture"
         class="w-full h-full object-cover"
       >

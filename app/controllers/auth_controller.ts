@@ -63,9 +63,7 @@ export default class AuthController {
 
 
      /**creates users and stores in database */
-        public async showHome({ view }: HttpContext) {
-            return view.render('pages/home')
-        }
+        
     
         public async showLoginForm({ view }: HttpContext) {
       return view.render('security/loginForm')

@@ -17,15 +17,12 @@
     <div class="flex space-x-3 px-4 pt-4 pb-2 border-b border-gray-800">
         <a href="/profile" class="flex-shrink-0 w-12 h-12 rounded-full overflow-hidden">
             {{--  <img src="{{ asset('image/profile0.png') }}" alt="User profile" class="w-full h-full object-cover">  --}}
-        @if(user.avatar)
-        <img 
-          src="{{ user.avatar }} || '/image/profile0.png' }}" 
-          alt="Profile picture"
-          class=" h-full object-cover"
-        >
+        @if(user?.avatar)
+        <img src="{{ '/uploads/' + (user.avatar || '') }}">
+
         @else
           <div class="w-full h-full bg-gray-700 flex items-center justify-center text-white text-xl font-bold uppercase">
-            {{ user.firstName.charAt(0) }}
+            {{ user?.firstName?.charAt(0) }}
           </div>
         @endif
         </a>
@@ -53,21 +50,27 @@
         </form>
     </div>
 
-    <!-- Tweet content-->
-    <div class="divide-y divide-gray-800">
+    
+  <!-- Tweet content-->
+  <div class="divide-y divide-gray-800">
+    @if(tweets && Array.isArray(tweets) && tweets.length > 0)
       @each(tweet in tweets)
         <div class="p-4 hover:bg-gray-900/50 cursor-pointer">
           <div class="flex space-x-3">
             <div class="flex-shrink-0 w-12 h-12 rounded-full overflow-hidden">
-              <img src="{{ tweet.author.avatar || '/image/profile0.png' }}" alt="User profile" class="w-full h-full object-cover">
+              @if(tweet.author?.avatar)
+                <img src="{{ '/uploads/' + tweet.author.avatar }}" alt="User profile" class="w-full h-full object-cover">
+              @else
+                <img src="{{ asset('image/profile0.png') }}" alt="User profile" class="w-full h-full object-cover">
+              @endif
             </div>
             <div class="flex-1 min-w-0">
               <div class="flex items-center space-x-1">
-                <span class="font-bold text-white">{{ tweet.author.firstName }} {{ tweet.author.surname }}</span>
-                @if(tweet.author.isVerified)
+                <span class="font-bold text-white">{{ tweet.author?.firstName }} {{ tweet.author?.surname }}</span>
+                @if(tweet.author?.isVerified)
                   <img src="{{ asset('icons/Verified.svg') }}" alt="Verified" class="w-4 h-4">
                 @end
-                <span class="text-gray-500">@{{ tweet.author.username }} ·</span>
+                <span class="text-gray-500">@{{ tweet.author?.username }} ·</span>
                 <span class="text-gray-500 text-sm">
                   {{ tweet.createdAt.toRelative() }}
                 </span>
@@ -104,13 +107,12 @@
           </div>
         </div>
       @endeach
-
-      @if(tweets.length === 0)
-        <div class="p-4 text-center text-gray-500">
-          Aucun tweet à afficher pour le moment.
-        </div>
-      @end
-    </div>
+    @else
+      <div class="p-4 text-center text-gray-500">
+        Aucun tweet à afficher pour le moment.
+      </div>
+    @endif
+  </div>
   </section>
   @endslot
 @end
