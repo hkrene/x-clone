@@ -79,21 +79,21 @@
       <div class="flex flex-wrap gap-y-1 gap-x-4 text-gray-500 text-sm">
         @if(user.location)
         <div class="flex items-center gap-1">
-          <i class="bi bi-geo-alt text-xl"></i>
+          <i class="bi bi-geo-alt text-l"></i>
           <span class="capitalize">{{ user.location }}</span>
         </div>
         @end
 
         @if(user.website)
         <div class="flex items-center gap-1">
-          <i class="bi bi-link-45deg text-2xl"></i>
+          <i class="bi bi-link-45deg text-xl"></i>
           <span class="text-blue-500 hover:underline cursor-pointer">{{ user.website }}</span>
         </div>
         @end
 
         @if(user.dateOfBirth)
           <div class="flex items-center gap-1">
-            <i class="bi bi-balloon text-xl"></i>
+            <i class="bi bi-balloon text-l"></i>
             <span class="capitalize">born {{ user.dateOfBirth }}</span>
           </div>
         @end
@@ -106,7 +106,7 @@
 
       <div class="flex gap-4 mt-3 ">
         <div class="hover:underline cursor-pointer">
-          <span class="font-bold">{{ user.followingCount }}</span> <span class="text-gray-500">Following</span>
+          <span class="font-bold text-white">{{ user.followingCount }}</span> <span class="text-gray-500">Following</span>
         </div>
         <div class="hover:underline cursor-pointer">
           <span class="font-bold text-white">{{ user.followersCount }}</span> <span class="text-gray-500">Followers</span>
