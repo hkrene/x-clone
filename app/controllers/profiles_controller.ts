@@ -4,46 +4,42 @@ import Tweet from '#models/tweet'
 import type { HttpContext } from '@adonisjs/core/http'
 import app from '@adonisjs/core/services/app'
 import { cuid } from '@adonisjs/core/helpers'
+import { DateTime } from 'luxon'
 
 export default class ProfilesController {
-
   public async showHome({ view, auth }: HttpContext) {
-  const user = await auth.use('web').authenticate()
+    const user = await auth.use('web').authenticate()
 
-  return view.render('pages/home', {
-    user: {
-      ...user.serialize(),
-      avatar: user.avatar || '',
-      firstName: user.firstName || '',
-      surname: user.surname || '',
-      username: user.username || '',
-      isVerified: user.isVerified || false,
-    },
-    
-  })
-}
-
-
+    return view.render('pages/home', {
+      user: {
+        ...user.serialize(),
+        avatar: user.avatar || '',
+        firstName: user.firstName || '',
+        surname: user.surname || '',
+        username: user.username || '', 
+        isVerified: user.isVerified || false,
+      },
+    })
+  }
 
   public async showEditProfile({ view, auth }: HttpContext) {
-  const user = await auth.use('web').authenticate()
+    const user = await auth.use('web').authenticate()
 
-  return view.render('pages/editProfil', {
-    user: {
-      ...user.serialize(),
-      bannerImage: user.bannerImage || '',
-      avatar: user.avatar || '',
-      firstName: user.firstName || '',
-      surname: user.surname || '',
-      bio: user.bio || '',
-      location: user.location || '',
-      website: user.website || '',
-      dateOfBirth: user.dateOfBirth || '',
-    },
-  })
-}
+    return view.render('pages/editProfil', {
+      user: {
+        ...user.serialize(),
+        bannerImage: user.bannerImage || '',
+        avatar: user.avatar || '',
+        firstName: user.firstName || '',
+        surname: user.surname || '',
+        bio: user.bio || '',
+        location: user.location || '',
+        website: user.website || '',
+        dateOfBirth: user.dateOfBirth || '',
+      },
+    })
+  }
 
-  /** Updates user profile */
   public async update({ request, response, auth }: HttpContext) {
     const firstName = request.input('firstName')
     const surname = request.input('surname')
@@ -81,7 +77,6 @@ export default class ProfilesController {
     return response.redirect().back()
   }
 
-  /** Displays user profile */
   public async showProfile({ params, view, auth }: HttpContext) {
     let user: User | null = null
 
@@ -105,7 +100,11 @@ export default class ProfilesController {
       return view.render('pages/profile')
     }
 
-    const tweets: Tweet[] = user.tweets || []
+    const tweets = (user.tweets || []).map((tweet) => ({
+      ...tweet.serialize(),
+      shortTime: this.formatShortTime(tweet.createdAt), // Added short time format
+    }))
+
     const followersCount = user.followers?.length || 0
     const followingCount = user.following?.length || 0
     const postsCount = tweets.length
@@ -113,6 +112,7 @@ export default class ProfilesController {
     return view.render('pages/profile', {
       user: {
         ...user.serialize(),
+        username: user.username ? `@${user.username}` : '', // Added @ prefix
         avatar: user.avatar,
         bannerImage: user.bannerImage || '/default-banner.jpg',
         postsCount,
@@ -122,5 +122,20 @@ export default class ProfilesController {
       },
       tweets,
     })
+  }
+
+  private formatShortTime(date: DateTime): string {
+    const diffMinutes = date.diffNow().as('minutes') * -1
+    
+    if (diffMinutes < 1) {
+      return 'now'
+    }
+    if (diffMinutes < 60) {
+      return `${Math.round(diffMinutes)}m`
+    }
+    if (diffMinutes < 1440) {
+      return `${Math.round(diffMinutes / 60)}h`
+    }
+    return `${Math.round(diffMinutes / 1440)}d`
   }
 }

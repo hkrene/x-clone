@@ -76,7 +76,7 @@
         {{ user.username.startsWith('@') ? user.username : `@${user.username}` }}
       </p>
 
-      <p class="my-3">{{ user.bio }}</p>
+      <p class="my-3 text-sm">{{ user.bio }}</p>
 
       <div class="flex flex-wrap gap-y-1 gap-x-4 text-gray-500 text-sm">
         @if(user.location)
@@ -108,7 +108,8 @@
 
       <div class="flex gap-4 mt-3 ">
         <div class="hover:underline cursor-pointer">
-          <span class="font-bold text-white">{{ user.followingCount }}</span> <span class="text-gray-500">Following</span>
+          <span class="font-bold text-white">{{ user.followingCount }}</span> 
+          <span class="text-gray-500">Following</span>
         </div>
         <div class="hover:underline cursor-pointer">
           <span class="font-bold text-white">{{ user.followersCount }}</span> <span class="text-gray-500">Followers</span>
@@ -152,7 +153,9 @@
               <img src="{{ asset('icons/Verified.svg')}}" class="w-4 h-4" alt="Verified">
             @end
             <span class="text-gray-500 text-sm">{{ user.username }} ·</span>
-            <span class="text-gray-500">{{ tweet.createdAt.toRelative() }}</span>
+            <span class="text-gray-500">
+              {{ tweet.shortTime ?? datetime(tweet.createdAt).setLocale('en').toRelative() }}
+            </span>
           </div>
         </div>
 
