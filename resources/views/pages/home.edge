@@ -85,7 +85,7 @@
                 @end
                 <span class="text-gray-500">@{{ tweet.author?.username }} ·</span>
                 <span class="text-gray-500 text-sm">
-                  {{ tweet.createdAt.toRelative() }}
+              {{ tweet.shortTime ?? datetime(tweet.createdAt).setLocale('en').toRelative() }}
                 </span>
               </div>
               <p class="mt-1 text-white text-base leading-snug">

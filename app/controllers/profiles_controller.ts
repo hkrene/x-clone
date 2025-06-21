@@ -9,6 +9,11 @@ import { DateTime } from 'luxon'
 export default class ProfilesController {
   public async showHome({ view, auth }: HttpContext) {
     const user = await auth.use('web').authenticate()
+    // Load tweets with author information
+    const tweets = await Tweet.query()
+      .where('user_id', user.id)
+      .preload('author')
+      .orderBy('createdAt', 'desc')
 
     return view.render('pages/home', {
       user: {
@@ -19,6 +24,10 @@ export default class ProfilesController {
         username: user.username || '', 
         isVerified: user.isVerified || false,
       },
+      tweets: tweets.map(tweet => ({
+        ...tweet.serialize(),
+        shortTime: this.formatShortTime(tweet.createdAt)
+      }))
     })
   }
 
