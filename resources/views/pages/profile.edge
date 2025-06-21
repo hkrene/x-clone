@@ -72,7 +72,9 @@
           </button>
         @end
       </div>
-      <p class="text-gray-500 text-sm">{{ user.username }}</p>
+      <p class="text-gray-500 text-sm">
+        {{ user.username.startsWith('@') ? user.username : `@${user.username}` }}
+      </p>
 
       <p class="my-3">{{ user.bio }}</p>
 
