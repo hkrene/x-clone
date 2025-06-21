@@ -83,7 +83,10 @@
                 @if(tweet.author?.isVerified)
                   <img src="{{ asset('icons/Verified.svg') }}" alt="Verified" class="w-4 h-4">
                 @end
-                <span class="text-gray-500">@{{ tweet.author?.username }} ·</span>
+                <span class="text-gray-500">
+                  {{--  {{ tweet.author?.username }}   --}}
+                  {{ user.username.startsWith('@') ? user.username : `@${user.username}` }}
+                </span>
                 <span class="text-gray-500 text-sm">
               {{ tweet.shortTime ?? datetime(tweet.createdAt).setLocale('en').toRelative() }}
                 </span>
@@ -129,3 +132,5 @@
   </section>
   @endslot
 @end
+
+  @!component('components/navbar')
