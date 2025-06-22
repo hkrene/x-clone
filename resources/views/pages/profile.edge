@@ -88,8 +88,8 @@
 
         @if(user.website)
         <div class="flex items-center gap-1">
-          {{--  <i class="bi bi-link-45deg text-xl font-bold"></i>  --}}
-          <i class="fas fa-link text-l"></i> 
+          <i class="bi bi-link-45deg text-xl font-bold"></i>
+          {{--  <i class="fas fa-link text-l"></i>   --}}
           <span class="text-blue-500 hover:underline cursor-pointer">{{ user.website }}</span>
         </div>
         @end
@@ -134,7 +134,7 @@
     @each(tweet in tweets)
     <div class="p-4 hover:bg-gray-900/50 cursor-pointer">
       <div class="flex space-x-3">
-        <div class="flex-shrink-0 w-12 h-12 rounded-full overflow-hidden">
+        <div class="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden">
           {{--  <img src="{{ user.avatar || asset('image/profile0.png') }}" alt="{{ user.firstName }}" class="w-full h-full object-cover">  --}}
           @if(user.avatar)
           <img 
@@ -148,13 +148,13 @@
             </div>
           @endif
         </div>
-        <div class="flex items-center space-x-1">
-            <span class="font-bold text-white">{{ user.firstName }} {{ user.surname }}</span>
+        <div class="md:flex items-center space-x-1">
+            <span class="font-bold text-white text-sm">{{ user.firstName }} {{ user.surname }}</span>
             @if(user.isVerified)
               <img src="{{ asset('icons/Verified.svg')}}" class="w-4 h-4" alt="Verified">
             @end
-            <span class="text-gray-500 text-sm">{{ user.username }} ·</span>
-            <span class="text-gray-500">
+            <span class="text-gray-500 text-xs">{{ user.username }} ·</span>
+            <span class="text-gray-500 text-sm">
               {{ tweet.shortTime ?? datetime(tweet.createdAt).setLocale('en').toRelative() }}
             </span>
           </div>
