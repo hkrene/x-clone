@@ -57,29 +57,87 @@
                     </a>
                 </nav>
 
-                <button class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded-full mt-4 capitalize hidden lg:block transition-colors">
+                <button 
+                class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded-full mt-4 capitalize hidden lg:block transition-colors"
+                onclick="openTweetModal()"
+                >
                     Tweet
                 </button>
             </div>
 
             <!-- Profile Section - Sticks to Bottom -->
             <div class="p-3 hover:bg-gray-900 rounded-full cursor-pointer w-full">
-                <div class="flex justify-between items-center">
-                    <div class="flex items-center space-x-3">
-                        <a href="/profile">
-                            <img src="{{asset('image/profile0.png')}}" alt="Profile" class="w-10 h-10 rounded-full">
-                        </a>
-                        <div class="hidden lg:block">
-                            <a href="/profile" class="flex items-center gap-1">
-                                <p class="text-sm font-medium">Bradley Ortiz</p>
-                                <img src="{{ asset('icons/Private.svg')}}" class="w-4 h-4" alt="Verified">
-                            </a>
-                            <p class="text-gray-500 text-sm">@bradley_</p>
-                        </div>
+    <div class="flex justify-between items-center">
+        <div class="flex items-center space-x-3">
+            <a href="/profile">
+                @if(user && user.avatar)
+                    <img src="{{ '/uploads/' + user.avatar }}" 
+                         alt="{{ user.firstName }}"
+                         class="w-10 h-10 rounded-full object-cover">
+                @else
+                    <div class="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center text-white text-xl font-bold uppercase">
+                        {{ user?.firstName?.charAt(0) || 'U' }}
                     </div>
-                    <img src="{{asset('icons/More-2.png')}}" class="hidden lg:block" alt="More options">
-                </div>
+                @endif
+            </a>
+            <div class="hidden lg:block">
+                <a href="/profile" class="flex items-center gap-1">
+                    <p class="text-sm font-medium">
+                        {{ user?.firstName || 'User' }} {{ user?.surname || '' }}
+                    </p>
+                    @if(user?.isVerified)
+                        <img src="{{ asset('icons/Verified.svg')}}" class="w-4 h-4" alt="Verified">
+                    @endif
+                </a>
+                <p class="text-gray-500 text-sm">
+                    @if(user?.username)
+                        @{{ user.username }}
+                    @else
+                        <span class="text-gray-400">Loading...</span>
+                    @endif
+                </p>
             </div>
+        </div>
+        <!-- More options icon with click handler -->
+        <img src="{{asset('icons/More-2.png')}}" 
+             class="hidden lg:block cursor-pointer" 
+             alt="More options"
+             onclick="toggleProfileModal(event)">
+    </div>
+</div>
+
+<!-- Profile Modal -->
+<div id="profileModal" class="hidden fixed bottom-16 right-4 w-64 bg-gray-800 rounded-lg shadow-lg z-50 border border-gray-700">
+    <div class="p-4">
+        <div class="flex items-center space-x-3 mb-4">
+            @if(user && user.avatar)
+                <img src="{{ '/uploads/' + user.avatar }}" 
+                     alt="{{ user.firstName }}"
+                     class="w-11 h-11 rounded-full object-cover">
+            @else
+                <div class="w-11 h-11 bg-gray-700 rounded-full flex items-center justify-center text-white text-xl font-bold uppercase">
+                    {{ user?.firstName?.charAt(0) || 'U' }}
+                </div>
+            @endif
+            <div>
+                <p class="text-sm font-medium">
+                    {{ user?.firstName || 'User' }} {{ user?.surname || '' }}
+                </p>
+                <p class="text-gray-500 text-sm">
+                    @{{ user?.username || 'username' }}
+                </p>
+            </div>
+        </div>
+        
+        <div class="border-t border-gray-700 pt-2">
+            <a href="#" class="block py-2 px-1 text-sm hover:bg-gray-700 rounded">Add an existing account</a>
+            <a href="/logout" class="block py-2 px-1 text-sm hover:bg-gray-700 rounded">Log out @{{ user?.username || '' }}</a>
+        </div>
+    </div>
+</div>
+
+<!-- Backdrop (optional) -->
+<div id="modalBackdrop" class="hidden fixed inset-0 bg-black bg-opacity-50 z-40" onclick="toggleProfileModal(event)"></div>
         </div>
     </section>
 
@@ -226,6 +284,36 @@
             </div>
         </div>
     </footer>
+
+
+<script>
+    function toggleProfileModal(event) {
+        // Stop event propagation to prevent immediate closing
+        event.stopPropagation();
+        
+        const modal = document.getElementById('profileModal');
+        const backdrop = document.getElementById('modalBackdrop');
+        
+        if (modal.classList.contains('hidden')) {
+            modal.classList.remove('hidden');
+            backdrop.classList.remove('hidden');
+        } else {
+            modal.classList.add('hidden');
+            backdrop.classList.add('hidden');
+        }
+    }
+    
+    // Close modal when clicking outside
+    document.addEventListener('click', function(event) {
+        const modal = document.getElementById('profileModal');
+        const moreOptionsIcon = document.querySelector('img[alt="More options"]');
+        
+        if (!modal.contains(event.target) && event.target !== moreOptionsIcon && !modal.classList.contains('hidden')) {
+            modal.classList.add('hidden');
+            document.getElementById('modalBackdrop').classList.add('hidden');
+        }
+    });
+</script>
 
 </body>
 </html>

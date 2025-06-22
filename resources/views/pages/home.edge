@@ -14,7 +14,7 @@
     </header>
 
     <!-- new tweet textarea -->
-    <div class="flex space-x-3 px-4 pt-4 pb-2 border-b border-gray-800">
+    <div class="hidden md:flex space-x-3 px-4 pt-4 pb-2 border-b border-gray-800">
         <a href="/profile" class="flex-shrink-0 w-12 h-12 rounded-full overflow-hidden">
             {{--  <img src="{{ asset('image/profile0.png') }}" alt="User profile" class="w-full h-full object-cover">  --}}
         @if(user?.avatar)
@@ -32,34 +32,34 @@
         </a>
 
         <!-- Tweet Form -->
-    <form action="/tweets" method="post" enctype="multipart/form-data" class="flex-1">
-      {{ csrfField() }}
+        <form action="/tweets" method="post" enctype="multipart/form-data" class="flex-1">
+          {{ csrfField() }}
 
-      <textarea 
-        name="tweet" 
-        placeholder="What's happening?"
-        class="w-full bg-transparent text-white text-xl outline-none placeholder-gray-500 resize-none pt-3 min-h-[60px]"
-      ></textarea>
+          <textarea 
+            name="tweet" 
+            placeholder="What's happening?"
+            class="w-full bg-transparent text-white text-xl outline-none placeholder-gray-500 resize-none pt-3 min-h-[60px]"
+          ></textarea>
 
-      <!-- Hidden File Input for media -->
-      <input type="file" id="mediaInput" name="media" accept="image/*,video/*" class="hidden" />
+          <!-- Hidden File Input for media -->
+          <input type="file" id="mediaInput" name="media" accept="image/*,video/*" class="hidden" />
 
-      <div class="flex items-center justify-between pt-2 pb-1">
-        <div class="flex space-x-1">
-          <!-- Media Upload Button triggers hidden file input -->
-          <button type="button" onclick="document.getElementById('mediaInput').click()">
-            <img src="{{ asset('icons/Top-Tweets.svg') }}" alt="Media">
-          </button>
-          <div><img src="{{ asset('icons/gif.svg') }}" alt="GIF"></div>
-          <div><img src="{{ asset('icons/poll.svg') }}" alt="Poll"></div>
-          <div><img src="{{ asset('icons/emoji.svg') }}" alt="Emoji"></div>
-          <div><img src="{{ asset('icons/schedule.svg') }}" alt="Schedule"></div>
-        </div>
-        <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white text-sm font-bold rounded-full px-4 py-1.5 capitalize">
-          Tweet
-        </button>
-      </div>
-    </form>
+          <div class="flex items-center justify-between pt-2 pb-1">
+            <div class="flex space-x-1">
+              <!-- Media Upload Button triggers hidden file input -->
+              <button type="button" onclick="document.getElementById('mediaInput').click()">
+                <img src="{{ asset('icons/Top-Tweets.svg') }}" alt="Media">
+              </button>
+              <div><img src="{{ asset('icons/gif.svg') }}" alt="GIF"></div>
+              <div><img src="{{ asset('icons/poll.svg') }}" alt="Poll"></div>
+              <div><img src="{{ asset('icons/emoji.svg') }}" alt="Emoji"></div>
+              <div><img src="{{ asset('icons/schedule.svg') }}" alt="Schedule"></div>
+            </div>
+            <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white text-sm font-bold rounded-full px-4 py-1.5 capitalize">
+              Tweet
+            </button>
+          </div>
+        </form>
 
     </div>
 
@@ -70,13 +70,15 @@
       @each(tweet in tweets)
         <div class="p-4 hover:bg-gray-900/50 cursor-pointer">
           <div class="flex space-x-3">
-            <div class="flex-shrink-0 w-12 h-12 rounded-full overflow-hidden">
+            <a href="/profile" class="flex-shrink-0 w-12 h-12 rounded-full overflow-hidden">
               @if(tweet.author?.avatar)
                 <img src="{{ '/uploads/' + tweet.author.avatar }}" alt="User profile" class="w-full h-full object-cover">
               @else
-                <img src="{{ asset('image/profile0.png') }}" alt="User profile" class="w-full h-full object-cover">
+                <div class="w-full h-full bg-gray-700 flex items-center justify-center text-white text-xl font-bold uppercase">
+                  {{ user.firstName.charAt(0) }}
+                </div>
               @endif
-            </div>
+            </a>
             <div class="flex-1 min-w-0">
               <div class="flex items-center space-x-1">
                 <span class="font-bold text-white">{{ tweet.author?.firstName }} {{ tweet.author?.surname }}</span>
@@ -130,6 +132,8 @@
     @endif
   </div>
   </section>
+
+  @!component('components/tweetbtn', { position: 'bottom-6' })
   @endslot
 @end
 
