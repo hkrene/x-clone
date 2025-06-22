@@ -107,7 +107,7 @@
 </div>
 
 <!-- Profile Modal -->
-<div id="profileModal" class="hidden fixed bottom-16 right-4 w-64 bg-gray-800 rounded-lg shadow-lg z-50 border border-gray-700">
+<div id="profileModal" class="hidden fixed bottom-16 left-4 w-64 bg-gray-800 rounded-lg shadow-lg z-50 border border-gray-700">
     <div class="p-4">
         <div class="flex items-center space-x-3 mb-4">
             @if(user && user.avatar)
@@ -131,7 +131,7 @@
         
         <div class="border-t border-gray-700 pt-2">
             <a href="#" class="block py-2 px-1 text-sm hover:bg-gray-700 rounded">Add an existing account</a>
-            <a href="/logout" class="block py-2 px-1 text-sm hover:bg-gray-700 rounded">Log out @{{ user?.username || '' }}</a>
+            <a href="/logout" class="block py-2 px-1 text-sm hover:bg-gray-700 rounded">Log out {{ user?.username || '' }}</a>
         </div>
     </div>
 </div>
