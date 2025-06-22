@@ -37,9 +37,17 @@
 
           <textarea 
             name="tweet" 
+            id="tweet-textarea"
             placeholder="What's happening?"
             class="w-full bg-transparent text-white text-xl outline-none placeholder-gray-500 resize-none pt-3 min-h-[60px]"
+            maxlength="280"
+            oninput="updateCharCount()"
           ></textarea>
+
+          <!-- Character Counter -->
+          <div id="char-counter" class="text-right text-gray-500 text-sm mb-3">
+            0/280
+          </div>
 
           <!-- Hidden File Input for media -->
           <input type="file" id="mediaInput" name="media" accept="image/*,video/*" class="hidden" />
@@ -55,7 +63,12 @@
               <div><img src="{{ asset('icons/emoji.svg') }}" alt="Emoji"></div>
               <div><img src="{{ asset('icons/schedule.svg') }}" alt="Schedule"></div>
             </div>
-            <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white text-sm font-bold rounded-full px-4 py-1.5 capitalize">
+            <button 
+            type="submit" 
+            id="tweet-button"
+            class="bg-blue-500 hover:bg-blue-600 text-white text-sm font-bold rounded-full px-4 py-1.5 capitalize disabled:opacity-50 disabled:cursor-not-allowed" 
+            disabled
+            >
               Tweet
             </button>
           </div>
