@@ -22,7 +22,7 @@ export default class TweetsController {
     const tweetText = request.input('tweet')
     const user = auth.user!
 
-    const media = request.file('media', {
+    const media = request.file('mediaUrl', {
       size: '10mb',
       extnames: ['jpg', 'jpeg', 'png', 'gif', 'mp4', 'webm'],
     })

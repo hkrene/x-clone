@@ -55,7 +55,7 @@
               0/280
             </div>
 
-            <input type="file" id="home-mediaInput" name="media" accept="image/*,video/*" class="hidden" />
+            <input type="file" id="home-mediaInput" name="mediaUrl" accept="image/*,video/*" class="hidden" />
 
             <div class="flex items-center justify-between pt-2 pb-1">
               <div class="flex space-x-1">
@@ -82,72 +82,99 @@
 
     
   <!-- Tweet content-->
-  <div class="divide-y divide-gray-800">
-    @if(tweets && Array.isArray(tweets) && tweets.length > 0)
-      @each(tweet in tweets)
-        <div class="p-4 hover:bg-gray-900/50 cursor-pointer">
-          <div class="flex space-x-3">
-            <a href="/profile" class="flex-shrink-0 w-12 h-12 rounded-full overflow-hidden">
-              @if(tweet.author?.avatar)
-                <img src="{{ '/uploads/' + tweet.author.avatar }}" alt="User profile" class="w-full h-full object-cover">
-              @else
-                <div class="w-full h-full bg-gray-700 flex items-center justify-center text-white text-xl font-bold uppercase">
-                  {{ user.firstName.charAt(0) }}
+    <div class="divide-y divide-gray-800">
+      @if(tweets && Array.isArray(tweets) && tweets.length > 0)
+        @each(tweet in tweets)
+          <div class="p-4 hover:bg-gray-900/50 cursor-pointer">
+            <div class="flex space-x-3">
+              <a href="/profile" class="flex-shrink-0 w-12 h-12 rounded-full overflow-hidden">
+                @if(tweet.author?.avatar)
+                  <img src="{{ '/uploads/' + tweet.author.avatar }}" alt="User profile" class="w-full h-full object-cover">
+                @else
+                  <div class="w-full h-full bg-gray-700 flex items-center justify-center text-white text-xl font-bold uppercase">
+                    {{ tweet.author.firstName.charAt(0) }}
+                  </div>
+                @endif
+              </a>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center space-x-1">
+                  <span class="font-bold text-white">{{ tweet.author?.firstName }} {{ tweet.author?.surname }}</span>
+                  @if(tweet.author?.isVerified)
+                    <img src="{{ asset('icons/Verified.svg') }}" alt="Verified" class="w-4 h-4">
+                  @end
+                  <span class="text-gray-500">
+                    {{ tweet.author.username.startsWith('@') ? tweet.author.username : `@${tweet.author.username}` }}
+                  </span>
+                  <span class="text-gray-500 text-sm">
+                    {{ tweet.shortTime ?? datetime(tweet.createdAt).setLocale('en').toRelative() }}
+                  </span>
                 </div>
-              @endif
-            </a>
-            <div class="flex-1 min-w-0">
-              <div class="flex items-center space-x-1">
-                <span class="font-bold text-white">{{ tweet.author?.firstName }} {{ tweet.author?.surname }}</span>
-                @if(tweet.author?.isVerified)
-                  <img src="{{ asset('icons/Verified.svg') }}" alt="Verified" class="w-4 h-4">
-                @end
-                <span class="text-gray-500">
-                  {{--  {{ tweet.author?.username }}   --}}
-                  {{ user.username.startsWith('@') ? user.username : `@${user.username}` }}
-                </span>
-                <span class="text-gray-500 text-sm">
-              {{ tweet.shortTime ?? datetime(tweet.createdAt).setLocale('en').toRelative() }}
-                </span>
-              </div>
-              <p class="mt-1 text-white text-base leading-snug">
-                {{ tweet.content }}
-              </p>
-              <div class="flex items-center justify-between mt-3 text-gray-500 max-w-md">
-                <button class="flex items-center space-x-1 group">
-                  <div class="p-2 rounded-full group-hover:bg-blue-900/20">
-                    <img src="{{ asset('icons/Reply.svg') }}" alt="Reply" class="w-5 h-5">
+                <p class="mt-1 text-white text-base leading-snug">
+                  {{ tweet.content }}
+                </p>
+
+                <!-- Media Attachment -->
+                @if(tweet.mediaUrl)
+                  <div class="mt-3 rounded-xl overflow-hidden">
+                    @let(ext = tweet.mediaUrl.split('.').pop().toLowerCase())
+                    @if(['jpg', 'jpeg', 'png', 'gif'].includes(ext))
+                      <img 
+                        src="{{ tweet.mediaUrl }}" 
+                        alt="Tweet media" 
+                        class="max-h-96 w-full object-cover rounded-xl border border-gray-800"
+                      >
+                    @elseif(['mp4', 'webm'].includes(ext))
+                      <video 
+                        controls 
+                        class="max-h-96 w-full rounded-xl border border-gray-800"
+                        preload="none"
+                      >
+                        <source src="{{ tweet.mediaUrl }}" type="video/{{ ext }}">
+                      </video>
+                    @else
+                      <div class="bg-gray-800 p-4 text-gray-400 rounded-xl">
+                        Unsupported media type
+                      </div>
+                    @endif
                   </div>
-                  <span class="text-xs hover:text-blue-500">0</span>
-                </button>
-                <button class="flex items-center space-x-1 group">
-                  <div class="p-2 rounded-full group-hover:bg-green-900/20">
-                    <img src="{{ asset('icons/Retweet.svg') }}" alt="Retweet" class="w-5 h-5">
-                  </div>
-                  <span class="text-xs hover:text-green-500">0</span>
-                </button>
-                <button class="flex items-center space-x-1 group">
-                  <div class="p-2 rounded-full group-hover:bg-red-900/20">
-                    <img src="{{ asset('icons/React.svg') }}" alt="Like" class="w-5 h-5">
-                  </div>
-                  <span class="text-xs hover:text-red-500">0</span>
-                </button>
-                <button class="flex items-center space-x-1 group">
-                  <div class="p-2 rounded-full group-hover:bg-blue-900/20">
-                    <img src="{{ asset('icons/Share.svg') }}" alt="Share" class="w-5 h-5">
-                  </div>
-                </button>
+                @endif
+
+                <!-- Tweet Actions -->
+                <div class="flex items-center justify-between mt-3 text-gray-500 max-w-md">
+                  <button class="flex items-center space-x-1 group">
+                    <div class="p-2 rounded-full group-hover:bg-blue-900/20">
+                      <img src="{{ asset('icons/Reply.svg') }}" alt="Reply" class="w-5 h-5">
+                    </div>
+                    <span class="text-xs hover:text-blue-500">0</span>
+                  </button>
+                  <button class="flex items-center space-x-1 group">
+                    <div class="p-2 rounded-full group-hover:bg-green-900/20">
+                      <img src="{{ asset('icons/Retweet.svg') }}" alt="Retweet" class="w-5 h-5">
+                    </div>
+                    <span class="text-xs hover:text-green-500">0</span>
+                  </button>
+                  <button class="flex items-center space-x-1 group">
+                    <div class="p-2 rounded-full group-hover:bg-red-900/20">
+                      <img src="{{ asset('icons/React.svg') }}" alt="Like" class="w-5 h-5">
+                    </div>
+                    <span class="text-xs hover:text-red-500">0</span>
+                  </button>
+                  <button class="flex items-center space-x-1 group">
+                    <div class="p-2 rounded-full group-hover:bg-blue-900/20">
+                      <img src="{{ asset('icons/Share.svg') }}" alt="Share" class="w-5 h-5">
+                    </div>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
+        @endeach
+      @else
+        <div class="p-4 text-center text-gray-500">
+          Aucun tweet à afficher pour le moment.
         </div>
-      @endeach
-    @else
-      <div class="p-4 text-center text-gray-500">
-        Aucun tweet à afficher pour le moment.
-      </div>
-    @endif
-  </div>
+      @endif
+    </div>
   </section>
 
   @!component('components/tweetbtn', { position: 'bottom-6' })
