@@ -109,9 +109,7 @@
                     {{ tweet.shortTime ?? datetime(tweet.createdAt).setLocale('en').toRelative() }}
                   </span>
                 </div>
-                <p class="mt-1 text-white text-base leading-snug">
-                  {{ tweet.content }}
-                </p>
+                <p class="mt-1 text-white text-base leading-snug break-words overflow-hidden text-ellipsis box-border">{{ tweet.content }}</p>
 
                 <!-- Media Attachment -->
                 @if(tweet.mediaUrl)
