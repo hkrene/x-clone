@@ -9,33 +9,7 @@ import { DateTime } from 'luxon'
 
 //Shows home page with tweets
 export default class ProfilesController {
-  // public async showHome({ view, auth }: HttpContext) {
-  //   const user = await auth.use('web').authenticate()
-  //   // Load tweets with author information
-  //   const tweets = await Tweet.query()
-  //     .whereNot('user_id', user.id)
-  //     .preload('author')
-  //     .limit(50)
-  //     .orderBy('createdAt', 'desc')
-
-  //   return view.render('pages/home', {
-  //     user: {
-  //       ...user.serialize(),
-  //       avatar: user.avatar || '',
-  //       firstName: user.firstName || '',
-  //       surname: user.surname || '',
-  //       username: user.username || '', 
-  //       isVerified: user.isVerified || false,
-  //     },
-  //     tweets: tweets.map(tweet => ({
-  //       ...tweet.serialize(),
-  //       shortTime: this.formatShortTime(tweet.createdAt)
-  //     }))
-  //   })
-  // }
-
-
- public async showHome({ view, auth }: HttpContext) {
+  public async showHome({ view, auth }: HttpContext) {
     const user = await auth.use('web').authenticate()
     // Load tweets with author information
     const tweets = await Tweet.query()
@@ -45,25 +19,21 @@ export default class ProfilesController {
       .orderBy('createdAt', 'desc')
 
     return view.render('pages/home', {
-    user: {
-      ...user.serialize(),
-      avatar: user.avatar || '',
-      firstName: user.firstName || '',
-      surname: user.surname || '',
-      username: user.username || '', 
-      isVerified: user.isVerified || false,
-    },
-    tweets: tweets.map(tweet => ({
-      ...tweet.serialize(),
-      author: tweet.author.serialize(),
-      shortTime: this.formatShortTime(
-        tweet.createdAt instanceof DateTime 
-          ? tweet.createdAt 
-          : DateTime.fromJSDate(tweet.createdAt)
-      )
-    }))
-  })
+      user: {
+        ...user.serialize(),
+        avatar: user.avatar || '',
+        firstName: user.firstName || '',
+        surname: user.surname || '',
+        username: user.username || '', 
+        isVerified: user.isVerified || false,
+      },
+      tweets: tweets.map(tweet => ({
+        ...tweet.serialize(),
+        shortTime: this.formatShortTime(tweet.createdAt)
+      }))
+    })
   }
+
 
   //This method renders the edit profile page with the user's current information
   public async showEditProfile({ view, auth }: HttpContext) {
@@ -126,6 +96,7 @@ export default class ProfilesController {
   }
 
 
+  
 // This method retrieves the user's profile based on the username parameter or the authenticated user  
   public async showProfile({ params, view, auth }: HttpContext) {
     let user: User | null = null
@@ -164,7 +135,7 @@ export default class ProfilesController {
         ...user.serialize(),
         username: user.username ? `@${user.username}` : '', // Added @ prefix
         avatar: user.avatar,
-        bannerImage: user.bannerImage || '/default-banner.jpg',
+        bannerImage: user.bannerImage || '',
         postsCount,
         followersCount,
         followingCount,
