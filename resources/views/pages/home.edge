@@ -87,7 +87,7 @@
         @each(tweet in tweets)
           <div class="p-4 hover:bg-gray-900/50 cursor-pointer">
             <div class="flex space-x-3">
-              <a href="/profile" class="flex-shrink-0 w-12 h-12 rounded-full overflow-hidden">
+              <a href="/otherProfile/{{ tweet.author.id }}" class="flex-shrink-0 w-12 h-12 rounded-full overflow-hidden">
                 @if(tweet.author?.avatar)
                   <img src="{{ '/uploads/' + tweet.author.avatar }}" alt="User profile" class="w-full h-full object-cover">
                 @else

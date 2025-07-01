@@ -49,29 +49,7 @@
     @endif
     </div>
 
-    <!-- Edit Profile Button -->
-    <div class="flex justify-end pt-3">
-      <button class="px-4 py-1.5 border border-gray-600 rounded-full text-sm font-bold hover:bg-gray-900">
-        
-        <a href="/editProfile">
-          Edit profile
-        </a>
-      </button>
-    </div>
-
-    <!-- Profile Details -->
-    <div class="mt-4 md:mt-16">
-      <div class="flex items-center gap-2">
-        <h2 class="text-xl font-bold">{{ user.firstName }} {{ user.surname }}</h2>
-        @if(user.isVerified)
-          <img src="{{ asset('icons/Verified.svg') }}" class="w-4 h-4" alt="Verified">
-        @else
-          <button class="px-2 py-0.5 md:border md:border-gray-600 rounded-full text-sm font-bold hover:bg-gray-900 flex gap-1 items-center">
-            <i class="bi bi-patch-check-fill text-blue-500 text-xl"></i>
-            <span class="text-blue-500 md:text-white">Get verified</span>
-          </button>
-        @end
-      </div>
+   
       <p class="text-gray-500 text-sm">
         {{ user.username.startsWith('@') ? user.username : `@${user.username}` }}
       </p>

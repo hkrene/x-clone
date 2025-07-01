@@ -145,6 +145,21 @@ export default class ProfilesController {
     })
   }
 
+
+  public async showOtherProfile({ params, view, auth, response }: HttpContext) {
+    const user = auth.user!
+    const param = await User.findOrFail(params.id)
+    if (param.id===user.id) {
+      response.redirect('/profile')
+      
+    } else {
+      return view.render('pages/otherProfile', {
+      })
+    }
+    
+  }
+
+
   private formatShortTime(date: DateTime): string {
     const diffMinutes = date.diffNow().as('minutes') * -1
     
