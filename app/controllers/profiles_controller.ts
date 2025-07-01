@@ -86,6 +86,8 @@ export default class ProfilesController {
     return response.redirect().back()
   }
 
+
+  
   public async showProfile({ params, view, auth }: HttpContext) {
     let user: User | null = null
 
