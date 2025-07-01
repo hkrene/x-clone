@@ -83,7 +83,7 @@ export default class ProfilesController {
     }
 
     await user.save()
-    return response.redirect().back()
+    return response.redirect('/profile')
   }
 
 
