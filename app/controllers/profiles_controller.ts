@@ -6,31 +6,66 @@ import app from '@adonisjs/core/services/app'
 import { cuid } from '@adonisjs/core/helpers'
 import { DateTime } from 'luxon'
 
+
+//Shows home page with tweets
 export default class ProfilesController {
-  public async showHome({ view, auth }: HttpContext) {
+  // public async showHome({ view, auth }: HttpContext) {
+  //   const user = await auth.use('web').authenticate()
+  //   // Load tweets with author information
+  //   const tweets = await Tweet.query()
+  //     .whereNot('user_id', user.id)
+  //     .preload('author')
+  //     .limit(50)
+  //     .orderBy('createdAt', 'desc')
+
+  //   return view.render('pages/home', {
+  //     user: {
+  //       ...user.serialize(),
+  //       avatar: user.avatar || '',
+  //       firstName: user.firstName || '',
+  //       surname: user.surname || '',
+  //       username: user.username || '', 
+  //       isVerified: user.isVerified || false,
+  //     },
+  //     tweets: tweets.map(tweet => ({
+  //       ...tweet.serialize(),
+  //       shortTime: this.formatShortTime(tweet.createdAt)
+  //     }))
+  //   })
+  // }
+
+
+ public async showHome({ view, auth }: HttpContext) {
     const user = await auth.use('web').authenticate()
     // Load tweets with author information
     const tweets = await Tweet.query()
-      .where('user_id', user.id)
+      // .whereNot('user_id', user.id)
       .preload('author')
+      .limit(50)
       .orderBy('createdAt', 'desc')
 
     return view.render('pages/home', {
-      user: {
-        ...user.serialize(),
-        avatar: user.avatar || '',
-        firstName: user.firstName || '',
-        surname: user.surname || '',
-        username: user.username || '', 
-        isVerified: user.isVerified || false,
-      },
-      tweets: tweets.map(tweet => ({
-        ...tweet.serialize(),
-        shortTime: this.formatShortTime(tweet.createdAt)
-      }))
-    })
+    user: {
+      ...user.serialize(),
+      avatar: user.avatar || '',
+      firstName: user.firstName || '',
+      surname: user.surname || '',
+      username: user.username || '', 
+      isVerified: user.isVerified || false,
+    },
+    tweets: tweets.map(tweet => ({
+      ...tweet.serialize(),
+      author: tweet.author.serialize(),
+      shortTime: this.formatShortTime(
+        tweet.createdAt instanceof DateTime 
+          ? tweet.createdAt 
+          : DateTime.fromJSDate(tweet.createdAt)
+      )
+    }))
+  })
   }
 
+  //This method renders the edit profile page with the user's current information
   public async showEditProfile({ view, auth }: HttpContext) {
     const user = await auth.use('web').authenticate()
 
@@ -48,6 +83,10 @@ export default class ProfilesController {
       },
     })
   }
+
+
+  //This method updates the user's profile information based on the input received from the request 
+  // After updating, it redirects the user back to their profile page
 
   public async update({ request, response, auth }: HttpContext) {
     const firstName = request.input('firstName')
@@ -87,7 +126,7 @@ export default class ProfilesController {
   }
 
 
-  
+// This method retrieves the user's profile based on the username parameter or the authenticated user  
   public async showProfile({ params, view, auth }: HttpContext) {
     let user: User | null = null
 
