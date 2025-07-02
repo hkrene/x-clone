@@ -123,7 +123,7 @@ export default class ProfilesController {
 
     const tweets = (user.tweets || []).map((tweet) => ({
       ...tweet.serialize(),
-      shortTime: this.formatShortTime(tweet.createdAt), // Added short time format
+      shortTime: this.formatShortTime(tweet.createdAt), 
     }))
 
     const followersCount = user.followers?.length || 0
@@ -133,7 +133,7 @@ export default class ProfilesController {
     return view.render('pages/profile', {
       user: {
         ...user.serialize(),
-        username: user.username ? `@${user.username}` : '', // Added @ prefix
+        username: user.username ? `@${user.username}` : '', 
         avatar: user.avatar,
         bannerImage: user.bannerImage || '',
         postsCount,
@@ -146,18 +146,42 @@ export default class ProfilesController {
   }
 
 
-  public async showOtherProfile({ params, view, auth, response }: HttpContext) {
-    const user = auth.user!
-    const param = await User.findOrFail(params.id)
-    if (param.id===user.id) {
+public async showOtherProfile({ params, view, auth, response }: HttpContext) {
+    const userAuth = auth.user!
+    const user = await User.query()
+      .where('id', params.id)
+      .preload('tweets', (query) => {
+        query.orderBy('created_at', 'desc')
+      })
+      .preload('followers')
+      .preload('following')
+      .firstOrFail()
+
+    if (user.id === userAuth.id) {
       response.redirect('/profile')
-      
     } else {
+      
+      const postsCount = user.tweets.length
+      const followersCount = user.followers.length
+      const followingCount = user.following.length
+
       return view.render('pages/otherProfile', {
+        user: {
+          ...user.serialize(),
+          username: user.username ? `@${user.username}` : '',
+          avatar: user.avatar,
+          bannerImage: user.bannerImage || '',
+          postsCount,
+          followersCount,
+          followingCount,
+          joinedDate: user.createdAt.toFormat('MMMM yyyy'),
+        },
+        tweets: user.tweets.map(tweet => ({
+          ...tweet.serialize(),
+        })),
       })
     }
-    
-  }
+}
 
 
   private formatShortTime(date: DateTime): string {
