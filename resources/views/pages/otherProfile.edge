@@ -35,7 +35,7 @@
   </div>
 
   <div class="px-4 relative">
-    <div class="absolute -top-10 md:-top-16 left-2 md:left-16 border-4 border-black rounded-full overflow-hidden w-20 h-20 md:w-40 md:h-40">
+    <div class="absolute -top-10 md:-top-16 left-2 md:left-4 border-4 border-black rounded-full overflow-hidden w-20 h-20 md:w-32 md:h-32">
     @if(user.avatar)
       <img 
         src="{{ '/uploads/' + user.avatar }}" 
@@ -60,17 +60,17 @@
     </div>
 
     <!-- Profile Details -->
-    <div class="mt-4 md:mt-16">
-      <div class="flex items-center gap-2">
+    <div class="mt-2 md:mt-8">
+      <div class="flex items-center ">
         <h2 class="text-xl font-bold">{{ user.firstName }} {{ user.surname }}</h2>
-        {{--  @if(user.isVerified)
-          <img src="{{ asset('icons/Verified.svg') }}" class="w-4 h-4" alt="Verified">  --}}
-        {{--  @else
-          <button class="px-2 py-0.5 md:border md:border-gray-600 rounded-full text-sm font-bold hover:bg-gray-900 flex gap-1 items-center">
+        @if(user.isVerified)
+          <img src="{{ asset('icons/Verified.svg') }}" class="w-2 h-2" alt="Verified">
+        @else
+          <button class="px-2 py-0.5 text-sm font-bold hover:bg-gray-900 flex gap-1 items-center">
             <i class="bi bi-patch-check-fill text-blue-500 text-xl"></i>
-            <span class="text-blue-500 md:text-white">Get verified</span>
+            {{--  <span class="text-blue-500 md:text-white">Get verified</span>  --}}
           </button>
-        @end  --}}
+        @end 
       </div>
       <p class="text-gray-500 text-sm">
         {{ user.username.startsWith('@') ? user.username : `@${user.username}` }}
