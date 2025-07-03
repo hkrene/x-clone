@@ -9,7 +9,7 @@
 <section class="flex-1 border-x border-gray-800 max-w-2xl w-full">
 
   <!-- Background Image Section -->
-  <div class="relative h-48 bg-cover bg-center bg-gray-800" style="background-image: url('{{ '/uploads/' + user.bannerImage || '' }}')">
+  <div class="relative h-32 md:h-48 bg-cover bg-center bg-gray-800" style="background-image: url('{{ '/uploads/' + user.bannerImage || '' }}')">
 
     <!-- Header -->
     <header class="absolute top-0 left-0 right-0 z-10 px-4 py-2 bg-transparent md:sticky md:bg-black md:backdrop-blur-md md:flex">
@@ -35,7 +35,7 @@
   </div>
 
   <div class="px-4 relative">
-    <div class="absolute -top-16 left-6 border-4 border-black rounded-full overflow-hidden w-28 h-28 md:w-40 md:h-40">
+    <div class="absolute -top-10 md:-top-16 left-2 md:left-16 border-4 border-black rounded-full overflow-hidden w-20 h-20 md:w-40 md:h-40">
     @if(user.avatar)
       <img 
         src="{{ '/uploads/' + user.avatar }}" 
@@ -50,17 +50,17 @@
     </div>
 
     <!-- Edit Profile Button -->
-    <div class="flex justify-end pt-3 ">
-      <button class="px-4 py-1.5 text-black  ">
+    <div class="flex justify-end pt-3">
+      <button class="px-6 py-1.5 border border-white bg-white text-black rounded-full text-sm font-bold hover:bg-gray-900 hover:text-white transition-colors duration-200">
         
-        {{--  <a href="/editProfile">
-          Edit profile
-        </a>  --}}
+        <a href="">
+          Follow
+        </a>
       </button>
     </div>
 
     <!-- Profile Details -->
-    <div class="mt-12 md:mt-16">
+    <div class="mt-4 md:mt-16">
       <div class="flex items-center gap-2">
         <h2 class="text-xl font-bold">{{ user.firstName }} {{ user.surname }}</h2>
         {{--  @if(user.isVerified)
@@ -178,11 +178,11 @@
               @endif
               
               <a 
-                href="{{ `/profile/${user.username.replace('@', '')}` }}" 
                 class="text-gray-500 hover:underline"
               >
                 {{ user.username }}
-              </a>
+              </                href="{{ `/profile/${user.username.replace('@', '')}` }}" 
+a>
               
               <span class="text-gray-500 text-sm">
                 {{ tweet.shortTime }}
