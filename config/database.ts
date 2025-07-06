@@ -44,6 +44,15 @@
 
 import env from '#start/env'
 import { defineConfig } from '@adonisjs/lucid'
+import fs from 'node:fs'
+
+// For production - use proper SSL validation if possible
+const sslConfig = env.get('NODE_ENV') === 'production'
+  ? {
+      rejectUnauthorized: true,
+      ca: fs.readFileSync('config/railway-ca.crt').toString() // Create this file
+    }
+  : { rejectUnauthorized: false } // Allow self-signed in development
 
 const dbConfig = defineConfig({
   connection: 'postgres',
@@ -52,10 +61,7 @@ const dbConfig = defineConfig({
       client: 'pg',
       connection: {
         connectionString: env.get('DATABASE_URL'),
-        ssl: { rejectUnauthorized: false },
-        // Add these explicit options for SCRAM auth
-        user: env.get('DB_USER', 'postgres'),
-        password: env.get('DB_PASSWORD', 'RFFpjDNoNeGwxqrwEdreiAMgkyyxPtSq')
+        ssl: sslConfig
       },
       migrations: {
         naturalSort: true,
