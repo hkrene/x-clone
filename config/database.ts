@@ -45,25 +45,25 @@
 import env from '#start/env'
 import { defineConfig } from '@adonisjs/lucid'
 
-
 const dbConfig = defineConfig({
- connection: 'postgres',
- connections: {
-   postgres: {
-     client: 'pg',
-     connection: {
-       connectionString: env.get('DATABASE_URL'),
-       ssl: { rejectUnauthorized: false }
-     },
-     migrations: {
-       naturalSort: true,
-       paths: ['database/migrations']
-     }
-   }
- }
+  connection: 'postgres',
+  connections: {
+    postgres: {
+      client: 'pg',
+      connection: {
+        connectionString: env.get('DATABASE_URL'),
+        ssl: env.get('NODE_ENV') === 'production' 
+          ? { rejectUnauthorized: false } 
+          : false
+      },
+      migrations: {
+        naturalSort: true,
+        paths: ['database/migrations']
+      },
+      // Remove healthCheck as it's not valid for PostgreSQL
+      debug: env.get('NODE_ENV') === 'development'
+    }
+  }
 })
 
-
 export default dbConfig
-
-
