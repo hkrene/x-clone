@@ -51,10 +51,17 @@ const dbConfig = defineConfig({
     postgres: {
       client: 'pg',
       connection: {
+        // Recommended approach using connectionString:
         connectionString: env.get('DATABASE_URL'),
-        ssl: env.get('NODE_ENV') === 'production' 
-          ? { rejectUnauthorized: false } // Railway uses trusted certs
-          : false // Disable in development
+        ssl: { rejectUnauthorized: false }
+        
+        // OR alternative using individual parameters:
+        // host: env.get('DB_HOST'),
+        // port: env.get('DB_PORT'),
+        // user: env.get('DB_USER'),
+        // password: env.get('DB_PASSWORD'),
+        // database: env.get('DB_DATABASE'),
+        // ssl: { rejectUnauthorized: false }
       },
       migrations: {
         naturalSort: true,
@@ -65,3 +72,5 @@ const dbConfig = defineConfig({
 })
 
 export default dbConfig
+
+

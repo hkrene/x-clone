@@ -5,14 +5,14 @@
   "type": "module",
   "license": "UNLICENSED",
   "scripts": {
-  "build": "node ace build",
-  "start": "node build/bin/server.js",
-  "dev": "node ace serve --watch",
-  "test": "node ace test",
-  "lint": "eslint .",
-  "format": "prettier --write .",
-  "typecheck": "tsc --noEmit"
-},
+    "build": "node ace build",
+    "start": "node build/bin/server.js",
+    "dev": "node ace serve --watch",
+    "test": "node ace test",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "typecheck": "tsc --noEmit"
+  },
   "imports": {
     "#controllers/*": "./app/controllers/*.js",
     "#exceptions/*": "./app/exceptions/*.js",
@@ -40,7 +40,7 @@
     "@japa/plugin-adonisjs": "^4.0.0",
     "@japa/runner": "^4.2.0",
     "@swc/core": "1.10.7",
-    "@types/luxon": "^3.4.2",
+    "@types/luxon": "^3.6.2",
     "@types/node": "^22.13.2",
     "eslint": "^9.20.1",
     "hot-hook": "^0.4.0",
@@ -62,8 +62,8 @@
     "@vinejs/vine": "^3.0.0",
     "cuid": "^3.0.0",
     "edge.js": "^6.2.1",
-    "luxon": "^3.5.0",
-    "pg": "^8.13.3",
+    "luxon": "^3.6.1",
+    "pg": "^8.16.3",
     "reflect-metadata": "^0.2.2"
   },
   "hotHook": {
