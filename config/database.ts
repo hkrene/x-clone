@@ -42,25 +42,21 @@
 
 // export default dbConfig
 
-// config/database.ts
 import env from '#start/env'
 import { defineConfig } from '@adonisjs/lucid'
-
-const connection = env.get('DATABASE_URL') || {
-  host: env.get('DB_HOST'),
-  port: env.get('DB_PORT'),
-  user: env.get('DB_USER'),
-  password: env.get('DB_PASSWORD'),
-  database: env.get('DB_DATABASE'),
-  ssl: env.get('NODE_ENV') === 'production' ? { rejectUnauthorized: false } : false
-}
 
 const dbConfig = defineConfig({
   connection: 'postgres',
   connections: {
     postgres: {
       client: 'pg',
-      connection: connection,
+      connection: {
+        connectionString: env.get('DATABASE_URL'),
+        ssl: { rejectUnauthorized: false },
+        // Add these explicit options for SCRAM auth
+        user: env.get('DB_USER', 'postgres'),
+        password: env.get('DB_PASSWORD', 'RFFpjDNoNeGwxqrwEdreiAMgkyyxPtSq')
+      },
       migrations: {
         naturalSort: true,
         paths: ['database/migrations']
