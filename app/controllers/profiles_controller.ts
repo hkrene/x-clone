@@ -1,5 +1,5 @@
 import User from '#models/user'
-import { createUserValidator } from '#validators/user'
+// import { createUserValidator } from '#validators/user'
 import Tweet from '#models/tweet'
 import type { HttpContext } from '@adonisjs/core/http'
 import app from '@adonisjs/core/services/app'
