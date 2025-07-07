@@ -26,7 +26,7 @@
 
     <!-- Avatar -->
     <div class="relative w-24 h-24 -mt-12 ml-4 rounded-full border-4 border-black bg-gray-800 overflow-hidden">
-      <img src="{{ user?.avatar || '/image/profile0.png' }}" class="object-cover w-full h-full">
+      <img src="{{ user?.avatar || ' ' }}" class="object-cover w-full h-full">
       <label class="absolute inset-0 flex items-center justify-center cursor-pointer">
         <input type="file" name="avatar" class="hidden">
         <i class="bi bi-camera text-white text-xl bg-black/60 p-1 rounded-full"></i>
