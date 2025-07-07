@@ -42,28 +42,58 @@
 
 // export default dbConfig
 
+// import env from '#start/env'
+// import { defineConfig } from '@adonisjs/lucid'
+
+// const dbConfig = defineConfig({
+//   connection: 'postgres',
+//   connections: {
+//     postgres: {
+//       client: 'pg',
+//       connection: {
+//         connectionString: env.get('DATABASE_URL'),
+//         ssl: { 
+//           rejectUnauthorized: false // This is safe for Railway's setup
+//         }
+//       },
+//       migrations: {
+//         naturalSort: true,
+//         paths: ['database/migrations']
+//       }
+//     }
+//   }
+// })
+
+// export default dbConfig
+
 import env from '#start/env'
 import { defineConfig } from '@adonisjs/lucid'
 
+const url = env.get('DATABASE_URL')
+if (!url) {
+  throw new Error('DATABASE_URL is not defined')
+}
+
 const dbConfig = defineConfig({
-  connection: 'postgres',
+  connection: 'pg',
   connections: {
-    postgres: {
+    pg: {
       client: 'pg',
       connection: {
-        connectionString: env.get('DATABASE_URL'),
-        ssl: { 
-          rejectUnauthorized: false // This is safe for Railway's setup
-        }
+        connectionString: url,
+        ssl: {
+          rejectUnauthorized: false, // Required by Railway
+        },
       },
       migrations: {
         naturalSort: true,
-        paths: ['database/migrations']
-      }
-    }
-  }
+        paths: ['database/migrations'],
+      },
+    },
+  },
 })
 
 export default dbConfig
+
 
 
