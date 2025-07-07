@@ -17,7 +17,7 @@
 
     <!-- Banner -->
     <div class="relative w-full h-36 rounded-xl bg-gray-800 overflow-hidden">
-      <img src="{{ user?.bannerImage || '/default-banner.jpg' }}" class="object-cover w-full h-full">
+      <img src="{{ user?.bannerImage || ' ' }}" class="object-cover w-full h-full">
       <label class="absolute inset-0 flex items-center justify-center cursor-pointer">
         <input type="file" name="banner" class="hidden">
         <i class="bi bi-camera text-3xl text-white bg-black/40 p-2 rounded-full"></i>
