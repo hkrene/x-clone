@@ -101,7 +101,7 @@
                 <div class="flex items-center space-x-1">
                   <span class="font-bold text-white">{{ tweet.author?.firstName }} {{ tweet.author?.surname }}</span>
                   @if(tweet.author?.isVerified)
-                    <img src="{{ asset('icons/Verified.svg') }}" alt="Verified" class="w-4 h-4">
+                  <i class="bi bi-patch-check-fill w-4 h-4 text-blue-500" aria-label="Verified"></i>
                   @end
                   <span class="text-gray-500">
                     {{ tweet.author.username.startsWith('@') ? tweet.author.username : `@${tweet.author.username}` }}

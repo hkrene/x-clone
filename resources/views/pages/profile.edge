@@ -9,7 +9,7 @@
 <section class="flex-1 border-x border-gray-800 max-w-2xl w-full">
 
   <!-- Background Image Section -->
-  <div class="relative h-32 md:h-52 bg-cover bg-center bg-gray-800" style="background-image: url('{{ '/uploads/' + user.bannerImage || '/image/leopard.jpeg' }}')">
+  <div class="relative h-32 md:h-52 bg-cover bg-center bg-gray-800" style="background-image: url('{{ '/uploads/' + user.bannerImage || ' ' }}')">
 
     <!-- Header -->
     <header class="absolute top-0 left-0 right-0 z-10 px-4 py-2 bg-transparent md:sticky md:bg-black md:backdrop-blur-md md:flex">
@@ -19,7 +19,8 @@
         </a>
         <div class="flex items-center gap-x-4 md:hidden lg:hidden">
           <div class="flex items-center justify-center w-8 h-8 rounded-full bg-gray-900">
-            <img src="{{ asset('icons/Search.svg') }}" class="w-5 h-5" alt="Search icon">
+            <i class="bi bi-search w-5 h-5" aria-label="Search icon"></i>
+
           </div>
           <div class="flex items-center justify-center w-8 h-8 rounded-full bg-gray-900 text-white">
             <i class="bi bi-three-dots-vertical text-base"></i>
@@ -64,7 +65,8 @@
       <div class="flex items-center gap-2">
         <h2 class="text-xl font-bold">{{ user.firstName }} {{ user.surname }}</h2>
         @if(user.isVerified)
-          <img src="{{ asset('icons/Verified.svg') }}" class="w-4 h-4" alt="Verified">
+        <i class="bi bi-patch-check-fill w-4 h-4 text-blue-500" aria-label="Verified"></i>
+
         @else
           <button class="px-2 py-0.5 md:border md:border-gray-600 rounded-full text-sm font-bold hover:bg-gray-900 flex gap-1 items-center">
             <i class="bi bi-patch-check-fill text-blue-500 text-xl"></i>

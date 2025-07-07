@@ -19,7 +19,8 @@
         </a>
         <div class="flex items-center gap-x-4 md:hidden lg:hidden">
           <div class="flex items-center justify-center w-8 h-8 rounded-full bg-gray-900">
-            <img src="{{ asset('icons/Search.svg') }}" class="w-5 h-5" alt="Search icon">
+            <i class="bi bi-search w-5 h-5" aria-label="Search icon"></i>
+
           </div>
           <div class="flex items-center justify-center w-8 h-8 rounded-full bg-gray-900 text-white">
             <i class="bi bi-three-dots-vertical text-base"></i>
@@ -64,7 +65,8 @@
       <div class="flex items-center ">
         <h2 class="text-xl font-bold">{{ user.firstName }} {{ user.surname }}</h2>
         @if(user.isVerified)
-          <img src="{{ asset('icons/Verified.svg') }}" class="w-2 h-2" alt="Verified">
+        <i class="bi bi-patch-check-fill w-4 h-4 text-blue-500" aria-label="Verified"></i>
+
         @else
           <button class="px-2 py-0.5 text-sm font-bold hover:bg-gray-900 flex gap-1 items-center">
             <i class="bi bi-patch-check-fill text-blue-500 text-xl"></i>
@@ -169,20 +171,13 @@
               
               @if(user.isVerified)
                 <span class="sr-only">Verified</span>
-                <img 
-                  src="{{ asset('icons/Verified.svg') }}" 
-                  alt="" 
-                  class="w-4 h-4"
-                  aria-hidden="true"
-                >
+                <i class="bi bi-patch-check-fill w-4 h-4 text-blue-500" aria-label="Verified"></i>
+
               @endif
               
-              <a 
-                class="text-gray-500 hover:underline"
-              >
+              <a  class="text-gray-500 hover:underline" >
                 {{ user.username }}
-              </                href="{{ `/profile/${user.username.replace('@', '')}` }}" 
-a>
+              </ href="{{ `/profile/${user.username.replace('@', '')}` }}" a>
               
               <span class="text-gray-500 text-sm">
                 {{ tweet.shortTime }}
@@ -227,28 +222,32 @@ a>
             <div class="flex items-center justify-between mt-3 text-gray-500 max-w-md">
               <button class="flex items-center space-x-1 group">
                 <div class="p-2 rounded-full group-hover:bg-blue-900/20">
-                  <img src="{{ asset('icons/Reply.svg') }}" alt="Reply" class="w-5 h-5">
+                  <i class="bi bi-reply w-5 h-5" aria-label="Reply"></i>
                 </div>
                 <span class="text-xs hover:text-blue-500">0</span>
               </button>
+
               <button class="flex items-center space-x-1 group">
                 <div class="p-2 rounded-full group-hover:bg-green-900/20">
-                  <img src="{{ asset('icons/Retweet.svg') }}" alt="Retweet" class="w-5 h-5">
+                  <i class="bi bi-arrow-repeat w-5 h-5" aria-label="Retweet"></i>
                 </div>
                 <span class="text-xs hover:text-green-500">0</span>
               </button>
+
               <button class="flex items-center space-x-1 group">
                 <div class="p-2 rounded-full group-hover:bg-red-900/20">
-                  <img src="{{ asset('icons/React.svg') }}" alt="Like" class="w-5 h-5">
+                  <i class="bi bi-heart w-5 h-5" aria-label="Like"></i>
                 </div>
                 <span class="text-xs hover:text-red-500">0</span>
               </button>
+
               <button class="flex items-center space-x-1 group">
                 <div class="p-2 rounded-full group-hover:bg-blue-900/20">
-                  <img src="{{ asset('icons/Share.svg') }}" alt="Share" class="w-5 h-5">
+                  <i class="bi bi-share w-5 h-5" aria-label="Share"></i>
                 </div>
               </button>
-            </div>
+          </div>
+
           </div>
         </div>
       </div>
