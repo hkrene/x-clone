@@ -10,7 +10,7 @@
         <a href="#">
             <h1 class="text-xl font-bold">Home</h1>
         </a>
-        <img src="{{ asset('icons/Timeline-Prop.svg') }}" class="w-5 h-5" alt="">
+        <i class="bi bi-clock w-5 h-5" aria-label="Timeline"></i>
     </header>
 
     <!-- new tweet textarea -->
@@ -140,30 +140,35 @@
 
                 <!-- Tweet Actions -->
                 <div class="flex items-center justify-between mt-3 text-gray-500 max-w-md">
-                  <button class="flex items-center space-x-1 group">
-                    <div class="p-2 rounded-full group-hover:bg-blue-900/20">
-                      <img src="{{ asset('icons/Reply.svg') }}" alt="Reply" class="w-5 h-5">
-                    </div>
-                    <span class="text-xs hover:text-blue-500">0</span>
-                  </button>
-                  <button class="flex items-center space-x-1 group">
-                    <div class="p-2 rounded-full group-hover:bg-green-900/20">
-                      <img src="{{ asset('icons/Retweet.svg') }}" alt="Retweet" class="w-5 h-5">
-                    </div>
-                    <span class="text-xs hover:text-green-500">0</span>
-                  </button>
-                  <button class="flex items-center space-x-1 group">
-                    <div class="p-2 rounded-full group-hover:bg-red-900/20">
-                      <img src="{{ asset('icons/React.svg') }}" alt="Like" class="w-5 h-5">
-                    </div>
-                    <span class="text-xs hover:text-red-500">0</span>
-                  </button>
-                  <button class="flex items-center space-x-1 group">
-                    <div class="p-2 rounded-full group-hover:bg-blue-900/20">
-                      <img src="{{ asset('icons/Share.svg') }}" alt="Share" class="w-5 h-5">
-                    </div>
-                  </button>
-                </div>
+                    <button class="flex items-center space-x-1 group">
+                      <div class="p-2 rounded-full group-hover:bg-blue-900/20">
+                        <i class="bi bi-reply w-5 h-5" aria-label="Reply"></i>
+                      </div>
+                      <span class="text-xs hover:text-blue-500">0</span>
+                    </button>
+
+                    <button class="flex items-center space-x-1 group">
+                      <div class="p-2 rounded-full group-hover:bg-green-900/20">
+                        <i class="bi bi-arrow-repeat w-5 h-5" aria-label="Retweet"></i>
+                      </div>
+                      <span class="text-xs hover:text-green-500">0</span>
+                    </button>
+
+                    <button class="flex items-center space-x-1 group">
+                      <div class="p-2 rounded-full group-hover:bg-red-900/20">
+                        <i class="bi bi-heart w-5 h-5" aria-label="Like"></i>
+                      </div>
+                      <span class="text-xs hover:text-red-500">0</span>
+                    </button>
+
+                    <button class="flex items-center space-x-1 group">
+                      <div class="p-2 rounded-full group-hover:bg-blue-900/20">
+                        <i class="bi bi-share w-5 h-5" aria-label="Share"></i>
+                      </div>
+                    </button>
+                  </div>
+
+
               </div>
             </div>
           </div>
