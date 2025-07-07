@@ -88,7 +88,7 @@
                         {{ user?.firstName || 'User' }} {{ user?.surname || '' }}
                     </p>
                     @if(user?.isVerified)
-                        <img src="{{ asset('icons/Verified.svg')}}" class="w-4 h-4" alt="Verified">
+                    <i class="bi bi-patch-check-fill w-4 h-4 text-blue-500" aria-label="Verified"></i>
                     @endif
                 </a>
                 <p class="text-gray-500 text-sm">
@@ -101,10 +101,12 @@
             </div>
         </div>
         <!-- More options icon with click handler -->
-        <img src="{{asset('icons/More-2.png')}}" 
-             class="hidden lg:block cursor-pointer" 
-             alt="More options"
-             onclick="toggleProfileModal(event)">
+        <i 
+            class="bi bi-three-dots-vertical hidden lg:block cursor-pointer" 
+            aria-label="More options"
+            onclick="toggleProfileModal(event)">
+        </i>
+
     </div>
 </div>
 
@@ -143,7 +145,8 @@
 
             <div class="relative">
                 <div class="absolute inset-y-0 left-0 pl-4 flex items-center">
-                    <img src="{{asset('icons/Search.svg')}}" class="w-5 h-5" alt="Search icon">
+                    <i class="bi bi-search w-5 h-5" aria-label="Search icon"></i>
+
                 </div>
                 
                 <input 
@@ -158,7 +161,8 @@
         <div class="bg-[rgb(32,35,39)] rounded-2xl mb-6 overflow-hidden">
             <div class="flex justify-between items-center p-4">
                 <h2 class=" text-xl font-bold">Trends for you</h2>
-            <img src="{{asset('icons/Settings.svg')}}" class="cursor-pointer pr-4" alt="Setting icon">
+                <i class="bi bi-gear-fill cursor-pointer pr-4" aria-label="Setting icon"></i>
+
             </div>
             <div class="space-y-4">
                 <div class="px-4 hover:bg-gray-800 pointer-cursor flex justify-between">
