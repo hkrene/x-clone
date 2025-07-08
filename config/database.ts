@@ -97,3 +97,16 @@ export default dbConfig
 
 
 
+// pg: {
+//       client: 'pg',
+//       connection: {
+//         connectionString: url,
+//         ssl: {
+//           rejectUnauthorized: false, // Required by Railway
+//         },
+//       },
+//       migrations: {
+//         naturalSort: true,
+//         paths: ['database/migrations'],
+//       },
+//     },
