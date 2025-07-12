@@ -1,4 +1,6 @@
 import User from '#models/user'
+
+import Follow from '#models/follow'
 // import { createUserValidator } from '#validators/user'
 import Tweet from '#models/tweet'
 import type { HttpContext } from '@adonisjs/core/http'
@@ -178,6 +180,7 @@ public async showOtherProfile({ params, view, auth, response }: HttpContext) {
         },
         tweets: user.tweets.map(tweet => ({
           ...tweet.serialize(),
+          shortTime: tweet.createdAt.toRelative(),
         })),
       })
     }
