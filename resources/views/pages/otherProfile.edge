@@ -65,24 +65,29 @@
   @endif  --}}
   {{--  <a class="px-6 py-1.5 border border-white bg-white text-black rounded-full text-sm font-bold hover:bg-gray-300 transition-colors duration-200" href="">Following</a>
 </form>  --}}
-<!-- resources/views/components/follow_button.edge -->
 <form 
-  action="{{ isFollowing ? `/unfollow/${user.id}` : `/follow/${user.id}` }}" 
+  action="/follow/{{ user.id }}" 
   method="post" 
   class="flex justify-end pt-3"
 >
   {{ csrfField() }}
+  <input type="hidden" name="action" value="{{ isFollowing ? 'unfollow' : 'follow' }}" />
+  
   @if(isFollowing)
-    <input type="hidden" name="_method" value="DELETE" />
-    <button class="px-6 py-1.5 border border-white bg-white text-black rounded-full text-sm font-bold hover:bg-gray-300 transition-colors duration-200">
+    <button 
+      class="px-6 py-1.5 border border-white bg-white text-black rounded-full text-sm font-bold hover:bg-gray-300 transition-colors duration-200"
+    >
       Unfollow
     </button>
   @else
-    <button class="px-6 py-1.5 border border-white bg-blue-500 text-white rounded-full text-sm font-bold hover:bg-blue-700 transition-colors duration-200">
+    <button 
+      class="px-6 py-1.5 border border-white bg-blue-500 text-white rounded-full text-sm font-bold hover:bg-blue-700 transition-colors duration-200"
+    >
       Follow
     </button>
   @endif
 </form>
+
 
 
     <!-- Profile Details -->

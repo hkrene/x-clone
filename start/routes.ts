@@ -14,6 +14,7 @@ import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
 // import UsersController from '#controllers/users_controller'
 import AuthController from '#controllers/auth_controller'
+// import FollowsController from '#controllers/follows_controller'
 import FollowsController from '#controllers/follows_controller'
 import TweetsController from '#controllers/tweets_controller'
 import ProfilesController from '#controllers/profiles_controller'
@@ -35,11 +36,6 @@ router.group(() => {
   router.post('/logout', [AuthController, 'logout'])    
   router.get('/otherProfile/:id', [ProfilesController, 'showOtherProfile'])
   // router.post('/:username/update', [ProfilesController, 'update']).as('profile.update')
-
 router.post('/follow/:id', [FollowsController, 'follow']).as('follow.user')
-router.delete('/unfollow/:id', [FollowsController, 'follow']).as('unfollow.user')
-
-router.get('/followers', [FollowsController, 'getFollowers']).as('user.followers')
-router.get('/following', [FollowsController, 'getFollowings']).as('user.following')
 
 }).use(middleware.auth())

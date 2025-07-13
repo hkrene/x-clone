@@ -186,8 +186,8 @@ export default class ProfilesController {
       avatar: user.avatar,
       bannerImage: user.bannerImage || '',
       postsCount,
-      followersCount,
-      followingCount,
+      // followersCount,
+      // followingCount,
       joinedDate: user.createdAt.toFormat('MMMM yyyy'),
     },
     tweets: user.tweets.map((tweet) => ({

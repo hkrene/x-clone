@@ -3,29 +3,31 @@ import Follow from '#models/follow'
 import User from '#models/user'
 import { HttpContext } from '@adonisjs/core/http'
 
-export default class FollowersAndFollowingsController {
-  public async follow({ auth, params, response, request }: HttpContext) {
-    const currentUserId = auth.user!.id
-    const targetUserId = Number(params.id)
+export default class FollowsController {
+  public async follow({ auth, params, request, response }: HttpContext) {
+  const currentUserId = auth.user!.id
+  const targetUserId = Number(params.id)
+  const action = request.input('action') // 'follow' or 'unfollow'
 
-    const existing = await Follow.query()
-      .where('id_user', currentUserId)
-      .andWhere('id_user_following', targetUserId)
-      .first()
+  const existing = await Follow.query()
+    .where('id_user', currentUserId)
+    .andWhere('id_user_following', targetUserId)
+    .first()
 
-    if (request.method() === 'DELETE') {
-      if (existing) await existing.delete()
-    } else {
-      if (!existing) {
-        await Follow.create({
-          idUser: currentUserId,
-          idUserFollowing: targetUserId,
-        })
-      }
+  if (action === 'unfollow') {
+    if (existing) await existing.delete()
+  } else {
+    if (!existing) {
+      await Follow.create({
+        idUser: currentUserId,
+        idUserFollowing: targetUserId,
+      })
     }
-
-    return response.redirect().back()
   }
+
+  return response.redirect().back()
+}
+
 
   public async getFollowers({ view, auth }: HttpContext) {
     const currentUserId = auth.user!.id

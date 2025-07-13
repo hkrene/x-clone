@@ -1,17 +1,20 @@
 import { DateTime } from 'luxon'
 import hash from '@adonisjs/core/services/hash'
 import { compose } from '@adonisjs/core/helpers'
-import { BaseModel, column, hasMany, manyToMany } from '@adonisjs/lucid/orm'
+import {
+  BaseModel,
+  column,
+  hasMany,
+  manyToMany,
+} from '@adonisjs/lucid/orm'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
 import type { HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
 
-
-// Importer les modèles liés (ex: Tweet, Comment, Like, etc.)
+// Related models
 import Tweet from '#models/tweet'
 import Comment from '#models/comment'
 import Like from '#models/like'
 import Retweet from '#models/retweet'
-
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
@@ -22,22 +25,20 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @column({ isPrimary: true })
   declare id: number
 
-
   @column()
   declare username: string
 
   @column()
   declare email: string
-  
+
   @column({ serializeAs: null })
   declare password: string
-  
+
   @column()
   declare surname: string | null
 
   @column()
   declare firstName: string | null
-
 
   @column.date()
   declare dateOfBirth: DateTime | null
@@ -64,10 +65,10 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare isPrivate: boolean
 
   @column({ columnName: 'followers_count', serializeAs: 'followersCount' })
-  declare followersCount: number
+  declare followersCountDb: number
 
   @column({ columnName: 'following_count', serializeAs: 'followingCount' })
-  declare followingCount: number
+  declare followingCountDb: number
 
   @column({ columnName: 'posts_count', serializeAs: 'postsCount' })
   declare postsCount: number
@@ -78,8 +79,8 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
 
-    /**
-   * Relations ORM
+  /**
+   * ORM Relationships
    */
   @hasMany(() => Tweet)
   declare tweets: HasMany<typeof Tweet>
@@ -93,22 +94,30 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @hasMany(() => Retweet)
   declare retweets: HasMany<typeof Retweet>
 
+  // Users I follow
+  @manyToMany(() => User, {
+    pivotTable: 'follows',
+    pivotForeignKey: 'id_user',
+    pivotRelatedForeignKey: 'id_user_following',
+  })
+  declare following: ManyToMany<typeof User>
+
+  // Users following me
+  @manyToMany(() => User, {
+    pivotTable: 'follows',
+    pivotForeignKey: 'id_user_following',
+    pivotRelatedForeignKey: 'id_user',
+  })
+  declare followers: ManyToMany<typeof User>
 
   /**
-   * Relations de suivi entre utilisateurs
+   * Virtual getters for follower/following counts via $extras
    */
-@manyToMany(() => User, {
-  pivotTable: 'follows',
-  pivotForeignKey: 'id_user', // follower
-  pivotRelatedForeignKey: 'id_user_following', // following
-})
-declare following: ManyToMany<typeof User>
+  get followersCount(): number {
+    return this.$extras.followers_count ?? this.followersCountDb ?? 0
+  }
 
-@manyToMany(() => User, {
-  pivotTable: 'follows',
-  pivotForeignKey: 'id_user_following', // being followed
-  pivotRelatedForeignKey: 'id_user', // follower
-})
-declare followers: ManyToMany<typeof User>
-
+  get followingCount(): number {
+    return this.$extras.following_count ?? this.followingCountDb ?? 0
+  }
 }
