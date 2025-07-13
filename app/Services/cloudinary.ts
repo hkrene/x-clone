@@ -41,3 +41,5 @@ async function handleUpload(bannerImage: { filePath?: string }, user: any) {
     // Handle missing filePath case accordingly
   }
 }
+console.log(handleUpload);
+
