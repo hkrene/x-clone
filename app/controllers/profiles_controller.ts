@@ -169,8 +169,8 @@ export default class ProfilesController {
   }
 
   const postsCount = user.tweets.length
-  const followersCount = user.$extras.followers_count
-  const followingCount = user.$extras.following_count
+  // const followersCount = user.$extras.followers_count
+  // const followingCount = user.$extras.following_count
 
   const followRelation = await Follow.query()
     .where('id_user', userAuth.id)
