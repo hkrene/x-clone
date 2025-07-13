@@ -198,54 +198,6 @@ export default class ProfilesController {
   })
 }
 
-// public async showOtherProfile({ params, view, auth, response }: HttpContext) {
-//     const userAuth = auth.user!
-//     const user = await User.query()
-//       .where('id', params.id)
-//       .preload('tweets', (query) => {
-//         query.orderBy('created_at', 'desc')
-//       })
-//       .preload('followers')
-//       .preload('following')
-//       .firstOrFail()
-
-//     if (user.id === userAuth.id) {
-//       response.redirect('/profile')
-//     } else {
-      
-//       const postsCount = user.tweets.length
-//       const followersCount = user.followers.length
-//       const followingCount = user.following.length
-
-//       const followRelation = await Follow.query()
-//   .where('id_user', userAuth.id)
-//   .andWhere('id_user_following', user.id)
-//   .first()
-
-// const isFollowing = !!followRelation
-
-
-//       return view.render('pages/otherProfile', {
-//         user: {
-//           ...user.serialize(),
-//           username: user.username ? `@${user.username}` : '',
-//           avatar: user.avatar,
-//           bannerImage: user.bannerImage || '',
-//           postsCount,
-//           followersCount,
-//           followingCount,
-//           joinedDate: user.createdAt.toFormat('MMMM yyyy'),
-//         },
-//         tweets: user.tweets.map(tweet => ({
-//           ...tweet.serialize(),
-//           shortTime: tweet.createdAt.toRelative(),
-//         })),
-//         isFollowing,
-//       })
-//     }
-// }
-
-
 
   private formatShortTime(date: DateTime): string {
     const diffMinutes = date.diffNow().as('minutes') * -1
