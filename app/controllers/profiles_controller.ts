@@ -7,6 +7,8 @@ import Tweet from '#models/tweet'
 import type { HttpContext } from '@adonisjs/core/http'
 import app from '@adonisjs/core/services/app'
 import { cuid } from '@adonisjs/core/helpers'
+// import Application from '@adonisjs/core/services/app'
+// import { uploadToCloudinary } from 'services/cloudinary'
 import { DateTime } from 'luxon'
 
 
@@ -94,8 +96,10 @@ export default class ProfilesController {
       user.avatar = avatar.fileName || ''
     }
 
+
     await user.save()
     return response.redirect('/profile')
+
   }
 
 
