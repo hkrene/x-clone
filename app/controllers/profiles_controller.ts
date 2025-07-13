@@ -15,29 +15,51 @@ import { DateTime } from 'luxon'
 //Shows home page with tweets
 export default class ProfilesController {
   public async showHome({ view, auth }: HttpContext) {
-    const user = await auth.use('web').authenticate()
-    // Load tweets with author information
-    const tweets = await Tweet.query()
-      // .whereNot('user_id', user.id)
-      .preload('author')
-      .limit(50)
-      .orderBy('createdAt', 'desc')
+  const user = await auth.use('web').authenticate()
+  
+  // Get IDs of users that the current user follows
+  const following = await Follow.query()
+    .where('id_user', user.id)
+    .select('id_user_following')
+  
+  const followingIds = following.map(f => f.idUserFollowing)
 
-    return view.render('pages/home', {
-      user: {
-        ...user.serialize(),
-        avatar: user.avatar || '',
-        firstName: user.firstName || '',
-        surname: user.surname || '',
-        username: user.username || '', 
-        isVerified: user.isVerified || false,
-      },
-      tweets: tweets.map(tweet => ({
-        ...tweet.serialize(),
-        shortTime: this.formatShortTime(tweet.createdAt)
-      }))
-    })
-  }
+  // For You feed - all tweets except current user's
+  const forYouTweets = await Tweet.query()
+    .whereNot('user_id', user.id)
+    .preload('author')
+    .orderBy('created_at', 'desc')
+    .limit(50)
+
+  // Following feed - only tweets from followed users
+  const followingTweets = followingIds.length > 0
+    ? await Tweet.query()
+        .whereIn('user_id', followingIds)
+        .preload('author')
+        .orderBy('created_at', 'desc')
+        .limit(50)
+    : []
+
+  return view.render('pages/home', {
+    user: {
+      ...user.serialize(),
+      avatar: user.avatar || '',
+      firstName: user.firstName || '',
+      surname: user.surname || '',
+      username: user.username || '', 
+      isVerified: user.isVerified || false,
+      following_count: followingIds.length
+    },
+    forYouTweets: forYouTweets.map(tweet => ({
+      ...tweet.serialize(),
+      shortTime: this.formatShortTime(tweet.createdAt)
+    })),
+    followingTweets: followingTweets.map(tweet => ({
+      ...tweet.serialize(),
+      shortTime: this.formatShortTime(tweet.createdAt)
+    }))
+  })
+}
 
 
   //This method renders the edit profile page with the user's current information

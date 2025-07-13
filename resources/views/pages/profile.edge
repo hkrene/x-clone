@@ -121,49 +121,78 @@
     </div>
   </div>
 
+
+
   <!-- Tabs -->
 <div x-data="{ tab: 'posts' }">
-  <div class="flex border-b border-gray-800 mt-4">
+  <div class="flex border-b border-gray-800">
     <button 
       @click="tab = 'posts'" 
-      :class="tab === 'posts' ? 'border-blue-500 text-white' : 'text-gray-500 hover:bg-gray-900'" 
-      class="flex-1 text-center py-4 font-medium border-b-4 transition-colors duration-200"
+      :class="{
+        'text-white font-bold': tab === 'posts',
+        'text-gray-500 hover:bg-gray-900/50': tab !== 'posts'
+      }"
+      class="flex-1 py-4 text-center relative transition-colors duration-200"
     >
       Posts
+      <div 
+        x-show="tab === 'posts'"
+        class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-blue-500 rounded-full"
+      ></div>
     </button>
     <button 
       @click="tab = 'replies'" 
-      :class="tab === 'replies' ? 'border-blue-500 text-white' : 'text-gray-500 hover:bg-gray-900'" 
-      class="flex-1 text-center py-4 font-medium border-b-4 transition-colors duration-200"
+      :class="{
+        'text-white font-bold': tab === 'replies',
+        'text-gray-500 hover:bg-gray-900/50': tab !== 'replies'
+      }"
+      class="flex-1 py-4 text-center relative transition-colors duration-200"
     >
       Replies
+      <div 
+        x-show="tab === 'replies'"
+        class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-blue-500 rounded-full"
+      ></div>
     </button>
     <button 
       @click="tab = 'media'" 
-      :class="tab === 'media' ? 'border-blue-500 text-white' : 'text-gray-500 hover:bg-gray-900'" 
-      class="flex-1 text-center py-4 font-medium border-b-4 transition-colors duration-200"
+      :class="{
+        'text-white font-bold': tab === 'media',
+        'text-gray-500 hover:bg-gray-900/50': tab !== 'media'
+      }"
+      class="flex-1 py-4 text-center relative transition-colors duration-200"
     >
       Media
+      <div 
+        x-show="tab === 'media'"
+        class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-blue-500 rounded-full"
+      ></div>
     </button>
     <button 
       @click="tab = 'likes'" 
-      :class="tab === 'likes' ? 'border-blue-500 text-white' : 'text-gray-500 hover:bg-gray-900'" 
-      class="flex-1 text-center py-4 font-medium border-b-4 transition-colors duration-200"
+      :class="{
+        'text-white font-bold': tab === 'likes',
+        'text-gray-500 hover:bg-gray-900/50': tab !== 'likes'
+      }"
+      class="flex-1 py-4 text-center relative transition-colors duration-200"
     >
       Likes
+      <div 
+        x-show="tab === 'likes'"
+        class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-blue-500 rounded-full"
+      ></div>
     </button>
   </div>
 
   <!-- Tabs content -->
-  <div class="divide-y divide-gray-800 mt-4">
-
+  <div>
     <div x-show="tab === 'posts'">
-       <!-- Tweet Feed -->
-        
+      <!-- Your existing posts content -->
       <div class="divide-y divide-gray-800">
         @if(tweets && tweets.length > 0)
           @each(tweet in tweets)
-            <div class="p-4 hover:bg-gray-900/50 cursor-pointer transition-colors duration-200">
+            <!-- Your existing tweet display -->
+             <div class="p-4 hover:bg-gray-900/50 cursor-pointer transition-colors duration-200">
               <div class="flex space-x-3">
                 <!-- User Avatar -->
                 <a 
@@ -298,22 +327,21 @@
           </div>
         @endif
       </div>
-          </div>
+    </div>
 
-            <div x-show="tab === 'replies'">
-              <p class="text-gray-500 text-center py-4">Replies coming soon...</p>
-            </div>
+    <div x-show="tab === 'replies'">
+      <p class="text-gray-500 text-center py-4">Replies coming soon...</p>
+    </div>
 
-            <div x-show="tab === 'media'">
-              <p class="text-gray-500 text-center py-4">Media content goes here.</p>
-            </div>
+    <div x-show="tab === 'media'">
+      <p class="text-gray-500 text-center py-4">Media content goes here.</p>
+    </div>
 
-            <div x-show="tab === 'likes'">
-              <p class="text-gray-500 text-center py-4">Liked tweets coming soon...</p>
-            </div>
-
-          </div>
-      </div>
+    <div x-show="tab === 'likes'">
+      <p class="text-gray-500 text-center py-4">Liked tweets coming soon...</p>
+    </div>
+  </div>
+</div>
 
 </section>
 

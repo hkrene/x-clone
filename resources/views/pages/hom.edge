@@ -1,0 +1,495 @@
+@layout.app({ title: "Twitter Home Page" })
+  @slot('meta')
+    <meta name="description" content="A clone of Twitter">
+  @endslot
+
+  @slot('main')
+  <!-- Main Content-->
+  <section class="flex-1 border-x border-gray-800 max-w-2xl w-full">
+    
+    <header class="sticky top-0 bg-black/80 backdrop-blur-md border-b border-gray-800 p-4 z-10">
+      <div class="max-w-2xl  flex items-center justify-between">
+        <!-- Left side - Profile icon -->
+        <div class="flex-shrink-0 w-10 h-10">
+          <a href="/profile" class="block w-full h-full rounded-full overflow-hidden">
+            @if(user?.avatar)
+              <img 
+                src="{{ '/uploads/' + (user.avatar || '') }}"
+                alt="Profile picture"
+                class="w-full h-full object-cover"
+              >
+            @else
+              <div class="w-full h-full bg-gray-700 flex items-center justify-center text-white text-lg font-bold uppercase">
+                {{ user?.firstName?.charAt(0) }}
+              </div>
+            @endif
+          </a>
+        </div>
+
+        <!-- Center - X logo -->
+        <div class="flex-1 flex justify-center">
+          <svg viewBox="0 0 24 24" aria-hidden="true" class="w-8 h-8 text-white">
+            <g>
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" fill="currentColor"></path>
+            </g>
+          </svg>
+        </div>
+
+        <!-- Right side - Settings/More icon -->
+        <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center">
+          <svg viewBox="0 0 24 24" width="24" height="24" class="text-white">
+            <circle cx="12" cy="6" r="2" fill="currentColor"/>
+            <circle cx="12" cy="12" r="2" fill="currentColor"/>
+            <circle cx="12" cy="18" r="2" fill="currentColor"/>
+          </svg>
+          {{--  <i class="bi bi-three-dots text-xl text-white"></i>  --}}
+        </div>
+      </div>
+    </header>
+
+
+    <!-- new tweet textarea -->
+    <div class="hidden md:flex space-x-3 px-4 pt-4 pb-2 border-b border-gray-800">
+        <a href="/profile" class="flex-shrink-0 w-12 h-12 rounded-full overflow-hidden">
+            {{--  <img src="{{ asset('image/profile0.png') }}" alt="User profile" class="w-full h-full object-cover">  --}}
+        @if(user?.avatar)
+        <img src="{{ '/uploads/' + (user.avatar || '') }}"
+        
+        alt="Profile picture"
+        class="w-full h-full object-cover"
+        >
+
+        @else
+          <div class="w-full h-full bg-gray-700 flex items-center justify-center text-white text-xl font-bold uppercase">
+            {{ user?.firstName?.charAt(0) }}
+          </div>
+        @endif
+        </a>
+
+        <!-- Tweet Form -->
+          <form 
+            action="/tweets" 
+            method="post" 
+            enctype="multipart/form-data" 
+            class="flex-1"
+            id="home-tweet-form"
+          >
+            {{ csrfField() }}
+
+            <textarea 
+              name="tweet" 
+              id="home-tweet-textarea"
+              placeholder="What's happening?"
+              class="w-full bg-transparent text-white text-xl outline-none placeholder-gray-500 resize-none pt-3 min-h-[60px]"
+              maxlength="280"
+              oninput="updateHomeCharCount()"
+            ></textarea>
+
+            <div id="home-char-counter" class="text-right text-gray-500 text-sm mb-3">
+              0/280
+            </div>
+
+            <input type="file" id="home-mediaInput" name="mediaUrl" accept="image/*,video/*" class="hidden" />
+
+            <div class="flex items-center justify-between pt-2 pb-1">
+              <div class="flex space-x-1">
+                <button type="button" onclick="document.getElementById('home-mediaInput').click()">
+                  <i class="bi bi-award" aria-label="Media"></i>
+                </button>
+                <div><i class="bi bi-file-earmark-gif-fill" aria-label="GIF"></i></div>
+                <div><i class="bi bi-bar-chart-fill" aria-label="Poll"></i></div>
+                <div><i class="bi bi-emoji-smile-fill" aria-label="Emoji"></i></div>
+                <div><i class="bi bi-calendar-event-fill" aria-label="Schedule"></i></div>
+
+              </div>
+              <button 
+                type="submit" 
+                id="home-tweet-button"
+                class="bg-blue-500 hover:bg-blue-600 text-white text-sm font-bold rounded-full px-4 py-1.5 capitalize disabled:opacity-50 disabled:cursor-not-allowed" 
+                disabled
+              >
+                Tweet
+              </button>
+            </div>
+          </form>
+
+    </div>
+
+    
+  <!-- Tweet content-->
+    <div class="divide-y divide-gray-800">
+      @if(tweets && Array.isArray(tweets) && tweets.length > 0)
+        @each(tweet in tweets)
+          <div class="p-4 hover:bg-gray-900/50 cursor-pointer">
+            <div class="flex space-x-3">
+              <a href="/otherProfile/{{ tweet.author.id }}" class="flex-shrink-0 w-12 h-12 rounded-full overflow-hidden">
+                @if(tweet.author?.avatar)
+                  <img src="{{ '/uploads/' + tweet.author.avatar }}" alt="User profile" class="w-full h-full object-cover">
+                @else
+                  <div class="w-full h-full bg-gray-700 flex items-center justify-center text-white text-xl font-bold uppercase">
+                    {{ tweet.author.firstName.charAt(0) }}
+                  </div>
+                @endif
+              </a>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center space-x-1">
+                  <span class="font-bold text-white">{{ tweet.author?.firstName }} {{ tweet.author?.surname }}</span>
+                  @if(tweet.author?.isVerified)
+                  <i class="bi bi-patch-check-fill w-4 h-4 text-blue-500" aria-label="Verified"></i>
+                  @end
+                  <span class="text-gray-500">
+                    {{ tweet.author.username.startsWith('@') ? tweet.author.username : `@${tweet.author.username}` }}
+                  </span>
+                  <span class="text-gray-500 text-sm">
+                    {{ tweet.shortTime ?? datetime(tweet.createdAt).setLocale('en').toRelative() }}
+                  </span>
+                </div>
+                <p class="mt-1 text-white text-base leading-snug break-words overflow-hidden text-ellipsis box-border">{{ tweet.content }}</p>
+
+                <!-- Media Attachment -->
+                @if(tweet.mediaUrl)
+                  <div class="mt-3 rounded-xl overflow-hidden">
+                    @let(ext = tweet.mediaUrl.split('.').pop().toLowerCase())
+                    @if(['jpg', 'jpeg', 'png', 'gif'].includes(ext))
+                      <img 
+                        src="{{ tweet.mediaUrl }}" 
+                        alt="Tweet media" 
+                        class="max-h-96 w-full object-cover rounded-xl border border-gray-800"
+                      >
+                    @elseif(['mp4', 'webm'].includes(ext))
+                      <video 
+                        controls 
+                        class="max-h-96 w-full rounded-xl border border-gray-800"
+                        preload="none"
+                      >
+                        <source src="{{ tweet.mediaUrl }}" type="video/{{ ext }}">
+                      </video>
+                    @else
+                      <div class="bg-gray-800 p-4 text-gray-400 rounded-xl">
+                        Unsupported media type
+                      </div>
+                    @endif
+                  </div>
+                @endif
+
+                <!-- Tweet Actions -->
+                <div class="flex items-center justify-between mt-3 text-gray-500 max-w-md">
+                    <button class="flex items-center space-x-1 group">
+                      <div class="p-2 rounded-full group-hover:bg-blue-900/20">
+                        <i class="bi bi-reply w-5 h-5" aria-label="Reply"></i>
+                      </div>
+                      <span class="text-xs hover:text-blue-500">0</span>
+                    </button>
+
+                    <button class="flex items-center space-x-1 group">
+                      <div class="p-2 rounded-full group-hover:bg-green-900/20">
+                        <i class="bi bi-arrow-repeat w-5 h-5" aria-label="Retweet"></i>
+                      </div>
+                      <span class="text-xs hover:text-green-500">0</span>
+                    </button>
+
+                    <button class="flex items-center space-x-1 group">
+                      <div class="p-2 rounded-full group-hover:bg-red-900/20">
+                        <i class="bi bi-heart w-5 h-5" aria-label="Like"></i>
+                      </div>
+                      <span class="text-xs hover:text-red-500">0</span>
+                    </button>
+
+                    <button class="flex items-center space-x-1 group">
+                      <div class="p-2 rounded-full group-hover:bg-blue-900/20">
+                        <i class="bi bi-share w-5 h-5" aria-label="Share"></i>
+                      </div>
+                    </button>
+                  </div>
+
+
+              </div>
+            </div>
+          </div>
+        @endeach
+      @else
+        <div class="p-4 text-center text-gray-500">
+          No tweets to display at the moment.
+        </div>
+      @endif
+    </div>
+  </section>
+
+  @!component('components/tweetbtn', { position: 'bottom-6' })
+  @endslot
+@end
+
+  @!component('components/navbar')
+
+
+V1
+
+  public async showHome({ view, auth }: HttpContext) {
+    const user = await auth.use('web').authenticate()
+    // Load tweets with author information
+    const tweets = await Tweet.query()
+      // .whereNot('user_id', user.id)
+      .preload('author')
+      .limit(50)
+      .orderBy('createdAt', 'desc')
+
+    return view.render('pages/home', {
+      user: {
+        ...user.serialize(),
+        avatar: user.avatar || '',
+        firstName: user.firstName || '',
+        surname: user.surname || '',
+        username: user.username || '', 
+        isVerified: user.isVerified || false,
+      },
+      tweets: tweets.map(tweet => ({
+        ...tweet.serialize(),
+        shortTime: this.formatShortTime(tweet.createdAt)
+      }))
+    })
+  }
+
+V2
+
+  public async showHome({ view, auth }: HttpContext) {
+  const user = await auth.use('web').authenticate()
+  
+  // Get IDs of users that the current user follows
+  const following = await Follow.query()
+    .where('id_user', user.id)
+    .select('id_user_following')
+  
+  const followingIds = following.map(f => f.idUserFollowing)
+
+  // For You feed - all tweets except current user's
+  const forYouTweets = await Tweet.query()
+    .whereNot('user_id', user.id)
+    .preload('author')
+    .orderBy('created_at', 'desc')
+    .limit(50)
+
+  // Following feed - only tweets from followed users
+  const followingTweets = followingIds.length > 0
+    ? await Tweet.query()
+        .whereIn('user_id', followingIds)
+        .preload('author')
+        .orderBy('created_at', 'desc')
+        .limit(50)
+    : []
+
+  return view.render('pages/home', {
+    user: {
+      ...user.serialize(),
+      avatar: user.avatar || '',
+      firstName: user.firstName || '',
+      surname: user.surname || '',
+      username: user.username || '', 
+      isVerified: user.isVerified || false,
+      following_count: followingIds.length
+    },
+    forYouTweets: forYouTweets.map(tweet => ({
+      ...tweet.serialize(),
+      shortTime: this.formatShortTime(tweet.createdAt)
+    })),
+    followingTweets: followingTweets.map(tweet => ({
+      ...tweet.serialize(),
+      shortTime: this.formatShortTime(tweet.createdAt)
+    }))
+  })
+}
+
+
+
+<!-- Tabs -->
+<div x-data="{ tab: 'posts' }">
+  <div class="flex border-b border-gray-800 mt-4">
+    <button 
+      @click="tab = 'posts'" 
+      :class="tab === 'posts' ? 'border-blue-500 text-white' : 'text-gray-500 hover:bg-gray-900'" 
+      class="flex-1 text-center py-4 font-medium border-b-4 transition-colors duration-200"
+    >
+      Posts
+    </button>
+    <button 
+      @click="tab = 'replies'" 
+      :class="tab === 'replies' ? 'border-blue-500 text-white' : 'text-gray-500 hover:bg-gray-900'" 
+      class="flex-1 text-center py-4 font-medium border-b-4 transition-colors duration-200"
+    >
+      Replies
+    </button>
+    <button 
+      @click="tab = 'media'" 
+      :class="tab === 'media' ? 'border-blue-500 text-white' : 'text-gray-500 hover:bg-gray-900'" 
+      class="flex-1 text-center py-4 font-medium border-b-4 transition-colors duration-200"
+    >
+      Media
+    </button>
+    <button 
+      @click="tab = 'likes'" 
+      :class="tab === 'likes' ? 'border-blue-500 text-white' : 'text-gray-500 hover:bg-gray-900'" 
+      class="flex-1 text-center py-4 font-medium border-b-4 transition-colors duration-200"
+    >
+      Likes
+    </button>
+  </div>
+
+  <!-- Tabs content -->
+  <div class="divide-y divide-gray-800 mt-4">
+
+    <div x-show="tab === 'posts'">
+       <!-- Tweet Feed -->
+        
+      <div class="divide-y divide-gray-800">
+        @if(tweets && tweets.length > 0)
+          @each(tweet in tweets)
+            <div class="p-4 hover:bg-gray-900/50 cursor-pointer transition-colors duration-200">
+              <div class="flex space-x-3">
+                <!-- User Avatar -->
+                <a 
+                  href="{{ `/profile/${user.username.replace('@', '')}` }}" 
+                  class="flex-shrink-0 w-12 h-12 rounded-full overflow-hidden"
+                  aria-label="{{ user.firstName }}'s profile"
+                >
+                  @if(user.avatar)
+                    <img 
+                      src="{{ user.avatar.startsWith('/') ? user.avatar : '/uploads/' + user.avatar }}" 
+                      alt="{{ user.firstName }}'s avatar" 
+                      class="w-full h-full object-cover"
+                      loading="lazy"
+                    >
+                  @else
+                    <div class="w-full h-full bg-gray-700 flex items-center justify-center text-white text-xl font-bold uppercase">
+                      {{ user.firstName.charAt(0) || '' }}
+                    </div>
+                  @endif
+                </a>
+
+                <!-- Tweet Content -->
+                <div class="flex-1 min-w-0">
+                  <!-- User Info -->
+                  <div class="flex items-center space-x-1 flex-wrap">
+                    <a 
+                      href="{{ `/profile/${user.username.replace('@', '')}` }}" 
+                      class="font-bold text-white hover:underline"
+                    >
+                      {{ user.firstName }} {{ user.surname }}
+                    </a>
+                    
+                    @if(user.isVerified)
+                      <span class="sr-only">Verified</span>
+                      <img 
+                        src="{{ asset('icons/Verified.svg') }}" 
+                        alt="" 
+                        class="w-4 h-4"
+                        aria-hidden="true"
+                      >
+                    @endif
+                    
+                    <a 
+                      href="{{ `/profile/${user.username.replace('@', '')}` }}" 
+                      class="text-gray-500 hover:underline"
+                    >
+                      {{ user.username }}
+                    </a>
+                    
+                    <span class="text-gray-500 text-sm">
+                      {{ tweet.shortTime }}
+                    </span>
+                  </div>
+
+                  <!-- Tweet Text -->
+                  <p class="mt-1 text-white text-base leading-snug break-words overflow-hidden text-ellipsis box-border">
+                    {{ tweet.content }}
+                  </p>
+
+                  <!-- Media Attachment -->
+                  @if(tweet.mediaUrl)
+                    @let(ext = tweet.mediaUrl?.split('.').pop()?.toLowerCase() || '')
+
+                    <div class="mt-3 rounded-xl overflow-hidden">
+                      @if(user.isVerified)
+                        <i class="bi bi-patch-check-fill w-4 h-4 text-blue-500" aria-label="Verified"></i>
+                      @endif
+
+                      @if(['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext))
+                        <img 
+                          src="{{ tweet.mediaUrl }}" 
+                          alt="Tweet media" 
+                          class="max-h-96 w-full object-cover rounded-xl border border-gray-800"
+                          loading="lazy"
+                        >
+                      @elseif(['mp4', 'webm', 'mov'].includes(ext))
+                        <video 
+                          controls 
+                          class="max-h-96 w-full rounded-xl border border-gray-800"
+                          preload="metadata"
+                          aria-label="Embedded video"
+                        >
+                          <source src="{{ tweet.mediaUrl }}" type="video/{{ ext }}">
+                          Your browser does not support the video tag.
+                        </video>
+                      @else
+                        <div class="bg-gray-800 p-4 text-gray-400 rounded-xl">
+                          Unsupported media type
+                        </div>
+                      @endif
+                    </div>
+                  @endif
+
+
+                  <!-- Tweet Actions -->
+                  <div class="flex items-center justify-between mt-3 text-gray-500 max-w-md">
+                    <button class="flex items-center space-x-1 group">
+                      <div class="p-2 rounded-full group-hover:bg-blue-900/20">
+                        <i class="bi bi-reply w-5 h-5" aria-label="Reply"></i>
+                      </div>
+                      <span class="text-xs hover:text-blue-500">0</span>
+                    </button>
+
+                    <button class="flex items-center space-x-1 group">
+                      <div class="p-2 rounded-full group-hover:bg-green-900/20">
+                        <i class="bi bi-arrow-repeat w-5 h-5" aria-label="Retweet"></i>
+                      </div>
+                      <span class="text-xs hover:text-green-500">0</span>
+                    </button>
+
+                    <button class="flex items-center space-x-1 group">
+                      <div class="p-2 rounded-full group-hover:bg-red-900/20">
+                        <i class="bi bi-heart w-5 h-5" aria-label="Like"></i>
+                      </div>
+                      <span class="text-xs hover:text-red-500">0</span>
+                    </button>
+
+                    <button class="flex items-center space-x-1 group">
+                      <div class="p-2 rounded-full group-hover:bg-blue-900/20">
+                        <i class="bi bi-share w-5 h-5" aria-label="Share"></i>
+                      </div>
+                    </button>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          @endeach
+        @else
+          <div class="p-4 text-center text-gray-500">
+            No tweets to display at the moment.
+          </div>
+        @endif
+      </div>
+          </div>
+
+            <div x-show="tab === 'replies'">
+              <p class="text-gray-500 text-center py-4">Replies coming soon...</p>
+            </div>
+
+            <div x-show="tab === 'media'">
+              <p class="text-gray-500 text-center py-4">Media content goes here.</p>
+            </div>
+
+            <div x-show="tab === 'likes'">
+              <p class="text-gray-500 text-center py-4">Liked tweets coming soon...</p>
+            </div>
+
+          </div>
+      </div>
