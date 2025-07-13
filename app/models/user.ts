@@ -97,20 +97,18 @@ export default class User extends compose(BaseModel, AuthFinder) {
   /**
    * Relations de suivi entre utilisateurs
    */
+@manyToMany(() => User, {
+  pivotTable: 'follows',
+  pivotForeignKey: 'id_user', // follower
+  pivotRelatedForeignKey: 'id_user_following', // following
+})
+declare following: ManyToMany<typeof User>
 
-  // Utilisateurs que je suis
-  @manyToMany(() => User, {
-    pivotTable: 'follows',
-    pivotForeignKey: 'follower_id',
-    pivotRelatedForeignKey: 'following_id',
-  })
-  declare following: ManyToMany<typeof User>
+@manyToMany(() => User, {
+  pivotTable: 'follows',
+  pivotForeignKey: 'id_user_following', // being followed
+  pivotRelatedForeignKey: 'id_user', // follower
+})
+declare followers: ManyToMany<typeof User>
 
-  // Utilisateurs qui me suivent
-  @manyToMany(() => User, {
-    pivotTable: 'follows',
-    pivotForeignKey: 'following_id',
-    pivotRelatedForeignKey: 'follower_id',
-  })
-  declare followers: ManyToMany<typeof User>
 }

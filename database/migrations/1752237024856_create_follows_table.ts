@@ -1,22 +1,3 @@
-// import { BaseSchema } from '@adonisjs/lucid/schema'
-
-// export default class extends BaseSchema {
-//   protected tableName = 'follows'
-
-//   async up() {
-//     this.schema.createTable(this.tableName, (table) => {
-//       table.increments('id')
-
-//       table.timestamp('created_at')
-//       table.timestamp('updated_at')
-//     })
-//   }
-
-//   async down() {
-//     this.schema.dropTable(this.tableName)
-//   }
-// }
-
 import { BaseSchema } from '@adonisjs/lucid/schema'
 
 export default class extends BaseSchema {
@@ -42,7 +23,7 @@ export default class extends BaseSchema {
         .inTable('users')
         .onDelete('CASCADE')
 
-      // 👇 Composite unique constraint to prevent duplicates
+      // Prevent duplicate follow relationships
       table.unique(['id_user', 'id_user_following'])
 
       table.timestamp('created_at', { useTz: true }).notNullable()

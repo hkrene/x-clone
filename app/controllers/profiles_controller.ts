@@ -1,6 +1,7 @@
 import User from '#models/user'
 
 import Follow from '#models/follow'
+
 // import { createUserValidator } from '#validators/user'
 import Tweet from '#models/tweet'
 import type { HttpContext } from '@adonisjs/core/http'
@@ -148,43 +149,102 @@ export default class ProfilesController {
   }
 
 
-public async showOtherProfile({ params, view, auth, response }: HttpContext) {
-    const userAuth = auth.user!
-    const user = await User.query()
-      .where('id', params.id)
-      .preload('tweets', (query) => {
-        query.orderBy('created_at', 'desc')
-      })
-      .preload('followers')
-      .preload('following')
-      .firstOrFail()
 
-    if (user.id === userAuth.id) {
-      response.redirect('/profile')
-    } else {
-      
-      const postsCount = user.tweets.length
-      const followersCount = user.followers.length
-      const followingCount = user.following.length
+  public async showOtherProfile({ params, view, auth, response }: HttpContext) {
+  const userAuth = auth.user!
 
-      return view.render('pages/otherProfile', {
-        user: {
-          ...user.serialize(),
-          username: user.username ? `@${user.username}` : '',
-          avatar: user.avatar,
-          bannerImage: user.bannerImage || '',
-          postsCount,
-          followersCount,
-          followingCount,
-          joinedDate: user.createdAt.toFormat('MMMM yyyy'),
-        },
-        tweets: user.tweets.map(tweet => ({
-          ...tweet.serialize(),
-          shortTime: tweet.createdAt.toRelative(),
-        })),
-      })
-    }
+  const user = await User.query()
+    .where('id', params.id)
+    .preload('tweets', (query) => {
+      query.orderBy('created_at', 'desc')
+    })
+    .withCount('followers', (query) => query.as('followers_count'))
+    .withCount('following', (query) => query.as('following_count'))
+    .firstOrFail()
+
+  console.log('Extras:', user.$extras)
+
+  if (user.id === userAuth.id) {
+    return response.redirect('/profile')
+  }
+
+  const postsCount = user.tweets.length
+  const followersCount = user.$extras.followers_count
+  const followingCount = user.$extras.following_count
+
+  const followRelation = await Follow.query()
+    .where('id_user', userAuth.id)
+    .andWhere('id_user_following', user.id)
+    .first()
+
+  const isFollowing = !!followRelation
+
+  return view.render('pages/otherProfile', {
+    user: {
+      ...user.serialize(),
+      username: user.username ? `@${user.username}` : '',
+      avatar: user.avatar,
+      bannerImage: user.bannerImage || '',
+      postsCount,
+      followersCount,
+      followingCount,
+      joinedDate: user.createdAt.toFormat('MMMM yyyy'),
+    },
+    tweets: user.tweets.map((tweet) => ({
+      ...tweet.serialize(),
+      shortTime: tweet.createdAt.toRelative(),
+    })),
+    isFollowing,
+  })
 }
+
+// public async showOtherProfile({ params, view, auth, response }: HttpContext) {
+//     const userAuth = auth.user!
+//     const user = await User.query()
+//       .where('id', params.id)
+//       .preload('tweets', (query) => {
+//         query.orderBy('created_at', 'desc')
+//       })
+//       .preload('followers')
+//       .preload('following')
+//       .firstOrFail()
+
+//     if (user.id === userAuth.id) {
+//       response.redirect('/profile')
+//     } else {
+      
+//       const postsCount = user.tweets.length
+//       const followersCount = user.followers.length
+//       const followingCount = user.following.length
+
+//       const followRelation = await Follow.query()
+//   .where('id_user', userAuth.id)
+//   .andWhere('id_user_following', user.id)
+//   .first()
+
+// const isFollowing = !!followRelation
+
+
+//       return view.render('pages/otherProfile', {
+//         user: {
+//           ...user.serialize(),
+//           username: user.username ? `@${user.username}` : '',
+//           avatar: user.avatar,
+//           bannerImage: user.bannerImage || '',
+//           postsCount,
+//           followersCount,
+//           followingCount,
+//           joinedDate: user.createdAt.toFormat('MMMM yyyy'),
+//         },
+//         tweets: user.tweets.map(tweet => ({
+//           ...tweet.serialize(),
+//           shortTime: tweet.createdAt.toRelative(),
+//         })),
+//         isFollowing,
+//       })
+//     }
+// }
+
 
 
   private formatShortTime(date: DateTime): string {
@@ -202,3 +262,4 @@ public async showOtherProfile({ params, view, auth, response }: HttpContext) {
     return `${Math.round(diffMinutes / 1440)}d`
   }
 }
+
