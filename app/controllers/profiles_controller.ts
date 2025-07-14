@@ -1,76 +1,71 @@
 import User from '#models/user'
-
+import { uploadToSupabase, deleteFromSupabase, getSignedUrl } from '#services/uploader'
 import Follow from '#models/follow'
-
-// import { createUserValidator } from '#validators/user'
 import Tweet from '#models/tweet'
 import type { HttpContext } from '@adonisjs/core/http'
 import app from '@adonisjs/core/services/app'
-import { cuid } from '@adonisjs/core/helpers'
-// import Application from '@adonisjs/core/services/app'
-// import { uploadToCloudinary } from 'services/cloudinary'
 import { DateTime } from 'luxon'
 
-
-//Shows home page with tweets
 export default class ProfilesController {
   public async showHome({ view, auth }: HttpContext) {
-  const user = await auth.use('web').authenticate()
-  
-  // Get IDs of users that the current user follows
-  const following = await Follow.query()
-    .where('id_user', user.id)
-    .select('id_user_following')
-  
-  const followingIds = following.map(f => f.idUserFollowing)
+    const user = await auth.use('web').authenticate()
+    
+    const following = await Follow.query()
+      .where('id_user', user.id)
+      .select('id_user_following')
+    const followingIds = following.map(f => f.idUserFollowing)
 
-  // For You feed - all tweets except current user's
-  const forYouTweets = await Tweet.query()
-    .whereNot('user_id', user.id)
-    .preload('author')
-    .orderBy('created_at', 'desc')
-    .limit(50)
+    const forYouTweets = await Tweet.query()
+      .whereNot('user_id', user.id)
+      .preload('author')
+      .orderBy('created_at', 'desc')
+      .limit(50)
 
-  // Following feed - only tweets from followed users
-  const followingTweets = followingIds.length > 0
-    ? await Tweet.query()
-        .whereIn('user_id', followingIds)
-        .preload('author')
-        .orderBy('created_at', 'desc')
-        .limit(50)
-    : []
+    const followingTweets = followingIds.length > 0
+      ? await Tweet.query()
+          .whereIn('user_id', followingIds)
+          .preload('author')
+          .orderBy('created_at', 'desc')
+          .limit(50)
+      : []
 
-  return view.render('pages/home', {
-    user: {
-      ...user.serialize(),
-      avatar: user.avatar || '',
-      firstName: user.firstName || '',
-      surname: user.surname || '',
-      username: user.username || '', 
-      isVerified: user.isVerified || false,
-      following_count: followingIds.length
-    },
-    forYouTweets: forYouTweets.map(tweet => ({
-      ...tweet.serialize(),
-      shortTime: this.formatShortTime(tweet.createdAt)
-    })),
-    followingTweets: followingTweets.map(tweet => ({
-      ...tweet.serialize(),
-      shortTime: this.formatShortTime(tweet.createdAt)
-    }))
-  })
-}
+    // Generate signed URLs for user avatar
+    const avatarUrl = user.avatar ? await getSignedUrl(user.avatar) : ''
 
+    return view.render('pages/home', {
+      user: {
+        ...user.serialize(),
+        avatar: avatarUrl,
+        firstName: user.firstName || '',
+        surname: user.surname || '',
+        username: user.username || '', 
+        isVerified: user.isVerified || false,
+        following_count: followingIds.length
+      },
+      forYouTweets: await Promise.all(forYouTweets.map(async (tweet) => ({
+        ...tweet.serialize(),
+        shortTime: this.formatShortTime(tweet.createdAt),
+        mediaUrl: tweet.mediaUrl ? await getSignedUrl(tweet.mediaUrl) : null
+      }))),
+      followingTweets: await Promise.all(followingTweets.map(async (tweet) => ({
+        ...tweet.serialize(),
+        shortTime: this.formatShortTime(tweet.createdAt),
+        mediaUrl: tweet.mediaUrl ? await getSignedUrl(tweet.mediaUrl) : null
+      })))
+    })
+  }
 
-  //This method renders the edit profile page with the user's current information
   public async showEditProfile({ view, auth }: HttpContext) {
     const user = await auth.use('web').authenticate()
+
+    const avatarUrl = user.avatar ? await getSignedUrl(user.avatar) : ''
+    const bannerUrl = user.bannerImage ? await getSignedUrl(user.bannerImage) : ''
 
     return view.render('pages/editProfil', {
       user: {
         ...user.serialize(),
-        bannerImage: user.bannerImage || '',
-        avatar: user.avatar || '',
+        bannerImage: bannerUrl,
+        avatar: avatarUrl,
         firstName: user.firstName || '',
         surname: user.surname || '',
         bio: user.bio || '',
@@ -80,10 +75,6 @@ export default class ProfilesController {
       },
     })
   }
-
-
-  //This method updates the user's profile information based on the input received from the request 
-  // After updating, it redirects the user back to their profile page
 
   public async update({ request, response, auth }: HttpContext) {
     const firstName = request.input('firstName')
@@ -105,28 +96,33 @@ export default class ProfilesController {
     if (dateOfBirth) user.dateOfBirth = dateOfBirth
 
     if (bannerImage) {
-      await bannerImage.move(app.makePath('public/uploads'), {
-        name: `${cuid()}.${bannerImage.extname}`,
-      })
-      user.bannerImage = bannerImage.fileName || ''
+      await bannerImage.move(app.tmpPath())
+
+      if (user.bannerImage?.includes('media/')) {
+        await deleteFromSupabase(user.bannerImage)
+      }
+
+      const path = `banners/${user.id}_${Date.now()}.${bannerImage.extname}`
+      const publicPath = await uploadToSupabase(bannerImage.filePath!, path, bannerImage.headers['content-type'])
+      user.bannerImage = publicPath
     }
 
     if (avatar) {
-      await avatar.move(app.makePath('public/uploads'), {
-        name: `${cuid()}.${avatar.extname}`,
-      })
-      user.avatar = avatar.fileName || ''
-    }
+      await avatar.move(app.tmpPath())
 
+      if (user.avatar?.includes('media/')) {
+        await deleteFromSupabase(user.avatar)
+      }
+
+      const path = `avatars/${user.id}_${Date.now()}.${avatar.extname}`
+      const publicPath = await uploadToSupabase(avatar.filePath!, path, avatar.headers['content-type'])
+      user.avatar = publicPath
+    }
 
     await user.save()
     return response.redirect('/profile')
-
   }
 
-
-  
-// This method retrieves the user's profile based on the username parameter or the authenticated user  
   public async showProfile({ params, view, auth }: HttpContext) {
     let user: User | null = null
 
@@ -150,10 +146,16 @@ export default class ProfilesController {
       return view.render('pages/profile')
     }
 
-    const tweets = (user.tweets || []).map((tweet) => ({
-      ...tweet.serialize(),
-      shortTime: this.formatShortTime(tweet.createdAt), 
-    }))
+    const avatarUrl = user.avatar ? await getSignedUrl(user.avatar) : ''
+    const bannerUrl = user.bannerImage ? await getSignedUrl(user.bannerImage) : ''
+
+    const tweets = await Promise.all(
+      (user.tweets || []).map(async (tweet) => ({
+        ...tweet.serialize(),
+        shortTime: this.formatShortTime(tweet.createdAt),
+        mediaUrl: tweet.mediaUrl ? await getSignedUrl(tweet.mediaUrl) : null,
+      }))
+    )
 
     const followersCount = user.followers?.length || 0
     const followingCount = user.following?.length || 0
@@ -163,8 +165,8 @@ export default class ProfilesController {
       user: {
         ...user.serialize(),
         username: user.username ? `@${user.username}` : '', 
-        avatar: user.avatar,
-        bannerImage: user.bannerImage || '',
+        avatar: avatarUrl,
+        bannerImage: bannerUrl || '',
         postsCount,
         followersCount,
         followingCount,
@@ -174,56 +176,50 @@ export default class ProfilesController {
     })
   }
 
-
-
   public async showOtherProfile({ params, view, auth, response }: HttpContext) {
-  const userAuth = auth.user!
+    const userAuth = auth.user!
 
-  const user = await User.query()
-    .where('id', params.id)
-    .preload('tweets', (query) => {
-      query.orderBy('created_at', 'desc')
+    const user = await User.query()
+      .where('id', params.id)
+      .preload('tweets', (query) => {
+        query.orderBy('created_at', 'desc')
+      })
+      .withCount('followers', (query) => query.as('followers_count'))
+      .withCount('following', (query) => query.as('following_count'))
+      .firstOrFail()
+
+    if (user.id === userAuth.id) {
+      return response.redirect('/profile')
+    }
+
+    const avatarUrl = user.avatar ? await getSignedUrl(user.avatar) : ''
+    const bannerUrl = user.bannerImage ? await getSignedUrl(user.bannerImage) : ''
+
+    const postsCount = user.tweets.length
+
+    const followRelation = await Follow.query()
+      .where('id_user', userAuth.id)
+      .andWhere('id_user_following', user.id)
+      .first()
+
+    const isFollowing = !!followRelation
+
+    return view.render('pages/otherProfile', {
+      user: {
+        ...user.serialize(),
+        username: user.username ? `@${user.username}` : '',
+        avatar: avatarUrl,
+        bannerImage: bannerUrl || '',
+        postsCount,
+        joinedDate: user.createdAt.toFormat('MMMM yyyy'),
+      },
+      tweets: user.tweets.map((tweet) => ({
+        ...tweet.serialize(),
+        shortTime: tweet.createdAt.toRelative(),
+      })),
+      isFollowing,
     })
-    .withCount('followers', (query) => query.as('followers_count'))
-    .withCount('following', (query) => query.as('following_count'))
-    .firstOrFail()
-
-  console.log('Extras:', user.$extras)
-
-  if (user.id === userAuth.id) {
-    return response.redirect('/profile')
   }
-
-  const postsCount = user.tweets.length
-  // const followersCount = user.$extras.followers_count
-  // const followingCount = user.$extras.following_count
-
-  const followRelation = await Follow.query()
-    .where('id_user', userAuth.id)
-    .andWhere('id_user_following', user.id)
-    .first()
-
-  const isFollowing = !!followRelation
-
-  return view.render('pages/otherProfile', {
-    user: {
-      ...user.serialize(),
-      username: user.username ? `@${user.username}` : '',
-      avatar: user.avatar,
-      bannerImage: user.bannerImage || '',
-      postsCount,
-      // followersCount,
-      // followingCount,
-      joinedDate: user.createdAt.toFormat('MMMM yyyy'),
-    },
-    tweets: user.tweets.map((tweet) => ({
-      ...tweet.serialize(),
-      shortTime: tweet.createdAt.toRelative(),
-    })),
-    isFollowing,
-  })
-}
-
 
   private formatShortTime(date: DateTime): string {
     const diffMinutes = date.diffNow().as('minutes') * -1
@@ -240,4 +236,3 @@ export default class ProfilesController {
     return `${Math.round(diffMinutes / 1440)}d`
   }
 }
-

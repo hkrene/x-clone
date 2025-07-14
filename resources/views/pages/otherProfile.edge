@@ -9,7 +9,7 @@
 <section class="flex-1 border-x border-gray-800 max-w-2xl w-full">
 
   <!-- Background Image Section -->
-  <div class="relative h-32 md:h-48 bg-cover bg-center bg-gray-800" style="background-image: url('{{ '/uploads/' + user.bannerImage || '' }}')">
+  <div class="relative h-32 md:h-48 bg-cover bg-center bg-gray-800" style="background-image: url('{{ user.bannerImage || '' }}')">
 
     <!-- Header -->
     <header class="absolute top-0 left-0 right-0 z-10 px-4 py-2 bg-transparent md:sticky md:bg-black md:backdrop-blur-md md:flex">
@@ -39,7 +39,7 @@
     <div class="absolute -top-10 md:-top-16 left-2 md:left-4 border-4 border-black rounded-full overflow-hidden w-20 h-20 md:w-32 md:h-32">
     @if(user.avatar)
       <img 
-        src="{{ '/uploads/' + user.avatar }}" 
+        src="{{ user.avatar }}" 
         alt="Profile picture"
         class="w-full h-full object-cover"
       >
@@ -228,7 +228,7 @@
                 >
                   @if(user.avatar)
                     <img 
-                      src="{{ user.avatar.startsWith('/') ? user.avatar : '/uploads/' + user.avatar }}" 
+                      src="{{ user.avatar }}"
                       alt="{{ user.firstName }}'s avatar" 
                       class="w-full h-full object-cover"
                       loading="lazy"

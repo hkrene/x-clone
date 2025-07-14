@@ -13,7 +13,11 @@
     "outDir": "./build",
     "baseUrl": ".", // Required for path aliases
     "paths": {
-      "#services/*": ["app/Services/*"]
+      "#config/*": ["config/*"],
+      "#services/*": ["app/services/*"],
+      "#models/*": ["app/models/*"],
+      "#validators/*": ["app/validators/*"],
+      "#controllers/*": ["app/controllers/*"]
     },
     "strict": true
   }

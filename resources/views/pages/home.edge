@@ -14,7 +14,7 @@
         <a href="/profile" class="block w-full h-full rounded-full overflow-hidden">
           @if(user?.avatar)
             <img 
-              src="{{ '/uploads/' + (user.avatar || '') }}"
+              src="{{ user.avatar }}"
               alt="Profile picture"
               class="w-full h-full object-cover"
             >
@@ -87,7 +87,7 @@
         <a href="/profile" class="flex-shrink-0 w-12 h-12 rounded-full overflow-hidden">
             {{--  <img src="{{ asset('image/profile0.png') }}" alt="User profile" class="w-full h-full object-cover">  --}}
         @if(user?.avatar)
-        <img src="{{ '/uploads/' + (user.avatar || '') }}"
+        <img src="{{ user.avatar }}"
         
         alt="Profile picture"
         class="w-full h-full object-cover"
@@ -187,7 +187,7 @@
             <div class="flex space-x-3">
               <a href="/otherProfile/{{ tweet.author.id }}" class="flex-shrink-0 w-12 h-12 rounded-full overflow-hidden">
                 @if(tweet.author?.avatar)
-                  <img src="{{ '/uploads/' + tweet.author.avatar }}" alt="User profile" class="w-full h-full object-cover">
+                  <img src="{{ tweet.author.avatar }}" alt="User profile" class="w-full h-full object-cover">
                 @else
                   <div class="w-full h-full bg-gray-700 flex items-center justify-center text-white text-xl font-bold uppercase">
                     {{ tweet.author.firstName.charAt(0) }}
