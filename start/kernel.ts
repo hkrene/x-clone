@@ -26,6 +26,7 @@ server.use([
   () => import('#middleware/container_bindings_middleware'),
   () => import('@adonisjs/static/static_middleware'),
   () => import('@adonisjs/vite/vite_middleware'),
+  () => import('#middleware/share_user_with_views_middleware')
 ])
 
 /**

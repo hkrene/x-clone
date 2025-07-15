@@ -11,365 +11,299 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-  <script src="//unpkg.com/alpinejs" defer></script>
-
 </head>
 <body class="bg-black text-white flex min-h-screen max-w-7xl mx-auto">
-  <!-- Left Sidebar  -->
+  @if(auth.user)
+    <!-- Left Sidebar -->
     <section class="hidden md:block w-[88px] lg:w-[275px] min-h-screen px-2 border-r border-gray-800 sticky top-0 overflow-y-auto h-screen">
-        <div class="flex flex-col h-full justify-between py-4"> 
-            
-            <div class="space-y-2">
-                <!-- Twitter Logo -->
-                <a href="/home" class="p-3 hover:bg-gray-900 rounded-full cursor-pointer mx-auto lg:mx-0 md:ml-2">
-                    <svg viewBox="0 0 24 24" aria-hidden="true" class="w-8 h-8 text-white">
-                        <g>
-                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" fill="currentColor"></path>
-                        </g>
-                    </svg>
-                </a>
+      <div class="flex flex-col h-full justify-between py-4">
+        <div class="space-y-2">
+          <!-- Twitter Logo -->
+          <a href="/home" class="p-3 hover:bg-gray-900 rounded-full cursor-pointer mx-auto lg:mx-0 md:ml-2">
+            <svg viewBox="0 0 24 24" aria-hidden="true" class="w-8 h-8 text-white">
+              <g>
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" fill="currentColor"></path>
+              </g>
+            </svg>
+          </a>
 
-                <!-- Navbar-->
-                <nav class="space-y-1 w-full mt-2">
-                    <a href="/home" class="flex justify-center lg:justify-start items-center space-x-4 p-3 hover:bg-gray-900 rounded-full">
-                        {{--  <i class="bi bi-house-fill w-6 h-6" aria-label="Home"></i>  --}}
-                        <svg viewBox="0 0 24 24" class="text-white w-8 h-8">
-                            <g>
-                                <path d="M12 1.696L.622 8.807l1.06 1.696L3 9.679V19.5C3 20.881 4.119 22 5.5 22h13c1.381 0 2.5-1.119 2.5-2.5V9.679l1.318.824 1.06-1.696L12 1.696zM12 16.5c-1.933 0-3.5-1.567-3.5-3.5s1.567-3.5 3.5-3.5 3.5 1.567 3.5 3.5-1.567 3.5-3.5 3.5z" fill="currentColor"></path>
-                            </g>
-                        </svg>
-                        <span class="text-xl hidden lg:block">Home</span>
-                    </a>
-                    <a href="" class="flex items-center space-x-4 p-3 hover:bg-gray-900 rounded-full justify-center lg:justify-start">
-                        {{--  <i class="bi bi-hash w-6 h-6" aria-label="Explore"></i>  --}}
-                        <svg viewBox="0 0 24 24" class="text-white w-8 h-8">
-                            <g>
-                                <path d="M10.25 3.75c-3.59 0-6.5 2.91-6.5 6.5s2.91 6.5 6.5 6.5c1.795 0 3.419-.726 4.596-1.904 1.178-1.177 1.904-2.801 1.904-4.596 0-3.59-2.91-6.5-6.5-6.5zm-8.5 6.5c0-4.694 3.806-8.5 8.5-8.5s8.5 3.806 8.5 8.5c0 1.986-.682 3.815-1.824 5.262l4.781 4.781-1.414 1.414-4.781-4.781c-1.447 1.142-3.276 1.824-5.262 1.824-4.694 0-8.5-3.806-8.5-8.5z" fill="currentColor"></path>
-                            </g>
-                        </svg>
-                        <span class="capitalize hidden lg:block">explore</span>
-                    </a>
-                    <a href="" class="flex items-center space-x-4 p-3 hover:bg-gray-900 rounded-full justify-center lg:justify-start">
-                        {{--  <i class="bi bi-bell-fill w-6 h-6" aria-label="Notifications"></i>  --}}
-                        <svg viewBox="0 0 24 24" class="text-white w-8 h-8">
-                            <g>
-                                <path d="M19.993 9.042C19.48 5.017 16.054 2 11.996 2s-7.49 3.021-7.999 7.051L2.866 18H7.1c.463 2.282 2.481 4 4.9 4s4.437-1.718 4.9-4h4.236l-1.143-8.958zM12 20c-1.306 0-2.417-.835-2.829-2h5.658c-.412 1.165-1.523 2-2.829 2zm-6.866-4l.847-6.698C6.364 6.272 8.941 4 11.996 4s5.627 2.268 6.013 5.295L18.864 16H5.134z" fill="currentColor"></path>
-                            </g>
-                        </svg>
-                        <span class="capitalize hidden lg:block">notifications</span>
-                    </a>
-                    <a href="" class="flex items-center space-x-4 p-3 hover:bg-gray-900 rounded-full justify-center lg:justify-start">
-                        {{--  <i class="bi bi-envelope-fill w-6 h-6" aria-label="Messages"></i>  --}}
-                        <svg viewBox="0 0 24 24" class="text-white w-8 h-8">
-                            <g>
-                                <path d="M1.998 5.5c0-1.381 1.119-2.5 2.5-2.5h15c1.381 0 2.5 1.119 2.5 2.5v13c0 1.381-1.119 2.5-2.5 2.5h-15c-1.381 0-2.5-1.119-2.5-2.5v-13zm2.5-.5c-.276 0-.5.224-.5.5v2.764l8 3.638 8-3.636V5.5c0-.276-.224-.5-.5-.5h-15zm15.5 5.463l-8 3.636-8-3.638V18.5c0 .276.224.5.5.5h15c.276 0 .5-.224.5-.5v-8.037z" fill="currentColor"></path>
-                            </g>
-                        </svg>
-                        <span class="capitalize hidden lg:block">message</span>
-                    </a>
-                    <a href="" class="flex items-center space-x-4 p-3 hover:bg-gray-900 rounded-full justify-center lg:justify-start">
-                        {{--  <i class="bi bi-bookmark-fill w-6 h-6" aria-label="Bookmarks"></i>  --}}
-                        <svg viewBox="0 0 24 24" class="text-white w-8 h-8">
-                            <g>
-                                <path d="M4 4.5C4 3.12 5.119 2 6.5 2h11C18.881 2 20 3.12 20 4.5v18.44l-8-5.71-8 5.71V4.5zM6.5 4c-.276 0-.5.22-.5.5v14.56l6-4.29 6 4.29V4.5c0-.28-.224-.5-.5-.5h-11z" fill="currentColor"></path>
-                            </g>
-                        </svg>
-                        <span class="capitalize hidden lg:block">bookmarks</span>
-                    </a>
-                    <a href="" class="flex items-center space-x-4 p-3 hover:bg-gray-900 rounded-full justify-center lg:justify-start">
-                        {{--  <i class="bi bi-card-list w-6 h-6" aria-label="Lists"></i>  --}}
-                        <svg viewBox="0 0 24 24" class="text-white w-8 h-8">
-                            <g>
-                                <path d="M3 4.5C3 3.12 4.12 2 5.5 2h13C19.88 2 21 3.12 21 4.5v15c0 1.38-1.12 2.5-2.5 2.5h-13C4.12 22 3 20.88 3 19.5v-15zM5.5 4c-.28 0-.5.22-.5.5v15c0 .28.22.5.5.5h13c.28 0 .5-.22.5-.5v-15c0-.28-.22-.5-.5-.5h-13zM16 10H8V8h8v2zm-8 2h8v2H8v-2z" fill="currentColor"></path>
-                            </g>
-                        </svg>
-                        <span class="capitalize hidden lg:block">lists</span>
-                    </a>
-                    <a href="/profile" class="flex items-center space-x-4 p-3 hover:bg-gray-900 rounded-full justify-center lg:justify-start">
-                        {{--  <i class="bi bi-person-fill w-6 h-6" aria-label="Profile"></i>  --}}
-                        <svg viewBox="0 0 24 24" class="text-white w-8 h-8">
-                            <g>
-                                <path d="M5.651 19h12.698c-.337-1.8-1.023-3.21-1.945-4.19C15.318 13.65 13.838 13 12 13s-3.317.65-4.404 1.81c-.922.98-1.608 2.39-1.945 4.19zm.486-5.56C7.627 11.85 9.648 11 12 11s4.373.85 5.863 2.44c1.477 1.58 2.366 3.8 2.632 6.46l.11 1.1H3.395l.11-1.1c.266-2.66 1.155-4.88 2.632-6.46zM12 4c-1.105 0-2 .9-2 2s.895 2 2 2 2-.9 2-2-.895-2-2-2zM8 6c0-2.21 1.791-4 4-4s4 1.79 4 4-1.791 4-4 4-4-1.79-4-4z" fill="currentColor"></path>
-                            </g>
-                        </svg>
-                        <span class="capitalize hidden lg:block">profile</span>
-                    </a>
-                    <a href="" class="flex items-center space-x-4 p-3 hover:bg-gray-900 rounded-full justify-center lg:justify-start">
-                        {{--  <i class="bi bi-three-dots w-6 h-6" aria-label="More"></i>  --}}
-                        <svg viewBox="0 0 24 24" class="text-white w-8 h-8">
-                            <g>
-                                <circle cx="6" cy="12" r="2" fill="currentColor"/>
-                                <circle cx="12" cy="12" r="2" fill="currentColor"/>
-                                <circle cx="18" cy="12" r="2" fill="currentColor"/>
-                            </g>
-                        </svg>
-                        <span class="capitalize hidden lg:block">more</span>
-                    </a>
-                </nav>
-
-                <button 
-                class="w-full bg-white hover:bg-blue-600 text-black font-bold py-3 rounded-full mt-4 capitalize hidden lg:block transition-colors"
-                onclick="openTweetModal()"
-                >
-                    <span class="hidden md:hidden lg:block">
-                        post
-                    </span>
-
-                    <svg viewBox="0 0 24 24" class="text-white w-8 h-8 lg:hidden">
-                        <g>
-                            <path d="M23 3c-6.62-.1-10.38 2.421-13.05 6.03C7.29 12.61 6 17.331 6 22h2c0-1.007.07-2.012.19-3H12c4.1 0 7.48-3.082 7.94-7.054C22.79 10.147 23.17 6.359 23 3zm-7 8h-1.5v2H16c.63-.016 1.2-.08 1.72-.188C16.95 15.24 14.68 17 12 17H8.55c.57-2.512 1.57-4.851 3-6.78 2.16-2.912 5.29-4.911 9.45-5.187C20.95 8.079 19.9 11 16 11zM4 9V6H1V4h3V1h2v3h3v2H6v3H4z" fill="currentColor"></path>
-                        </g>
-                    </svg>
-                </button>
-            </div>
-
-            <!-- Profile Section - Sticks to Bottom -->
-            <div class="p-3 hover:bg-gray-900 rounded-full cursor-pointer w-full">
-    <div class="flex justify-between items-center">
-        <div class="flex items-center space-x-3">
-            <a href="/profile">
-                @if(user && user.avatar)
-                    <img src="{{ '/uploads/' + user.avatar }}" 
-                         alt="{{ user.firstName }}"
-                         class="w-10 h-10 rounded-full object-cover">
-                @else
-                    <div class="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center text-white text-xl font-bold uppercase">
-                        {{ user?.firstName?.charAt(0) || 'U' }}
-                    </div>
-                @endif
+          <!-- Navbar -->
+          <nav class="space-y-1 w-full mt-2">
+            <a href="/home" class="flex justify-center lg:justify-start items-center space-x-4 p-3 hover:bg-gray-900 rounded-full">
+              <svg viewBox="0 0 24 24" class="text-white w-8 h-8">
+                <g>
+                  <path d="M12 1.696L.622 8.807l1.06 1.696L3 9.679V19.5C3 20.881 4.119 22 5.5 22h13c1.381 0 2.5-1.119 2.5-2.5V9.679l1.318.824 1.06-1.696L12 1.696zM12 16.5c-1.933 0-3.5-1.567-3.5-3.5s1.567-3.5 3.5-3.5 3.5 1.567 3.5 3.5-1.567 3.5-3.5 3.5z" fill="currentColor"></path>
+                </g>
+              </svg>
+              <span class="text-xl hidden lg:block">Home</span>
             </a>
-            <div class="hidden lg:block">
+            <a href="#" class="flex items-center space-x-4 p-3 hover:bg-gray-900 rounded-full justify-center lg:justify-start">
+              <svg viewBox="0 0 24 24" class="text-white w-8 h-8">
+                <g>
+                  <path d="M10.25 3.75c-3.59 0-6.5 2.91-6.5 6.5s2.91 6.5 6.5 6.5c1.795 0 3.419-.726 4.596-1.904 1.178-1.177 1.904-2.801 1.904-4.596 0-3.59-2.91-6.5-6.5-6.5zm-8.5 6.5c0-4.694 3.806-8.5 8.5-8.5s8.5 3.806 8.5 8.5c0 1.986-.682 3.815-1.824 5.262l4.781 4.781-1.414 1.414-4.781-4.781c-1.447 1.142-3.276 1.824-5.262 1.824-4.694 0-8.5-3.806-8.5-8.5z" fill="currentColor"></path>
+                </g>
+              </svg>
+              <span class="capitalize hidden lg:block">explore</span>
+            </a>
+            <a href="#" class="flex items-center space-x-4 p-3 hover:bg-gray-900 rounded-full justify-center lg:justify-start">
+              <svg viewBox="0 0 24 24" class="text-white w-8 h-8">
+                <g>
+                  <path d="M19.993 9.042C19.48 5.017 16.054 2 11.996 2s-7.49 3.021-7.999 7.051L2.866 18H7.1c.463 2.282 2.481 4 4.9 4s4.437-1.718 4.9-4h4.236l-1.143-8.958zM12 20c-1.306 0-2.417-.835-2.829-2h5.658c-.412 1.165-1.523 2-2.829 2zm-6.866-4l.847-6.698C6.364 6.272 8.941 4 11.996 4s5.627 2.268 6.013 5.295L18.864 16H5.134z" fill="currentColor"></path>
+                </g>
+              </svg>
+              <span class="capitalize hidden lg:block">notifications</span>
+            </a>
+            <a href="#" class="flex items-center space-x-4 p-3 hover:bg-gray-900 rounded-full justify-center lg:justify-start">
+              <svg viewBox="0 0 24 24" class="text-white w-8 h-8">
+                <g>
+                  <path d="M1.998 5.5c0-1.381 1.119-2.5 2.5-2.5h15c1.381 0 2.5 1.119 2.5 2.5v13c0 1.381-1.119 2.5-2.5 2.5h-15c-1.381 0-2.5-1.119-2.5-2.5v-13zm2.5-.5c-.276 0-.5.224-.5.5v2.764l8 3.638 8-3.636V5.5c0-.276-.224-.5-.5-.5h-15zm15.5 5.463l-8 3.636-8-3.638V18.5c0 .276.224.5.5.5h15c.276 0 .5-.224.5-.5v-8.037z" fill="currentColor"></path>
+                </g>
+              </svg>
+              <span class="capitalize hidden lg:block">message</span>
+            </a>
+            <a href="#" class="flex items-center space-x-4 p-3 hover:bg-gray-900 rounded-full justify-center lg:justify-start">
+              <svg viewBox="0 0 24 24" class="text-white w-8 h-8">
+                <g>
+                  <path d="M4 4.5C4 3.12 5.119 2 6.5 2h11C18.881 2 20 3.12 20 4.5v18.44l-8-5.71-8 5.71V4.5zM6.5 4c-.276 0-.5.22-.5.5v14.56l6-4.29 6 4.29V4.5c0-.28-.224-.5-.5-.5h-11z" fill="currentColor"></path>
+                </g>
+              </svg>
+              <span class="capitalize hidden lg:block">bookmarks</span>
+            </a>
+            <a href="#" class="flex items-center space-x-4 p-3 hover:bg-gray-900 rounded-full justify-center lg:justify-start">
+              <svg viewBox="0 0 24 24" class="text-white w-8 h-8">
+                <g>
+                  <path d="M3 4.5C3 3.12 4.12 2 5.5 2h13C19.88 2 21 3.12 21 4.5v15c0 1.38-1.12 2.5-2.5 2.5h-13C4.12 22 3 20.88 3 19.5v-15zM5.5 4c-.28 0-.5.22-.5.5v15c0 .28.22.5.5.5h13c.28 0 .5-.22.5-.5v-15c0-.28-.22-.5-.5-.5h-13zM16 10H8V8h8v2zm-8 2h8v2H8v-2z" fill="currentColor"></path>
+                </g>
+              </svg>
+              <span class="capitalize hidden lg:block">lists</span>
+            </a>
+            <a href="/profile" class="flex items-center space-x-4 p-3 hover:bg-gray-900 rounded-full justify-center lg:justify-start">
+              <svg viewBox="0 0 24 24" class="text-white w-8 h-8">
+                <g>
+                  <path d="M5.651 19h12.698c-.337-1.8-1.023-3.21-1.945-4.19C15.318 13.65 13.838 13 12 13s-3.317.65-4.404 1.81c-.922.98-1.608 2.39-1.945 4.19zm.486-5.56C7.627 11.85 9.648 11 12 11s4.373.85 5.863 2.44c1.477 1.58 2.366 3.8 2.632 6.46l.11 1.1H3.395l.11-1.1c.266-2.66 1.155-4.88 2.632-6.46zM12 4c-1.105 0-2 .9-2 2s.895 2 2 2 2-.9 2-2-.895-2-2-2zM8 6c0-2.21 1.791-4 4-4s4 1.79 4 4-1.791 4-4 4-4-1.79-4-4z" fill="currentColor"></path>
+                </g>
+              </svg>
+              <span class="capitalize hidden lg:block">profile</span>
+            </a>
+            <a href="#" class="flex items-center space-x-4 p-3 hover:bg-gray-900 rounded-full justify-center lg:justify-start">
+              <svg viewBox="0 0 24 24" class="text-white w-8 h-8">
+                <g>
+                  <circle cx="6" cy="12" r="2" fill="currentColor"/>
+                  <circle cx="12" cy="12" r="2" fill="currentColor"/>
+                  <circle cx="18" cy="12" r="2" fill="currentColor"/>
+                </g>
+              </svg>
+              <span class="capitalize hidden lg:block">more</span>
+            </a>
+          </nav>
+
+          <button class="w-full bg-white hover:bg-blue-600 text-black font-bold py-3 rounded-full mt-4 capitalize hidden lg:block transition-colors" onclick="openTweetModal()">
+            <span class="hidden md:hidden lg:block">post</span>
+            <svg viewBox="0 0 24 24" class="text-white w-8 h-8 lg:hidden">
+              <g>
+                <path d="M23 3c-6.62-.1-10.38 2.421-13.05 6.03C7.29 12.61 6 17.331 6 22h2c0-1.007.07-2.012.19-3H12c4.1 0 7.48-3.082 7.94-7.054C22.79 10.147 23.17 6.359 23 3zm-7 8h-1.5v2H16c.63-.016 1.2-.08 1.72-.188C16.95 15.24 14.68 17 12 17H8.55c.57-2.512 1.57-4.851 3-6.78 2.16-2.912 5.29-4.911 9.45-5.187C20.95 8.079 19.9 11 16 11zM4 9V6H1V4h3V1h2v3h3v2H6v3H4z" fill="currentColor"></path>
+              </g>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Profile Section -->
+        <div class="p-3 hover:bg-gray-900 rounded-full cursor-pointer w-full">
+          <div class="flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+              <a href="/profile">
+                @if(auth.user.avatar)
+                  <img src="{{ auth.user.avatar }}" 
+                       alt="{{ auth.user.firstName }}'s profile picture"
+                       class="w-10 h-10 rounded-full object-cover">
+                @else
+                  <div class="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center text-white text-xl font-bold uppercase">
+                    {{ auth.user.firstName.charAt(0) || 'U' }}
+                  </div>
+                @endif
+              </a>
+              <div class="hidden lg:block">
                 <a href="/profile" class="flex items-center gap-1">
-                    <p class="text-sm font-medium">
-                        {{ user?.firstName || 'User' }} {{ user?.surname || '' }}
-                    </p>
-                    @if(user?.isVerified)
+                  <p class="text-sm font-medium">
+                    {{ auth.user.firstName }} {{ auth.user.surname }}
+                  </p>
+                  @if(auth.user.isVerified)
                     <i class="bi bi-patch-check-fill w-4 h-4 text-blue-500" aria-label="Verified"></i>
-                    @endif
+                  @endif
                 </a>
                 <p class="text-gray-500 text-sm">
-                    @if(user?.username)
-                        @{{ user.username }}
-                    @else
-                        <span class="text-gray-400">Loading...</span>
-                    @endif
+                  {{--  {{ auth.user.username }}  --}}
+                  {{ auth.user.username.startsWith('@') ? auth.user.username : `@${auth.user.username}` }}
                 </p>
+              </div>
             </div>
+            <button type="button" class="hidden lg:block cursor-pointer profile-modal-toggle" aria-label="More options">
+              <i class="bi bi-three-dots-vertical text-white text-xl"></i>
+            </button>
+          </div>
         </div>
-        <!-- More options icon with click handler -->
-        <i 
-            class="bi bi-three-dots-vertical hidden lg:block cursor-pointer" 
-            aria-label="More options"
-            onclick="toggleProfileModal(event)">
-        </i>
 
-    </div>
-</div>
-
-<!-- Profile Modal -->
-<div id="profileModal" class="hidden fixed bottom-20 left-34 w-68 bg-gray-950 rounded-2xl shadow-lg z-50 border  border-gray-700">
-        
-        <div class="border-gray-700 py-2 ">
-            
-
+        <!-- Profile Modal -->
+        <div id="profileModal" class="hidden fixed bottom-20 left-34 w-68 bg-gray-950 rounded-2xl shadow-lg z-50 border border-gray-700">
+          <div class="border-gray-700 py-2">
             <form action="/logout" method="POST">
-                {{ csrfField() }}
-                <button type="submit" class="block py-2 px-1 pr-20 pl-4 text-md hover:bg-gray-900 font-bold">
-                    Add an existing account
-                </button>
-
-                <button type="submit" class="block py-2 px-1 pr-20 pl-4 text-md hover:bg-gray-900 font-bold w-full text-left">
-                    Log out {{ user?.username || '' }}
-                </button>
+              {{ csrfField() }}
+              <button type="submit" class="block py-2 px-1 pr-20 pl-4 text-md hover:bg-gray-900 font-bold">
+                Add an existing account
+              </button>
+              <button type="submit" class="block py-2 px-1 pr-20 pl-4 text-md hover:bg-gray-900 font-bold w-full text-left">
+                Log out 
+                  {{ auth.user.username.startsWith('@') ? auth.user.username : `@${auth.user.username}` }}
+              </button>
             </form>
+          </div>
         </div>
-</div>
 
-<!-- Backdrop (optional) -->
-<div id="modalBackdrop" class="hidden fixed inset-0 bg-black bg-opacity-50 z-40" onclick="toggleProfileModal(event)">
-    
-</div>
-        </div>
+        <!-- Backdrop -->
+        <div id="modalBackdrop" class="hidden fixed inset-0 bg-black bg-opacity-50 z-40" onclick="toggleProfileModal(event)"></div>
+      </div>
     </section>
+  @endif
 
-    {{{ await $slots.main() }}}
+  {{{ await $slots.main() }}}
 
-  <!-- Right Sidebar in footer -->
+  @if(auth.user)
+    <!-- Right Sidebar -->
     <footer class="hidden lg:block w-[370px] min-h-screen p-4 border-l border-gray-800 sticky top-0 overflow-y-auto h-screen pl-8">
-
-        <div class="mb-4 relative">
-
-            <div class="relative">
-                <div class="absolute inset-y-0 left-0 pl-4 flex items-center">
-                    <i class="bi bi-search w-5 h-5" aria-label="Search icon"></i>
-
-                </div>
-                
-                <input 
-                    type="text" 
-                    placeholder="Search Twitter" 
-                    class="w-full bg-[rgb(32,35,39)] rounded-full pl-12 pr-5 py-3 text-white placeholder-gray-500"
-                >
-            </div>
+      <div class="mb-4 relative">
+        <div class="relative">
+          <div class="absolute inset-y-0 left-0 pl-4 flex items-center">
+            <i class="bi bi-search w-5 h-5" aria-label="Search icon"></i>
+          </div>
+          <input type="text" placeholder="Search Twitter" class="w-full bg-[rgb(32,35,39)] rounded-full pl-12 pr-5 py-3 text-white placeholder-gray-500">
         </div>
+      </div>
 
-        <!-- Trends Section -->
-        <div class="bg-[rgb(32,35,39)] rounded-2xl mb-6 overflow-hidden">
-            <div class="flex justify-between items-center p-4">
-                <h2 class=" text-xl font-bold">Trends for you</h2>
-                <i class="bi bi-gear-fill cursor-pointer pr-4" aria-label="Setting icon"></i>
-
+      <!-- Trends Section -->
+      <div class="bg-[rgb(32,35,39)] rounded-2xl mb-6 overflow-hidden">
+        <div class="flex justify-between items-center p-4">
+          <h2 class="text-xl font-bold">Trends for you</h2>
+          <i class="bi bi-gear-fill cursor-pointer pr-4" aria-label="Setting icon"></i>
+        </div>
+        <div class="space-y-4">
+          <!-- Sample trends (replace with dynamic data if needed) -->
+          @each(trend in [
+            { category: 'Trending in Turkey', title: '#squid', tweets: '2,066 Tweets' },
+            { category: 'Technology', title: '#AdonisJS', tweets: '1,245 Tweets' },
+            { category: 'Sports', title: '#WorldCup', tweets: '45,892 Tweets' },
+            { category: 'Entertainment', title: '#NewMovie', tweets: '12,543 Tweets' }
+          ])
+            <div class="px-4 hover:bg-gray-800 cursor-pointer flex justify-between">
+              <div class="space-y-[1px]">
+                <div class="text-sm text-gray-500">{{ trend.category }}</div>
+                <div class="font-bold uppercase">{{ trend.title }}</div>
+                <div class="text-sm text-gray-500">{{ trend.tweets }}</div>
+              </div>
+              <i class="bi bi-three-dots text-xl"></i>
             </div>
-            <div class="space-y-4">
-                <div class="px-4 hover:bg-gray-800 pointer-cursor flex justify-between">
-                    <div class="space-y-[1px]">
-                        <div class="text-sm text-gray-500">Trending in Turkey</div>
-                        <div class="font-bold uppercase">#squid</div>
-                        <div class="text-sm text-gray-500">2,066 Tweets</div>
+          @endeach
+          <button class="font-bold text-blue-500 px-4 pb-4">show more</button>
+        </div>
+      </div>
+
+      <!-- Who to Follow Section -->
+      <div class="bg-[rgb(32,35,39)] rounded-xl overflow-hidden">
+        <div class="max-w-md mx-auto p-4">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold">Who to follow</h2>
+          </div>
+
+          <div class="space-y-4">
+            @each(user in suggestedUsers)
+              <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                  <img src="{{ user.avatar || '/default-avatar.png' }}" 
+                       alt="{{ user.username }} avatar" 
+                       class="w-10 h-10 rounded-full">
+                  <div>
+                    <div class="flex items-center gap-[3px]">
+                      <p class="capitalize text-sm hover:underline">
+                        {{ user.firstName }} {{ user.surname }}
+                      </p>
+                      @if(user.isVerified)
+                        <i class="bi bi-patch-check-fill w-4 h-4 text-blue-500" aria-label="Verified"></i>
+                      @endif
                     </div>
-                    <i class="bi bi-three-dots text-xl"></i>
+                    <p class="text-gray-500 text-sm">
+                      @{{ user.username }}
+                    </p>
+                  </div>
                 </div>
-                <div class="px-4 hover:bg-gray-800 cursor-pointer flex justify-between">
-                    <div class="space-y-[1px]">
-                        <div class="text-sm text-gray-500">Trending in Turkey</div>
-                        <div class="font-bold uppercase">#squid</div>
-                        <div class="text-sm text-gray-500">2,066 Tweets</div>
-                    </div>
-                    <i class="bi bi-three-dots text-xl"></i>
-                </div>
-                <div class="px-4 hover:bg-gray-800 cursor-pointer flex justify-between">
-                    <div class="space-y-[1px]">
-                        <div class="text-sm text-gray-500">Trending in Turkey</div>
-                        <div class="font-bold uppercase">#squid</div>
-                        <div class="text-sm text-gray-500">2,066 Tweets</div>
-                    </div>
-                    <i class="bi bi-three-dots text-xl"></i>
-                </div>
-                <div class="px-4 hover:bg-gray-800 cursor-pointer flex justify-between">
-                    <div class="space-y-[1px]">
-                        <div class="text-sm text-gray-500">Trending in Turkey</div>
-                        <div class="font-bold uppercase">#squid</div>
-                        <div class="text-sm text-gray-500">2,066 Tweets</div>
-                    </div>
-                    <i class="bi bi-three-dots text-xl"></i>
-                </div>
-                <button class="font-bold text-blue-500 px-4 pb-4">
-                    show more
+                <button class="bg-white text-black px-4 py-1 rounded-full text-sm">
+                  Follow
                 </button>
-            </div>
+              </div>
+            @endeach
+          </div>
+
+          <div class="mt-4">
+            <a href="#" class="text-blue-500 hover:underline font-bold">Show more</a>
+          </div>
         </div>
+      </div>
 
-
-        {{--  who to follow   --}}
-        <div class="bg-[rgb(32,35,39)] rounded-xl overflow-hidden">
-            <div class="max-w-md mx-auto p-4">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-xl font-bold">Who to follow</h2>
-                </div>
-
-                <div class="space-y-4">
-                    
-                    <div class="flex justify-between items-center">
-                        <div class="flex items-center space-x-3">
-                        {{--  <img src="{{asset('image/nyt.png')}}" alt="new york times logo">  --}}
-                            <div>
-                                <div class="flex items-center gap-[3px]">
-                                    <p class="capitalize text-sm hover:underline">the new york times</p>
-                                    <i class="bi bi-patch-check-fill w-4 h-4 text-blue-500" aria-label="Verified"></i>
-
-                                </div>
-                                <p class="text-gray-500">@nytimes</p>
-                            </div>
-                        </div>
-                        <button class="bg-white text-black px-4 py-1 rounded-full text-sm">
-                            Follow
-                        </button>
-                        
-                    </div>
-
-                    <div class="flex justify-between items-center">
-                        <div class="flex items-center space-x-3">
-                        {{--  <img src="{{asset('image/cnn.png')}}" alt="CNN logo">  --}}
-                            <div>
-                               <div class="flex items-center gap-[3px]">
-                                <p class="text-sm hover:underline">CNN</p>
-                                <i class="bi bi-patch-check-fill w-4 h-4 text-blue-500" aria-label="Verified"></i>
-
-                               </div>
-                                <p class="text-gray-500 text-sm">@CNN</p>
-                            </div>
-                        </div>
-                        <button class="bg-white text-black px-4 py-1 rounded-full text-sm">
-                            Follow
-                        </button>
-                    </div>
-
-                    <div class="flex justify-between items-center">
-                        <div class="flex items-center space-x-3">
-                        {{--  <img src="{{asset('image/twitter-logo.png')}}" alt="CNN logo">  --}}
-                            <div>
-                               <div class="flex items-center gap-[3px]">
-                                <p class="text-sm hover:underline">Twitter</p>
-                                <i class="bi bi-patch-check-fill w-4 h-4 text-blue-500" aria-label="Verified"></i>
-
-                               </div>
-                                <p class="text-gray-500 text-sm">@Twitter</p>
-                            </div>
-                        </div>
-                        <button class="bg-white text-black px-4 py-1 rounded-full text-sm">
-                            Follow
-                        </button>
-                    </div>
-                </div>
-                <div class="mt-4">
-                    <a href="#" class="text-blue-500 hover:underline font-bold">Show more</a>
-                </div>
-            </div>
+      <!-- Footer Links -->
+      <div class="mt-4 text-xs text-gray-600 px-4">
+        <div class="flex flex-wrap gap-x-4 gap-y-1 px-2">
+          <a href="#" class="hover:underline">Terms of Service</a>
+          <a href="#" class="hover:underline">Privacy Policy</a>
+          <a href="#" class="hover:underline">Cookie Policy</a>
+          <a href="#" class="hover:underline">Imprint</a>
+          <a href="#" class="hover:underline">Ads Info</a>
+          <a href="#" class="hover:underline">More...</a>
+          <span>&copy; 2025 X, Inc.</span>
         </div>
-
-        <!-- Links -->
-        <div class="mt-4 text-xs text-gray-600 px-4">
-            <div class="flex flex-wrap gap-x-4 gap-y-1 px-2">
-                <a href="#" class="hover:underline">Terms of Service</a>
-                <a href="#" class="hover:underline">Privacy Policy</a>
-                <a href="#" class="hover:underline">Cookie Policy</a>
-                <a href="#" class="hover:underline">Imprint</a>
-                <a href="#" class="hover:underline">Ads Info</a>
-                <a href="#" class="hover:underline">More...</a>
-                <span>&copy; 2021 Twitter, Inc.</span>
-            </div>
-        </div>
+      </div>
     </footer>
+  @endif
 
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const modal = document.getElementById('profileModal')
+      const backdrop = document.getElementById('modalBackdrop')
+      const toggleButton = document.querySelector('.profile-modal-toggle')
 
-<script>
-    function toggleProfileModal(event) {
-        // Stop event propagation to prevent immediate closing
-        event.stopPropagation();
+      // Toggle modal visibility
+      toggleButton?.addEventListener('click', (e) => {
+        e.stopPropagation()
+        modal.classList.toggle('hidden')
+        backdrop.classList.toggle('hidden')
         
-        const modal = document.getElementById('profileModal');
-        const backdrop = document.getElementById('modalBackdrop');
-        
-        if (modal.classList.contains('hidden')) {
-            modal.classList.remove('hidden');
-            backdrop.classList.remove('hidden');
-        } else {
-            modal.classList.add('hidden');
-            backdrop.classList.add('hidden');
+        // Update aria-expanded state
+        const isExpanded = toggleButton.getAttribute('aria-expanded') === 'true'
+        toggleButton.setAttribute('aria-expanded', (!isExpanded).toString())
+      })
+
+      // Close modal when clicking outside
+      document.addEventListener('click', (e) => {
+        const isClickInsideModal = modal?.contains(e.target)
+        const isClickOnToggle = toggleButton?.contains(e.target)
+
+        if (!isClickInsideModal && !isClickOnToggle && !modal?.classList.contains('hidden')) {
+          modal?.classList.add('hidden')
+          backdrop?.classList.add('hidden')
+          toggleButton?.setAttribute('aria-expanded', 'false')
         }
-    }
-    
-    // Close modal when clicking outside
-    document.addEventListener('click', function(event) {
-        const modal = document.getElementById('profileModal');
-        const moreOptionsIcon = document.querySelector('img[alt="More options"]');
-        
-        if (!modal.contains(event.target) && event.target !== moreOptionsIcon && !modal.classList.contains('hidden')) {
-            modal.classList.add('hidden');
-            document.getElementById('modalBackdrop').classList.add('hidden');
-        }
-    });
-</script>
+      })
 
+      // Function to open tweet modal (placeholder)
+      window.openTweetModal = function() {
+        console.log('Tweet modal would open here')
+        // Implement your tweet modal logic
+      }
+
+      // Function to toggle profile modal (for backdrop click)
+      window.toggleProfileModal = function(e) {
+        e.stopPropagation()
+        modal?.classList.toggle('hidden')
+        backdrop?.classList.toggle('hidden')
+      }
+    })
+  </script>
 </body>
 </html>

@@ -6,9 +6,51 @@ import type { HttpContext } from '@adonisjs/core/http'
 import app from '@adonisjs/core/services/app'
 import { DateTime } from 'luxon'
 
+type SuggestedUser = {
+  id: number
+  firstName: string
+  surname: string
+  username: string
+  avatar: string
+  isVerified: boolean
+}
 export default class ProfilesController {
+
+  public async getSuggestedUsers(authUserId: number) {
+  const following = await Follow.query()
+    .where('id_user', authUserId)
+    .select('id_user_following')
+
+  const followingIds = following.map(f => f.idUserFollowing)
+  followingIds.push(authUserId) // exclude yourself
+
+  const users = await User.query()
+    .whereNotIn('id', followingIds)
+    .orderByRaw('RANDOM()')
+    .limit(3)
+
+  return await Promise.all(users.map(async (user) => ({
+    id: user.id,
+    firstName: user.firstName || '',
+    surname: user.surname || '',
+    username: user.username || '',
+    avatar: user.avatar ? await getSignedUrl(user.avatar) : '',
+    isVerified: user.isVerified || false,
+  })))
+}
+
+
+
+
+
   public async showHome({ view, auth }: HttpContext) {
+    
     const user = await auth.use('web').authenticate()
+
+    // Generate signed URLs for user avatar
+    const avatarUrl = user.avatar ? await getSignedUrl(user.avatar) : ''
+
+    const suggestedUsers = await this.getSuggestedUsers(user.id)
     
     const following = await Follow.query()
       .where('id_user', user.id)
@@ -29,9 +71,6 @@ export default class ProfilesController {
           .limit(50)
       : []
 
-    // Generate signed URLs for user avatar
-    const avatarUrl = user.avatar ? await getSignedUrl(user.avatar) : ''
-
     return view.render('pages/home', {
       user: {
         ...user.serialize(),
@@ -51,9 +90,10 @@ export default class ProfilesController {
         ...tweet.serialize(),
         shortTime: this.formatShortTime(tweet.createdAt),
         mediaUrl: tweet.mediaUrl ? await getSignedUrl(tweet.mediaUrl) : null
-      })))
+      }))),
+      suggestedUsers,  
     })
-  }
+      }
 
   public async showEditProfile({ view, auth }: HttpContext) {
     const user = await auth.use('web').authenticate()
@@ -160,6 +200,14 @@ export default class ProfilesController {
     const followersCount = user.followers?.length || 0
     const followingCount = user.following?.length || 0
     const postsCount = tweets.length
+    
+    const authUser = await auth.use('web').authenticate().catch(() => null)
+  let suggestedUsers: SuggestedUser[] = []
+
+  if (authUser) {
+    suggestedUsers = await this.getSuggestedUsers(authUser.id)
+  }
+
 
     return view.render('pages/profile', {
       user: {
@@ -173,6 +221,7 @@ export default class ProfilesController {
         joinedDate: user.createdAt.toFormat('MMMM yyyy'),
       },
       tweets,
+      suggestedUsers,
     })
   }
 

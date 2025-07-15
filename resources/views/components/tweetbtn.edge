@@ -34,7 +34,7 @@
           <!-- User Avatar -->
           <a href="/profile" class="flex-shrink-0 w-12 h-12 rounded-full overflow-hidden">
             @if(user?.avatar)
-              <img src="{{ '/uploads/' + user.avatar }}" alt="Profile" class="w-full h-full object-cover">
+              <img src="{{ user.avatar }}" alt="Profile" class="w-full h-full object-cover">
             @else
               <div class="w-full h-full bg-gray-700 flex items-center justify-center text-white text-xl font-bold uppercase">
                 {{ user?.firstName?.charAt(0) }}
