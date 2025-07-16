@@ -24,6 +24,8 @@ router.post('/signup', [AuthController, 'create'])
 
 router.get('/login', [AuthController, 'showLoginForm'])
 router.post('/login', [AuthController, 'store'])
+router.get('/forgot-password', [AuthController, 'showForgotPasswordForm'])
+router.post('/forgot-password', [AuthController, 'sendResetLink'])
 
 router.group(() => {
   router.get('/home', [ProfilesController, 'showHome'])

@@ -77,6 +77,18 @@ export default class AuthController {
         await auth.use('web').logout()
         return response.redirect('/signup')
       }
+
+  public async showForgotPasswordForm({ view }: HttpContext) {
+    return view.render('pages/forgotpas')
+  }
+  public async sendResetLink({ request, response }: HttpContext) {
+    const email = request.input('email')
+    // Here you would typically send a reset link to the user's email
+    console.log(`Reset link sent to: ${email}`)
+    
+    // Redirect or render a view after sending the reset link
+    return response.redirect('/login')
+  }
 }
 
 

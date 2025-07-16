@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'x-black': '#000000',
+            'x-dark': '#0F0F0F',
+            'x-light': '#E7E9EA',
+            'x-gray': '#71767B',
+            'x-blue': '#1D9BF0',
+          }
+        }
+      }
+    }
+  </script>
+  <title>Forgot Password | X</title>
+</head>
+<body class="bg-black min-h-screen flex items-center justify-center font-sans">
+
+  <!-- Alert Modal (hidden by default) -->
+  <div id="alertModal" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4">
+    <div class="bg-black border border-gray-800 rounded-xl max-w-md w-full p-6">
+      <div class="flex justify-between items-start mb-4">
+        <h3 class="text-xl font-bold">Check your email</h3>
+        <button onclick="closeAlert()" class="text-gray-500 hover:text-white">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+          </svg>
+        </button>
+      </div>
+      <p class="text-gray-500 mb-6">We've sent a password reset link to your email address.</p>
+      <button 
+        onclick="closeAlert()" 
+        class="w-full bg-white text-black font-bold py-3 px-6 rounded-full hover:bg-gray-200 transition-colors"
+      >
+        Got it
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="bg-black text-white p-8 rounded-xl max-w-md w-full border border-gray-800">
+    <!-- X Logo -->
+    <div class="flex justify-center mb-8">
+      <svg viewBox="0 0 24 24" aria-hidden="true" class="w-10 h-10 text-white">
+        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" fill="currentColor"></path>
+      </svg>
+    </div>
+
+    <h1 class="text-3xl font-bold mb-6">Find your X account</h1>
+    
+    <p class="text-gray-500 mb-6">Enter your email.</p>
+
+    <form action="/forgot-password" method="POST" id="forgotPasswordForm" class="space-y-4">
+        {{ csrfField() }}
+      <div>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          placeholder="Email..."
+          required
+          autofocus
+          class="w-full px-4 py-3 bg-transparent border border-gray-600 rounded-md text-base placeholder-gray-500 focus:outline-none focus:border-x-blue focus:ring-1 focus:ring-x-blue"
+        />
+      </div>
+
+      <button 
+        type="button" 
+        onclick="showAlert()"
+        class="w-full bg-white text-black font-bold py-3 px-6 rounded-full hover:bg-gray-200 transition-colors"
+      >
+        Search
+      </button>
+    </form>
+
+    <div class="mt-6 pt-6 border-t border-gray-800">
+      <a href="/login" class="text-x-blue hover:underline block text-center">Return to login</a>
+    </div>
+  </div>
+
+  <!-- Footer Links -->
+  <div class="absolute bottom-4 left-0 right-0 text-center text-xs text-gray-500">
+    <div class="flex flex-wrap justify-center gap-x-4 gap-y-1 mb-1">
+      <a href="#" class="hover:underline">Terms of Service</a>
+      <a href="#" class="hover:underline">Privacy Policy</a>
+      <a href="#" class="hover:underline">Cookie Policy</a>
+      <a href="#" class="hover:underline">Accessibility</a>
+    </div>
+    <div>© 2025 X Corp.</div>
+  </div>
+
+  <script>
+    function showAlert() {
+      // Validate form first
+      const form = document.getElementById('forgotPasswordForm');
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+      
+      // Show the alert modal
+      document.getElementById('alertModal').classList.remove('hidden');
+      
+      // Here you would normally submit the form to your backend
+      // For this demo, we're just showing the alert
+    }
+
+    function closeAlert() {
+      document.getElementById('alertModal').classList.add('hidden');
+    }
+  </script>
+</body>
+</html>
