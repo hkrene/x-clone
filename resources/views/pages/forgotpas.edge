@@ -58,7 +58,7 @@
     
     <p class="text-gray-500 mb-6">Enter your email.</p>
 
-    <form action="/forgot-password" method="POST" id="forgotPasswordForm" class="space-y-4">
+    <form action="{{ route('send.reset.link') }}" method="POST" id="forgotPasswordForm" class="space-y-4">
         {{ csrfField() }}
       <div>
         <input
@@ -73,7 +73,7 @@
       </div>
 
       <button 
-        type="button" 
+        type="submit" 
         onclick="showAlert()"
         class="w-full bg-white text-black font-bold py-3 px-6 rounded-full hover:bg-gray-200 transition-colors"
       >

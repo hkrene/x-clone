@@ -1,6 +1,14 @@
 import { HttpContext } from '@adonisjs/core/http'
 import {createUserValidator} from '#validators/user'
-// import { DateTime } from 'luxon'
+import PasswordResetToken from '#models/password_reset_token'
+// import { forgotPasswordValidator, resetPasswordValidator } from '#validators/password_reset'
+import { forgotPasswordValidator } from '#validators/forgot_password'
+import { resetPasswordValidator } from '#validators/reset_password'
+
+import hash from '@adonisjs/core/services/hash'
+import mail from '@adonisjs/mail/services/main'
+import { DateTime } from 'luxon'
+import { nanoid } from 'nanoid'
 
 import User from '#models/user'
 // import mail from '@adonisjs/mail/services/main'
@@ -81,7 +89,7 @@ export default class AuthController {
   public async showForgotPasswordForm({ view }: HttpContext) {
     return view.render('pages/forgotpas')
   }
-  public async sendResetLink({ request, response }: HttpContext) {
+  public async sendsResetLink({ request, response }: HttpContext) {
     const email = request.input('email')
     // Here you would typically send a reset link to the user's email
     console.log(`Reset link sent to: ${email}`)
@@ -89,6 +97,64 @@ export default class AuthController {
     // Redirect or render a view after sending the reset link
     return response.redirect('/login')
   }
+
+
+
+  async sendResetLink({ request, response, session }: HttpContext) {
+  const { email } = await request.validateUsing(forgotPasswordValidator)
+  const user = await User.findByOrFail('email', email)
+
+  // Delete any existing tokens
+  await PasswordResetToken.query()
+    .where('email', email)
+    .delete()
+
+  // Create new token
+  const token = nanoid(64)
+  await PasswordResetToken.create({
+    email,
+    token,
+    expiresAt: DateTime.now().plus({ hours: 24 }),
+    ip: request.ip()
+  })
+
+  // Send email
+  const resetUrl = `${process.env.APP_URL}/password-reset/${token}`
+  
+  await mail.send((message) => {
+    message
+      .to(email)
+      .from('no-reply@yourdomain.com')
+      .subject('Reset Your Password')
+      .htmlView('emails/password_reset', { 
+        resetUrl: `${process.env.APP_URL}/password-reset/${token}`
+      })
+  })
+
+  // Set flash message and redirect
+  session.flash('success', 'Password reset link sent - check your email')
+  return response.redirect().back()
+}
+
+async resetPassword({ request, response, session }: HttpContext) {
+  const { token, password } = await request.validateUsing(resetPasswordValidator)
+
+  const tokenRecord = await PasswordResetToken.query()
+    .where('token', token)
+    .where('expires_at', '>', DateTime.now().toSQL())
+    .firstOrFail()
+
+  const user = await User.findByOrFail('email', tokenRecord.email)
+  user.password = await hash.make(password)
+  await user.save()
+
+  // Invalidate token
+  await tokenRecord.delete()
+
+  // Set flash message and redirect
+  session.flash('success', 'Password reset successful')
+  return response.redirect('/login')
+}
 }
 
 
