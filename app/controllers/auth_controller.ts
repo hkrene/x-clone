@@ -103,6 +103,8 @@ export default class AuthController {
   async sendResetLink({ request, response, session }: HttpContext) {
   const { email } = await request.validateUsing(forgotPasswordValidator)
   const user = await User.findByOrFail('email', email)
+  console.log(user);
+  
 
   // Delete any existing tokens
   await PasswordResetToken.query()
@@ -120,6 +122,8 @@ export default class AuthController {
 
   // Send email
   const resetUrl = `${process.env.APP_URL}/password-reset/${token}`
+  console.log(resetUrl);
+  
   
   await mail.send((message) => {
     message
