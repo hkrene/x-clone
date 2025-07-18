@@ -18,7 +18,6 @@ export default class AuthController {
   
 
   public async showSignupForm({ view }: HttpContext) {
-    // console.log('showSignupForm called');
     return view.render('security/signupForm')
     
   }
