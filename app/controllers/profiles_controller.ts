@@ -44,56 +44,58 @@ export default class ProfilesController {
 
 
   public async showHome({ view, auth }: HttpContext) {
-    
-    const user = await auth.use('web').authenticate()
+  const user = await auth.use('web').authenticate()
+  const avatarUrl = user.avatar ? await getSignedUrl(user.avatar) : ''
 
-    // Generate signed URLs for user avatar
-    const avatarUrl = user.avatar ? await getSignedUrl(user.avatar) : ''
+  const suggestedUsers = await this.getSuggestedUsers(user.id)
+  
+  const following = await Follow.query()
+    .where('id_user', user.id)
+    .select('id_user_following')
+  const followingIds = following.map(f => f.idUserFollowing)
 
-    const suggestedUsers = await this.getSuggestedUsers(user.id)
-    
-    const following = await Follow.query()
-      .where('id_user', user.id)
-      .select('id_user_following')
-    const followingIds = following.map(f => f.idUserFollowing)
-
-    const forYouTweets = await Tweet.query()
-      .whereNot('user_id', user.id)
-      .preload('author')
-      .orderBy('created_at', 'desc')
-      .limit(50)
-
-    const followingTweets = followingIds.length > 0
-      ? await Tweet.query()
-          .whereIn('user_id', followingIds)
-          .preload('author')
-          .orderBy('created_at', 'desc')
-          .limit(50)
-      : []
-
-    return view.render('pages/home', {
-      user: {
-        ...user.serialize(),
-        avatar: avatarUrl,
-        firstName: user.firstName || '',
-        surname: user.surname || '',
-        username: user.username || '', 
-        isVerified: user.isVerified || false,
-        following_count: followingIds.length
-      },
-      forYouTweets: await Promise.all(forYouTweets.map(async (tweet) => ({
-        ...tweet.serialize(),
-        shortTime: this.formatShortTime(tweet.createdAt),
-        mediaUrl: tweet.mediaUrl ? await getSignedUrl(tweet.mediaUrl) : null
-      }))),
-      followingTweets: await Promise.all(followingTweets.map(async (tweet) => ({
-        ...tweet.serialize(),
-        shortTime: this.formatShortTime(tweet.createdAt),
-        mediaUrl: tweet.mediaUrl ? await getSignedUrl(tweet.mediaUrl) : null
-      }))),
-      suggestedUsers,  
+  // Updated For You feed - includes your tweets and people you follow
+  const forYouTweets = await Tweet.query()
+    .where(q => {
+      q.whereIn('user_id', followingIds)
+       .orWhere('user_id', user.id)
     })
-      }
+    .preload('author')
+    .orderBy('created_at', 'desc')
+    .limit(50)
+
+  // Following feed remains the same (just people you follow)
+  const followingTweets = followingIds.length > 0
+    ? await Tweet.query()
+        .whereIn('user_id', followingIds)
+        .preload('author')
+        .orderBy('created_at', 'desc')
+        .limit(50)
+    : []
+
+  return view.render('pages/home', {
+    user: {
+      ...user.serialize(),
+      avatar: avatarUrl,
+      firstName: user.firstName || '',
+      surname: user.surname || '',
+      username: user.username || '', 
+      isVerified: user.isVerified || false,
+      following_count: followingIds.length
+    },
+    forYouTweets: await Promise.all(forYouTweets.map(async (tweet) => ({
+      ...tweet.serialize(),
+      shortTime: this.formatShortTime(tweet.createdAt),
+      mediaUrl: tweet.mediaUrl ? await getSignedUrl(tweet.mediaUrl) : null
+    }))),
+    followingTweets: await Promise.all(followingTweets.map(async (tweet) => ({
+      ...tweet.serialize(),
+      shortTime: this.formatShortTime(tweet.createdAt),
+      mediaUrl: tweet.mediaUrl ? await getSignedUrl(tweet.mediaUrl) : null
+    }))),
+    suggestedUsers,  
+  })
+}
 
   public async showEditProfile({ view, auth }: HttpContext) {
     const user = await auth.use('web').authenticate()
