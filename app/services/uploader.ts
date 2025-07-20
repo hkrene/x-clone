@@ -1,63 +1,109 @@
-import fs from 'fs'
+// services/uploader.ts
+import fs from 'node:fs/promises'
 import { supabase } from '#services/supabase'
+import logger from '@adonisjs/core/services/logger'
 
-// const BUCKET = 'xclone-database'
-// uploader.ts
 const BUCKET = process.env.SUPABASE_BUCKET || 'xclone-database'
 
+export async function uploadToSupabase(
+  filePath: string, 
+  uploadPath: string, 
+  contentType: string
+): Promise<string> {
+  try {
+    // Clean path (remove leading/trailing slashes)
+    const cleanPath = uploadPath.replace(/^\/|\/$/g, '')
+    
+    // Read file
+    const buffer = await fs.readFile(filePath)
+    
+    // Upload with error handling
+    const { error } = await supabase.storage
+      .from(BUCKET)
+      .upload(cleanPath, buffer, {
+        contentType,
+        upsert: true, // Changed to true to prevent errors on re-upload
+        cacheControl: '3600',
+      })
 
-/**
- * Uploads a file to Supabase Storage under the given path.
- * @param filePath - Temporary file path on disk
- * @param uploadPath - Path inside the bucket (e.g. 'avatars/user123.png')
- * @param contentType - MIME type (e.g. 'image/jpeg')
- * @returns The file path inside the bucket (used to generate signed URL later)
- */
-export async function uploadToSupabase(filePath: string, uploadPath: string, contentType: string): Promise<string> {
-  const buffer = fs.readFileSync(filePath)
+    if (error) {
+      logger.error(`Upload failed for ${cleanPath}`, error)
+      throw new Error(`Upload failed: ${error.message}`)
+    }
 
-  const { error } = await supabase.storage
-    .from(BUCKET)
-    .upload(uploadPath, buffer, {
-      contentType,
-      upsert: false,
-    })
-
-  if (error) {
-    throw new Error('Upload to Supabase failed: ' + error.message)
+    logger.info(`Uploaded to ${BUCKET}/${cleanPath}`)
+    return cleanPath
+  } catch (error) {
+    logger.error('File upload error', error)
+    throw error
   }
-
-  return uploadPath // store only path in DB, not full URL
 }
 
-/**
- * Deletes a file from Supabase Storage using its path.
- * @param filePath - Path inside the bucket (e.g. 'avatars/user123.png')
- */
 export async function deleteFromSupabase(filePath: string): Promise<void> {
-  const { error } = await supabase.storage.from(BUCKET).remove([filePath])
-  if (error) {
-    throw new Error('Failed to delete from Supabase: ' + error.message)
+  const cleanPath = filePath.replace(/^\/|\/$/g, '')
+  
+  try {
+    // First check if file exists
+    const { data: list } = await supabase.storage
+      .from(BUCKET)
+      .list('', {
+        limit: 1,
+        search: cleanPath,
+      })
+
+    if (!list || list.length === 0) {
+      logger.warn(`File not found for deletion: ${cleanPath}`)
+      return
+    }
+
+    const { error } = await supabase.storage
+      .from(BUCKET)
+      .remove([cleanPath])
+
+    if (error) {
+      logger.error(`Deletion failed for ${cleanPath}`, error)
+      throw new Error(`Deletion failed: ${error.message}`)
+    }
+
+    logger.info(`Deleted ${BUCKET}/${cleanPath}`)
+  } catch (error) {
+    logger.error('File deletion error', error)
+    throw error
   }
 }
 
-/**
- * Generates a signed URL for a private file.
- * @param filePath - Path inside the bucket (e.g. 'avatars/user123.png')
- * @returns A temporary signed URL valid for 1 hour or an empty string if failed
- */
-export async function getSignedUrl(filePath: string): Promise<string> {
+export async function getSignedUrl(filePath: string | null): Promise<string> {
   if (!filePath) return ''
 
-  const { data, error } = await supabase
-    .storage
-    .from(BUCKET)
-    .createSignedUrl(filePath, 60 * 60)
+  const cleanPath = filePath.replace(/^\/|\/$/g, '')
+  
+  try {
+    // First verify file exists
+    const { data: list } = await supabase.storage
+      .from(BUCKET)
+      .list('', {
+        limit: 1,
+        search: cleanPath,
+      })
 
-  if (error || !data?.signedUrl) {
-    console.warn(`Supabase signed URL generation failed: ${filePath} (Object not found)`)
-    return '' // prevent server crash
+    if (!list || list.length === 0) {
+      logger.warn(`File not found for URL generation: ${cleanPath}`)
+      return ''
+    }
+
+    // Generate URL
+    const { data, error } = await supabase.storage
+      .from(BUCKET)
+      .createSignedUrl(cleanPath, 60 * 60) 
+
+    if (error || !data?.signedUrl) {
+      logger.error(`URL generation failed for ${cleanPath}`, error)
+      return ''
+    }
+
+    return data.signedUrl
+  } catch (error) {
+    logger.error('URL generation error', error)
+    return ''
   }
-
-  return data.signedUrl
 }
