@@ -41,6 +41,7 @@ export async function verifyBucket() {
       throw error
     }
     
+    
     logger.info(`Verified Supabase bucket: ${data.name}`)
     return true
   } catch (error) {

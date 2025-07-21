@@ -1,7 +1,10 @@
 import type { HttpContext } from '@adonisjs/core/http'
-import app from '@adonisjs/core/services/app'
+// import app from '@adonisjs/core/services/app'
 import { cuid } from '@adonisjs/core/helpers'
 import Tweet from '#models/tweet'
+import mime from 'mime-types'
+// import path from 'node:path'
+import { uploadToSupabase } from '#services/uploader'
 
 export default class TweetsController {
   /**
@@ -18,32 +21,62 @@ export default class TweetsController {
   /**
    * Store a new tweet with optional media (image/video)
    */
-  public async store({ request, auth, response }: HttpContext) {
-    const tweetText = request.input('tweet')
-    const user = auth.user!
+  // public async store({ request, auth, response }: HttpContext) {
+  //   const tweetText = request.input('tweet')
+  //   const user = auth.user!
 
-    const media = request.file('mediaUrl', {
-      size: '10mb',
-      extnames: ['jpg', 'jpeg', 'png', 'gif', 'mp4', 'webm'],
-    })
+  //   const media = request.file('mediaUrl', {
+  //     size: '10mb',
+  //     extnames: ['jpg', 'jpeg', 'png', 'gif', 'mp4', 'webm'],
+  //   })
 
-    let mediaUrl: string | null = null
+  //   let mediaUrl: string | null = null
 
-    if (media) {
-      const fileName = `${cuid()}.${media.extname}`
-      await media.move(app.publicPath('uploads'), {
-        name: fileName,
-        overwrite: true,
-      })
+  //   if (media) {
+  //     const fileName = `${cuid()}.${media.extname}`
+  //     await media.move(app.publicPath('uploads'), {
+  //       name: fileName,
+  //       overwrite: true,
+  //     })
 
-      mediaUrl = `/uploads/${fileName}`
-    }
+  //     mediaUrl = `/uploads/${fileName}`
+  //   }
 
-    await user.related('tweets').create({
-      content: tweetText,
-      mediaUrl,
-    })
+  //   await user.related('tweets').create({
+  //     content: tweetText,
+  //     mediaUrl,
+  //   })
 
-    return response.redirect('/home')
+  //   return response.redirect('/home')
+  // }
+
+public async store({ request, auth, response }: HttpContext) {
+  const tweetText = request.input('tweet')
+  const user = auth.user!
+
+  const media = request.file('mediaUrl', {
+    size: '10mb',
+    extnames: ['jpg', 'jpeg', 'png', 'gif', 'mp4', 'webm'],
+  })
+
+  let mediaUrl: string | null = null
+
+  if (media) {
+    const fileName = `${cuid()}.${media.extname}`
+    const tmpPath = media.tmpPath!
+    const contentType = mime.lookup(media.extname!) || 'application/octet-stream'
+    // Store with the file extension to help with type detection
+    const uploadPath = `tweets/${fileName}`
+
+    await uploadToSupabase(tmpPath, uploadPath, contentType)
+    mediaUrl = uploadPath
   }
+
+  await user.related('tweets').create({
+    content: tweetText,
+    mediaUrl,
+  })
+
+  return response.redirect('/home')
+}
 }
