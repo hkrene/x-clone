@@ -264,10 +264,14 @@ export default class ProfilesController {
         postsCount,
         joinedDate: user.createdAt.toFormat('MMMM yyyy'),
       },
-      tweets: user.tweets.map((tweet) => ({
-        ...tweet.serialize(),
-        shortTime: tweet.createdAt.toRelative(),
-      })),
+      tweets: await Promise.all(
+        user.tweets.map(async (tweet) => ({
+          ...tweet.serialize(),
+          shortTime: tweet.createdAt.toRelative(),
+          mediaUrl: tweet.mediaUrl ? await getSignedUrl(tweet.mediaUrl) : null,
+        }))
+      ),
+
       isFollowing,
     })
   }
