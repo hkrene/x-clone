@@ -23,6 +23,7 @@ export async function uploadToSupabase(
         upsert: true,
         cacheControl: '3600',
       })
+      
 
     if (error) {
       logger.error(`Upload failed for ${cleanPath}`, error)
