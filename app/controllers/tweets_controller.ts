@@ -7,9 +7,7 @@
 // import { uploadToSupabase } from '#services/uploader'
 
 // export default class TweetsController {
-//   /**
-//    * Show the home page with tweets
-//    */
+//   
 //   public async index({ view }: HttpContext) {
 //     const tweets = await Tweet.query()
 //       .preload('author')
