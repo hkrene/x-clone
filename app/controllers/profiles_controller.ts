@@ -40,31 +40,26 @@ export default class ProfilesController {
 }
 
 
-
-
-
-  public async showHome({ view, auth }: HttpContext) {
+public async showHome({ view, auth }: HttpContext) {
   const user = await auth.use('web').authenticate()
   const avatarUrl = user.avatar ? await getSignedUrl(user.avatar) : ''
 
+  // Get suggested users
   const suggestedUsers = await this.getSuggestedUsers(user.id)
   
+  // Get users that the current user is following
   const following = await Follow.query()
     .where('id_user', user.id)
     .select('id_user_following')
   const followingIds = following.map(f => f.idUserFollowing)
 
-  // Updated For You feed - includes your tweets and people you follow
+  // For You feed - shows ALL tweets from all users
   const forYouTweets = await Tweet.query()
-    .where(q => {
-      q.whereIn('user_id', followingIds)
-       .orWhere('user_id', user.id)
-    })
     .preload('author')
     .orderBy('created_at', 'desc')
     .limit(50)
 
-  // Following feed remains the same (just people you follow)
+  // Following feed - only shows tweets from users you follow
   const followingTweets = followingIds.length > 0
     ? await Tweet.query()
         .whereIn('user_id', followingIds)
@@ -72,6 +67,19 @@ export default class ProfilesController {
         .orderBy('created_at', 'desc')
         .limit(50)
     : []
+
+  // Process tweets with media URLs
+  const processTweets = async (tweets: Tweet[]) => {
+    return Promise.all(tweets.map(async (tweet) => ({
+      ...tweet.serialize(),
+      shortTime: this.formatShortTime(tweet.createdAt),
+      mediaUrl: tweet.mediaUrl ? await getSignedUrl(tweet.mediaUrl) : null,
+      author: {
+        ...tweet.author.serialize(),
+        avatar: tweet.author.avatar ? await getSignedUrl(tweet.author.avatar) : null
+      }
+    })))
+  }
 
   return view.render('pages/home', {
     user: {
@@ -83,19 +91,14 @@ export default class ProfilesController {
       isVerified: user.isVerified || false,
       following_count: followingIds.length
     },
-    forYouTweets: await Promise.all(forYouTweets.map(async (tweet) => ({
-      ...tweet.serialize(),
-      shortTime: this.formatShortTime(tweet.createdAt),
-      mediaUrl: tweet.mediaUrl ? await getSignedUrl(tweet.mediaUrl) : null
-    }))),
-    followingTweets: await Promise.all(followingTweets.map(async (tweet) => ({
-      ...tweet.serialize(),
-      shortTime: this.formatShortTime(tweet.createdAt),
-      mediaUrl: tweet.mediaUrl ? await getSignedUrl(tweet.mediaUrl) : null
-    }))),
+    forYouTweets: await processTweets(forYouTweets),
+    followingTweets: await processTweets(followingTweets),
     suggestedUsers,  
   })
 }
+
+
+  
 
   public async showEditProfile({ view, auth }: HttpContext) {
     const user = await auth.use('web').authenticate()

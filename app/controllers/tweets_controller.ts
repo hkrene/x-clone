@@ -1,22 +1,22 @@
-import type { HttpContext } from '@adonisjs/core/http'
-import app from '@adonisjs/core/services/app'
-import { cuid } from '@adonisjs/core/helpers'
-import Tweet from '#models/tweet'
-import mime from 'mime-types'
-// import path from 'node:path'
-import { uploadToSupabase } from '#services/uploader'
+// import type { HttpContext } from '@adonisjs/core/http'
+// import app from '@adonisjs/core/services/app'
+// import { cuid } from '@adonisjs/core/helpers'
+// import Tweet from '#models/tweet'
+// import mime from 'mime-types'
+// // import path from 'node:path'
+// import { uploadToSupabase } from '#services/uploader'
 
-export default class TweetsController {
-  /**
-   * Show the home page with tweets
-   */
-  public async index({ view }: HttpContext) {
-    const tweets = await Tweet.query()
-      .preload('author')
-      .orderBy('createdAt', 'desc')
+// export default class TweetsController {
+//   /**
+//    * Show the home page with tweets
+//    */
+//   public async index({ view }: HttpContext) {
+//     const tweets = await Tweet.query()
+//       .preload('author')
+//       .orderBy('createdAt', 'desc')
 
-    return view.render('home', { tweets })
-  }
+//     return view.render('home', { tweets })
+//   }
 
   /**
    * Store a new tweet with optional media (image/video)
@@ -50,39 +50,98 @@ export default class TweetsController {
   //   return response.redirect('/home')
   // }
 
-  public async store({ request, auth, response }: HttpContext) {
-  const tweetText = request.input('tweet')
-  const user = auth.user!
-  const media = request.file('mediaUrl', {
-    size: '10mb',
-    extnames: ['jpg', 'jpeg', 'png', 'gif', 'mp4', 'webm'],
-  })
+//   public async store({ request, auth, response }: HttpContext) {
+//   const tweetText = request.input('tweet')
+//   const user = auth.user!
+//   const media = request.file('mediaUrl', {
+//     size: '10mb',
+//     extnames: ['jpg', 'jpeg', 'png', 'gif', 'mp4', 'webm'],
+//   })
 
-  let mediaUrl: string | null = null
+//   let mediaUrl: string | null = null
 
-  if (media) {
-    try {
-      await media.move(app.tmpPath()) // Throws on failure
-      const fileName = `${cuid()}.${media.extname}`
-      const tmpPath = media.filePath! // Only available after move
-      const contentType = mime.lookup(media.extname!) || 'application/octet-stream'
-      const uploadPath = `tweets/${fileName}`
+//   if (media) {
+//     try {
+//       await media.move(app.tmpPath()) // Throws on failure
+//       const fileName = `${cuid()}.${media.extname}`
+//       const tmpPath = media.filePath! // Only available after move
+//       const contentType = mime.lookup(media.extname!) || 'application/octet-stream'
+//       const uploadPath = `tweets/${fileName}`
 
-      await uploadToSupabase(tmpPath, uploadPath, contentType)
-      mediaUrl = uploadPath
-    } catch (error) {
-      console.error('Failed to move/upload media:', error)
-      return response.internalServerError('Media upload failed')
-    }
+//       await uploadToSupabase(tmpPath, uploadPath, contentType)
+//       mediaUrl = uploadPath
+//     } catch (error) {
+//       console.error('Failed to move/upload media:', error)
+//       return response.internalServerError('Media upload failed')
+//     }
+//   }
+
+//   await user.related('tweets').create({
+//     content: tweetText,
+//     mediaUrl,
+//   })
+
+//   return response.redirect('/home')
+// }
+
+
+import type { HttpContext } from '@adonisjs/core/http'
+import app from '@adonisjs/core/services/app'
+import { cuid } from '@adonisjs/core/helpers'
+import Tweet from '#models/tweet'
+import mime from 'mime-types'
+import { uploadToSupabase, getSignedUrl } from '#services/uploader'
+import fs from 'node:fs/promises' // Add this import at the top
+
+export default class TweetsController {
+  /**
+   * Show the home page with tweets
+   */
+  public async index({ view }: HttpContext) {
+    const tweets = await Tweet.query()
+      .preload('author')
+      .orderBy('createdAt', 'desc')
+
+    return view.render('home', { tweets })
   }
 
-  await user.related('tweets').create({
-    content: tweetText,
-    mediaUrl,
-  })
+  /**
+   * Store a new tweet with optional media (image/video)
+   */
+  public async store({ request, auth, response }: HttpContext) {
+    const tweetText = request.input('tweet')
+    const user = auth.user!
+    const media = request.file('mediaUrl', {
+      size: '10mb',
+      extnames: ['jpg', 'jpeg', 'png', 'gif', 'mp4', 'webm'],
+    })
 
-  return response.redirect('/home')
-}
+    let mediaUrl: string | null = null
 
+    if (media) {
+      try {
+        await media.move(app.tmpPath()) // Throws on failure
+        const fileName = `${cuid()}.${media.extname}`
+        const tmpPath = media.filePath! // Only available after move
+        const contentType = mime.lookup(media.extname!) || 'application/octet-stream'
+        const uploadPath = `tweets/${fileName}`
 
+        const storedPath = await uploadToSupabase(tmpPath, uploadPath, contentType)
+        mediaUrl = await getSignedUrl(storedPath)
+        
+        // Clean up the temporary file
+        await fs.unlink(tmpPath).catch(() => {})
+      } catch (error) {
+        console.error('Failed to move/upload media:', error)
+        return response.internalServerError('Media upload failed')
+      }
+    }
+
+    await user.related('tweets').create({
+      content: tweetText,
+      mediaUrl,
+    })
+
+    return response.redirect('/home')
+  }
 }
