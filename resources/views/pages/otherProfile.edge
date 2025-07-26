@@ -74,10 +74,10 @@
       <!-- Message Button -->
       <button 
         type="button"
-        class="px-4 py-1.5 border border-gray-600 rounded-full text-sm font-bold hover:bg-gray-900 hover:text-white flex items-center gap-2"
+        class="px-2 py-2 border border-gray-600 rounded-full text-sm font-bold hover:bg-gray-900 hover:text-white flex items-center"
         title="Message"
       >
-        <svg viewBox="0 0 24 24" class="w-4 h-4" fill="currentColor">
+        <svg viewBox="0 0 24 24" class="w6 h-6" fill="currentColor">
           <path d="M1.998 5.5c0-1.381 1.119-2.5 2.5-2.5h15c1.381 0 2.5 1.119 2.5 2.5v13c0 1.381-1.119 2.5-2.5 2.5h-15c-1.381 0-2.5-1.119-2.5-2.5v-13zm2.5-.5c-.276 0-.5.224-.5.5v2.764l8 3.638 8-3.636V5.5c0-.276-.224-.5-.5-.5h-15zm15.5 5.463l-8 3.636-8-3.638V18.5c0 .276.224.5.5.5h15c.276 0 .5-.224.5-.5v-8.037z"/>
         </svg>
       </button>
@@ -100,62 +100,71 @@
 
 
     <!-- Profile Details -->
-    <div class="mt-2 md:mt-8">
-      <div class="flex items-center ">
-        <h2 class="text-xl font-bold">{{ user.firstName }} {{ user.surname }}</h2>
+    <div class="mt-4 md:mt-8">
+      <!-- Name and Verification -->
+      <div class="flex items-center gap-1.5">
+        <h2 class="text-xl font-bold text-white leading-tight">{{ user.firstName }} {{ user.surname }}</h2>
         @if(user.isVerified)
-        <i class="bi bi-patch-check-fill w-4 h-4 text-blue-500" aria-label="Verified"></i>
-
+          <i class="bi bi-patch-check-fill w-5 h-5 text-blue-500" aria-label="Verified"></i>
         @else
-          <button class="px-2 py-0.5 text-sm font-bold hover:bg-gray-900 flex gap-1 items-center">
-            <i class="bi bi-patch-check-fill text-blue-500 text-xl"></i>
-            {{--  <span class="text-blue-500 md:text-white">Get verified</span>  --}}
+          <button class=" text-xs font-bold hover:bg-gray-900/30 flex items-center gap-1">
+            <i class="bi bi-patch-check-fill text-blue-500 text-sm"></i>
           </button>
-        @end 
+        @end
       </div>
-      <p class="text-gray-500 text-sm">
+    
+      <!-- Username -->
+      <p class="text-gray-500 text-sm mt-0.5">
         {{ user.username.startsWith('@') ? user.username : `@${user.username}` }}
       </p>
-
-      <p class="my-3 text-sm">{{ user.bio }}</p>
-
-      <div class="flex flex-wrap gap-y-1 gap-x-4 text-gray-500 text-sm">
+    
+      <!-- Bio -->
+      <p class="my-3 text-white text-base leading-snug">{{ user.bio }}</p>
+    
+      <!-- Profile Metadata -->
+      <div class="flex flex-wrap gap-y-1.5 gap-x-4 text-gray-500 text-sm">
         @if(user.location)
-        <div class="flex items-center gap-1">
-          <i class="bi bi-geo-alt text-l"></i>
-          <span class="capitalize">{{ user.location }}</span>
-        </div>
-        @end
-
-        @if(user.website)
-        <div class="flex items-center gap-1">
-          <i class="bi bi-link-45deg text-xl font-bold"></i>
-          {{--  <i class="fas fa-link text-l"></i>   --}}
-          <span class="text-blue-500 hover:underline cursor-pointer">{{ user.website }}</span>
-        </div>
-        @end
-
-        @if(user.dateOfBirth)
-          <div class="flex items-center gap-1">
-            <i class="bi bi-balloon text-l"></i>
-            <span class="capitalize">born {{ user.dateOfBirth }}</span>
+          <div class="flex items-center gap-1.5">
+            <i class="bi bi-geo-alt text-base"></i>
+            <span>{{ user.location }}</span>
           </div>
         @end
-
-        <div class="flex items-center gap-1">
-          <i class="bi bi-calendar4-week text-l"></i>
-          <span class="capitalize">joined {{ user.joinedDate }}</span>
+    
+        @if(user.website)
+          <div class="flex items-center gap-1.5">
+            <i class="bi bi-link-45deg text-base"></i>
+            <a href="{{ user.website.startsWith('http') ? user.website : `https://${user.website}` }}" 
+               class="text-blue-500 hover:underline" 
+               target="_blank" 
+               rel="noopener noreferrer">
+              {{ user.website.replace('https://', '').replace('http://', '') }}
+            </a>
+          </div>
+        @end
+    
+        @if(user.dateOfBirth)
+          <div class="flex items-center gap-1.5">
+            <i class="bi bi-balloon text-base"></i>
+            <span>Born {{ user.dateOfBirth }}</span>
+          </div>
+        @end
+    
+        <div class="flex items-center gap-1.5">
+          <i class="bi bi-calendar4-week text-base"></i>
+          <span>Joined {{ user.joinedDate }}</span>
         </div>
-
-
-      <div class="flex gap-4 mt-3 ">
-        <div class="hover:underline cursor-pointer">
-          <span class="font-bold text-white">{{ user.followingCount }}</span> 
-          <span class="text-gray-500">Following</span>
-        </div>
-        <div class="hover:underline cursor-pointer">
-          <span class="font-bold text-white">{{ user.followersCount }}</span> <span class="text-gray-500">Followers</span>
-        </div>
+      </div>
+    
+      <!-- Follow Stats -->
+      <div class="flex gap-4 mt-3">
+        <a href="#" class="hover:underline">
+          <span class="font-bold text-white">{{ user.followingCount }}</span>
+          <span class="text-gray-500"> Following</span>
+        </a>
+        <a href="#" class="hover:underline">
+          <span class="font-bold text-white">{{ user.followersCount }}</span>
+          <span class="text-gray-500"> Followers</span>
+        </a>
       </div>
     </div>
   </div>
