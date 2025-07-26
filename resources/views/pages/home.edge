@@ -13,11 +13,23 @@
       <div class="flex-shrink-0 w-10 h-10 md:hidden">
         <a href="/profile" class="block w-full h-full rounded-full overflow-hidden">
           @if(user?.avatar)
-            <img 
-              src="{{ user.avatar }}"
-              alt="Profile picture"
-              class="w-full h-full object-cover"
-            >
+            @if(user.avatar.startsWith('data:'))
+              <img 
+                src="{{ user.avatar }}"
+                alt="Profile picture"
+                class="w-full h-full object-cover"
+              >
+            @elseif(user.avatar.startsWith('http'))
+              <img 
+                src="{{ user.avatar }}"
+                alt="Profile picture"
+                class="w-full h-full object-cover"
+              >
+            @else
+              <div class="w-full h-full bg-gray-700 flex items-center justify-center text-white text-lg font-bold uppercase">
+                {{ user?.firstName?.charAt(0) }}
+              </div>
+            @endif
           @else
             <div class="w-full h-full bg-gray-700 flex items-center justify-center text-white text-lg font-bold uppercase">
               {{ user?.firstName?.charAt(0) }}
@@ -87,12 +99,21 @@
         <a href="/profile" class="flex-shrink-0 w-12 h-12 rounded-full overflow-hidden">
             
         @if(user?.avatar)
-        <img src="{{ user.avatar }}"
-        
-        alt="Profile picture"
-        class="w-full h-full object-cover"
-        >
-
+          @if(user.avatar.startsWith('data:'))
+            <img src="{{ user.avatar }}"
+            alt="Profile picture"
+            class="w-full h-full object-cover"
+            >
+          @elseif(user.avatar.startsWith('http'))
+            <img src="{{ user.avatar }}"
+            alt="Profile picture"
+            class="w-full h-full object-cover"
+            >
+          @else
+            <div class="w-full h-full bg-gray-700 flex items-center justify-center text-white text-xl font-bold uppercase">
+              {{ user?.firstName?.charAt(0) }}
+            </div>
+          @endif
         @else
           <div class="w-full h-full bg-gray-700 flex items-center justify-center text-white text-xl font-bold uppercase">
             {{ user?.firstName?.charAt(0) }}
@@ -211,7 +232,15 @@
             <div class="flex space-x-3">
               <a href="/otherProfile/{{ tweet.author.id }}" class="flex-shrink-0 w-12 h-12 rounded-full overflow-hidden">
                 @if(tweet.author?.avatar)
-                  <img src="{{ tweet.author.avatar }}" alt="User profile" class="w-full h-full object-cover">
+                  @if(tweet.author.avatar.startsWith('data:'))
+                    <img src="{{ tweet.author.avatar }}" alt="User profile" class="w-full h-full object-cover">
+                  @elseif(tweet.author.avatar.startsWith('http'))
+                    <img src="{{ tweet.author.avatar }}" alt="User profile" class="w-full h-full object-cover">
+                  @else
+                    <div class="w-full h-full bg-gray-700 flex items-center justify-center text-white text-xl font-bold uppercase">
+                      {{ tweet.author.firstName.charAt(0) }}
+                    </div>
+                  @endif
                 @else
                   <div class="w-full h-full bg-gray-700 flex items-center justify-center text-white text-xl font-bold uppercase">
                     {{ tweet.author.firstName.charAt(0) }}
@@ -370,7 +399,15 @@
             <div class="flex space-x-3">
               <a href="/otherProfile/{{ tweet.author.id }}" class="flex-shrink-0 w-12 h-12 rounded-full overflow-hidden">
                 @if(tweet.author?.avatar)
-                  <img src="{{ tweet.author.avatar }}" alt="User profile" class="w-full h-full object-cover">
+                  @if(tweet.author.avatar.startsWith('data:'))
+                    <img src="{{ tweet.author.avatar }}" alt="User profile" class="w-full h-full object-cover">
+                  @elseif(tweet.author.avatar.startsWith('http'))
+                    <img src="{{ tweet.author.avatar }}" alt="User profile" class="w-full h-full object-cover">
+                  @else
+                    <div class="w-full h-full bg-gray-700 flex items-center justify-center text-white text-xl font-bold uppercase">
+                      {{ tweet.author.firstName.charAt(0) }}
+                    </div>
+                  @endif
                 @else
                   <div class="w-full h-full bg-gray-700 flex items-center justify-center text-white text-xl font-bold uppercase">
                     {{ tweet.author.firstName.charAt(0) }}

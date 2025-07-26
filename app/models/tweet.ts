@@ -10,7 +10,7 @@ export default class Tweet extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
 
-  @column()
+  @column({ columnName: 'user_id' })
   declare userId: number
 
   @column()

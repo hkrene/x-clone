@@ -34,7 +34,15 @@
           <!-- User Avatar -->
           <a href="/profile" class="flex-shrink-0 w-12 h-12 rounded-full overflow-hidden">
             @if(auth.user.avatar)
-              <img src="{{ auth.user.avatar }}" alt="Profile" class="w-full h-full object-cover">
+              @if(auth.user.avatar.startsWith('data:'))
+                <img src="{{ auth.user.avatar }}" alt="Profile" class="w-full h-full object-cover">
+              @elseif(auth.user.avatar.startsWith('http'))
+                <img src="{{ auth.user.avatar }}" alt="Profile" class="w-full h-full object-cover">
+              @else
+                <div class="w-full h-full bg-gray-700 flex items-center justify-center text-white text-xl font-bold uppercase">
+                  {{ auth.user.firstName.charAt(0) }}
+                </div>
+              @endif
             @else
               <div class="w-full h-full bg-gray-700 flex items-center justify-center text-white text-xl font-bold uppercase">
                 {{ auth.user.firstName.charAt(0) }}

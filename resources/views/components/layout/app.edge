@@ -114,9 +114,19 @@
             <div class="flex items-center space-x-3">
               <a href="/profile">
                 @if(auth.user.avatar)
-                  <img src="{{ auth.user.avatar }}" 
-                       alt="{{ auth.user.firstName }}'s profile picture"
-                       class="w-10 h-10 rounded-full object-cover">
+                  @if(auth.user.avatar.startsWith('data:'))
+                    <img src="{{ auth.user.avatar }}" 
+                         alt="{{ auth.user.firstName }}'s profile picture"
+                         class="w-10 h-10 rounded-full object-cover">
+                  @elseif(auth.user.avatar.startsWith('http'))
+                    <img src="{{ auth.user.avatar }}" 
+                         alt="{{ auth.user.firstName }}'s profile picture"
+                         class="w-10 h-10 rounded-full object-cover">
+                  @else
+                    <div class="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center text-white text-xl font-bold uppercase">
+                      {{ auth.user.firstName.charAt(0) || 'U' }}
+                    </div>
+                  @endif
                 @else
                   <div class="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center text-white text-xl font-bold uppercase">
                     {{ auth.user.firstName.charAt(0) || 'U' }}
@@ -218,9 +228,25 @@
             @each(user in suggestedUsers)
               <div class="flex justify-between items-center">
                 <div class="flex items-center space-x-3">
-                  <img src="{{ user.avatar || '/default-avatar.png' }}" 
-                       alt="{{ user.username }} avatar" 
-                       class="w-10 h-10 rounded-full">
+                  @if(user.avatar)
+                    @if(user.avatar.startsWith('data:'))
+                      <img src="{{ user.avatar }}" 
+                           alt="{{ user.username }} avatar" 
+                           class="w-10 h-10 rounded-full object-cover">
+                    @elseif(user.avatar.startsWith('http'))
+                      <img src="{{ user.avatar }}" 
+                           alt="{{ user.username }} avatar" 
+                           class="w-10 h-10 rounded-full object-cover">
+                    @else
+                      <div class="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center text-white text-sm font-bold uppercase">
+                        {{ user.firstName.charAt(0) }}
+                      </div>
+                    @endif
+                  @else
+                    <div class="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center text-white text-sm font-bold uppercase">
+                      {{ user.firstName.charAt(0) }}
+                    </div>
+                  @endif
                   <div>
                     <div class="flex items-center gap-[3px]">
                       <p class="capitalize text-sm hover:underline">

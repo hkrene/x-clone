@@ -1,5 +1,5 @@
 // start/controllers/followers_and_followings_controller.ts
-import Follow from '#models/follow'
+import Following from '#models/follow'
 import User from '#models/user'
 import { HttpContext } from '@adonisjs/core/http'
 
@@ -9,7 +9,7 @@ export default class FollowsController {
   const targetUserId = Number(params.id)
   const action = request.input('action') // 'follow' or 'unfollow'
 
-  const existing = await Follow.query()
+  const existing = await Following.query()
     .where('id_user', currentUserId)
     .andWhere('id_user_following', targetUserId)
     .first()
@@ -18,7 +18,7 @@ export default class FollowsController {
     if (existing) await existing.delete()
   } else {
     if (!existing) {
-      await Follow.create({
+      await Following.create({
         idUser: currentUserId,
         idUserFollowing: targetUserId,
       })
@@ -32,10 +32,10 @@ export default class FollowsController {
   public async getFollowers({ view, auth }: HttpContext) {
     const currentUserId = auth.user!.id
     const userAll = await User.query().whereNot('id', currentUserId)
-    const followings = await Follow.query().where('id_user', currentUserId)
+    const followings = await Following.query().where('id_user', currentUserId)
     const followingIds = followings.map((f) => f.idUserFollowing)
 
-    const followers = await Follow.query()
+    const followers = await Following.query()
       .where('id_user_following', currentUserId)
       .preload('user')
 
@@ -50,10 +50,10 @@ export default class FollowsController {
   public async getFollowings({ view, auth }: HttpContext) {
     const currentUserId = auth.user!.id
     const userAll = await User.query().whereNot('id', currentUserId)
-    const followings = await Follow.query().where('id_user', currentUserId)
+    const followings = await Following.query().where('id_user', currentUserId)
     const followingIds = followings.map((f) => f.idUserFollowing)
 
-    const abonnement = await Follow.query()
+    const abonnement = await Following.query()
       .where('id_user', currentUserId)
       .preload('userFollowing')
 
@@ -86,7 +86,7 @@ export default class FollowsController {
     const followersCount = user.$extras.followers_count
     const followingCount = user.$extras.following_count
 
-    const isFollowing = !!(await Follow.query()
+    const isFollowing = !!(await Following.query()
       .where('id_user', userAuth.id)
       .andWhere('id_user_following', user.id)
       .first())

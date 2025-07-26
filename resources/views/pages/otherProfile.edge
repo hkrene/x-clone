@@ -38,11 +38,23 @@
   <div class="px-4 relative">
     <div class="absolute -top-10 md:-top-16 left-2 md:left-4 border-4 border-black rounded-full overflow-hidden w-20 h-20 md:w-32 md:h-32">
     @if(user.avatar)
-      <img 
-        src="{{ user.avatar }}" 
-        alt="Profile picture"
-        class="w-full h-full object-cover"
-      >
+      @if(user.avatar.startsWith('data:'))
+        <img 
+          src="{{ user.avatar }}" 
+          alt="Profile picture"
+          class="w-full h-full object-cover"
+        >
+      @elseif(user.avatar.startsWith('http'))
+        <img 
+          src="{{ user.avatar }}" 
+          alt="Profile picture"
+          class="w-full h-full object-cover"
+        >
+      @else
+        <div class="w-full h-full bg-gray-700 flex items-center justify-center text-white text-xl font-bold uppercase">
+          {{ user.firstName.charAt(0) }}
+        </div>
+      @endif
     @else
       <div class="w-full h-full bg-gray-700 flex items-center justify-center text-white text-xl font-bold uppercase">
         {{ user.firstName.charAt(0) }}
@@ -54,10 +66,21 @@
     <form 
       action="/follow/{{ user.id }}" 
       method="post" 
-      class="flex justify-end pt-3"
+      class="flex justify-end pt-3 gap-2"
     >
       {{ csrfField() }}
       <input type="hidden" name="action" value="{{ isFollowing ? 'unfollow' : 'follow' }}" />
+      
+      <!-- Message Button -->
+      <button 
+        type="button"
+        class="px-4 py-1.5 border border-gray-600 rounded-full text-sm font-bold hover:bg-gray-900 hover:text-white flex items-center gap-2"
+        title="Message"
+      >
+        <svg viewBox="0 0 24 24" class="w-4 h-4" fill="currentColor">
+          <path d="M1.998 5.5c0-1.381 1.119-2.5 2.5-2.5h15c1.381 0 2.5 1.119 2.5 2.5v13c0 1.381-1.119 2.5-2.5 2.5h-15c-1.381 0-2.5-1.119-2.5-2.5v-13zm2.5-.5c-.276 0-.5.224-.5.5v2.764l8 3.638 8-3.636V5.5c0-.276-.224-.5-.5-.5h-15zm15.5 5.463l-8 3.636-8-3.638V18.5c0 .276.224.5.5.5h15c.276 0 .5-.224.5-.5v-8.037z"/>
+        </svg>
+      </button>
       
       @if(isFollowing)
         <button 
@@ -228,12 +251,25 @@
                   aria-label="{{ user.firstName }}'s profile"
                 >
                   @if(user.avatar)
-                    <img 
-                      src="{{ user.avatar }}"
-                      alt="{{ user.firstName }}'s avatar" 
-                      class="w-full h-full object-cover"
-                      loading="lazy"
-                    >
+                    @if(user.avatar.startsWith('data:'))
+                      <img 
+                        src="{{ user.avatar }}"
+                        alt="{{ user.firstName }}'s avatar" 
+                        class="w-full h-full object-cover"
+                        loading="lazy"
+                      >
+                    @elseif(user.avatar.startsWith('http'))
+                      <img 
+                        src="{{ user.avatar }}"
+                        alt="{{ user.firstName }}'s avatar" 
+                        class="w-full h-full object-cover"
+                        loading="lazy"
+                      >
+                    @else
+                      <div class="w-full h-full bg-gray-700 flex items-center justify-center text-white text-xl font-bold uppercase">
+                        {{ user.firstName.charAt(0) || '' }}
+                      </div>
+                    @endif
                   @else
                     <div class="w-full h-full bg-gray-700 flex items-center justify-center text-white text-xl font-bold uppercase">
                       {{ user.firstName.charAt(0) || '' }}

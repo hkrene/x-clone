@@ -1,6 +1,6 @@
 import User from '#models/user'
 import { uploadToSupabase, deleteFromSupabase, getSignedUrl } from '#services/uploader'
-import Follow from '#models/follow'
+import Following from '#models/follow'
 import Tweet from '#models/tweet'
 import type { HttpContext } from '@adonisjs/core/http'
 import app from '@adonisjs/core/services/app'
@@ -17,7 +17,7 @@ type SuggestedUser = {
 export default class ProfilesController {
 
   public async getSuggestedUsers(authUserId: number) {
-  const following = await Follow.query()
+  const following = await Following.query()
     .where('id_user', authUserId)
     .select('id_user_following')
 
@@ -48,7 +48,7 @@ public async showHome({ view, auth }: HttpContext) {
   const suggestedUsers = await this.getSuggestedUsers(user.id)
   
   // Get users that the current user is following
-  const following = await Follow.query()
+  const following = await Following.query()
     .where('id_user', user.id)
     .select('id_user_following')
   const followingIds = following.map(f => f.idUserFollowing)
@@ -273,7 +273,7 @@ public async showHome({ view, auth }: HttpContext) {
 
     const postsCount = user.tweets.length
 
-    const followRelation = await Follow.query()
+    const followRelation = await Following.query()
       .where('id_user', userAuth.id)
       .andWhere('id_user_following', user.id)
       .first()
