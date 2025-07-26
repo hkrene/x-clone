@@ -280,34 +280,59 @@
                   </p>
 
                   <!-- Media Attachment -->
-                  @if(tweet.mediaUrl)
-                    @let(ext = tweet.mediaUrl?.split('.').pop()?.toLowerCase() || '')
-
+                  @if(tweet.mediaUrl && tweet.mediaUrl.length > 0)
                     <div class="mt-3 rounded-xl overflow-hidden">
-                      @if(user.isVerified)
-                        <i class="bi bi-patch-check-fill w-4 h-4 text-blue-500" aria-label="Verified"></i>
-                      @endif
-
-                      @if(['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext))
-                        <img 
-                          src="{{ tweet.mediaUrl }}" 
-                          alt="Tweet media" 
-                          class="max-h-96 w-full object-cover rounded-xl border border-gray-800"
-                          loading="lazy"
-                        >
-                      @elseif(['mp4', 'webm', 'mov'].includes(ext))
-                        <video 
-                          controls 
-                          class="max-h-96 w-full rounded-xl border border-gray-800"
-                          preload="metadata"
-                          aria-label="Embedded video"
-                        >
-                          <source src="{{ tweet.mediaUrl }}" type="video/{{ ext }}">
-                          Your browser does not support the video tag.
-                        </video>
+                      @if(tweet.mediaUrl.startsWith('data:'))
+                        @let(mediaType = tweet.mediaUrl.split(';')[0].split(':')[1])
+                        @if(['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'].includes(mediaType))
+                          <img 
+                            src="{{ tweet.mediaUrl }}" 
+                            alt="Tweet media" 
+                            class="max-h-96 w-full object-cover rounded-xl border border-gray-800"
+                            loading="lazy"
+                          />
+                        @elseif(['video/mp4', 'video/webm', 'video/mov'].includes(mediaType))
+                          <video 
+                            controls 
+                            class="max-h-96 w-full rounded-xl border border-gray-800"
+                            preload="metadata"
+                            aria-label="Embedded video"
+                          >
+                            <source src="{{ tweet.mediaUrl }}" type="{{ mediaType }}">
+                            Your browser does not support the video tag.
+                          </video>
+                        @else
+                          <div class="bg-gray-800 p-4 text-gray-400 rounded-xl">
+                            Unable to display media ({{ mediaType || 'unknown type' }})
+                          </div>
+                        @endif
+                      @elseif(tweet.mediaUrl.startsWith('http'))
+                        @let(ext = tweet.mediaUrl?.split('.').pop()?.toLowerCase() || '')
+                        @if(['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext))
+                          <img 
+                            src="{{ tweet.mediaUrl }}" 
+                            alt="Tweet media" 
+                            class="max-h-96 w-full object-cover rounded-xl border border-gray-800"
+                            loading="lazy"
+                          />
+                        @elseif(['mp4', 'webm', 'mov'].includes(ext))
+                          <video 
+                            controls 
+                            class="max-h-96 w-full rounded-xl border border-gray-800"
+                            preload="metadata"
+                            aria-label="Embedded video"
+                          >
+                            <source src="{{ tweet.mediaUrl }}" type="video/{{ ext }}">
+                            Your browser does not support the video tag.
+                          </video>
+                        @else
+                          <div class="bg-gray-800 p-4 text-gray-400 rounded-xl">
+                            Unsupported media type
+                          </div>
+                        @endif
                       @else
                         <div class="bg-gray-800 p-4 text-gray-400 rounded-xl">
-                          Unsupported media type
+                          Unable to display media (invalid URL format)
                         </div>
                       @endif
                     </div>
