@@ -68,17 +68,28 @@ public async showHome({ view, auth }: HttpContext) {
         .limit(50)
     : []
 
-  // Process tweets with media URLs
+  // Process tweets with media data
   const processTweets = async (tweets: Tweet[]) => {
-    return Promise.all(tweets.map(async (tweet) => ({
-      ...tweet.serialize(),
-      shortTime: this.formatShortTime(tweet.createdAt),
-      mediaUrl: tweet.mediaUrl ? await getSignedUrl(tweet.mediaUrl) : null,
-      author: {
-        ...tweet.author.serialize(),
-        avatar: tweet.author.avatar ? await getSignedUrl(tweet.author.avatar) : null
+    return Promise.all(tweets.map(async (tweet) => {
+      let mediaUrl = null
+      if (tweet.mediaData && tweet.mediaType) {
+        // Create data URL from base64 data
+        mediaUrl = `data:${tweet.mediaType};base64,${tweet.mediaData}`
+      } else if (tweet.mediaUrl) {
+        // Fallback for old tweets that still have mediaUrl
+        mediaUrl = await getSignedUrl(tweet.mediaUrl)
       }
-    })))
+      
+      return {
+        ...tweet.serialize(),
+        shortTime: this.formatShortTime(tweet.createdAt),
+        mediaUrl: mediaUrl,
+        author: {
+          ...tweet.author.serialize(),
+          avatar: tweet.author.avatar ? await getSignedUrl(tweet.author.avatar) : null
+        }
+      }
+    }))
   }
 
   return view.render('pages/home', {
@@ -195,11 +206,22 @@ public async showHome({ view, auth }: HttpContext) {
     const bannerUrl = user.bannerImage ? await getSignedUrl(user.bannerImage) : ''
 
     const tweets = await Promise.all(
-      (user.tweets || []).map(async (tweet) => ({
-        ...tweet.serialize(),
-        shortTime: this.formatShortTime(tweet.createdAt),
-        mediaUrl: tweet.mediaUrl ? await getSignedUrl(tweet.mediaUrl) : null,
-      }))
+      (user.tweets || []).map(async (tweet) => {
+        let mediaUrl = null
+        if (tweet.mediaData && tweet.mediaType) {
+          // Create data URL from base64 data
+          mediaUrl = `data:${tweet.mediaType};base64,${tweet.mediaData}`
+        } else if (tweet.mediaUrl) {
+          // Fallback for old tweets that still have mediaUrl
+          mediaUrl = await getSignedUrl(tweet.mediaUrl)
+        }
+        
+        return {
+          ...tweet.serialize(),
+          shortTime: this.formatShortTime(tweet.createdAt),
+          mediaUrl: mediaUrl,
+        }
+      })
     )
 
     const followersCount = user.followers?.length || 0
@@ -268,11 +290,22 @@ public async showHome({ view, auth }: HttpContext) {
         joinedDate: user.createdAt.toFormat('MMMM yyyy'),
       },
       tweets: await Promise.all(
-        user.tweets.map(async (tweet) => ({
-          ...tweet.serialize(),
-          shortTime: tweet.createdAt.toRelative(),
-          mediaUrl: tweet.mediaUrl ? await getSignedUrl(tweet.mediaUrl) : null,
-        }))
+        user.tweets.map(async (tweet) => {
+          let mediaUrl = null
+          if (tweet.mediaData && tweet.mediaType) {
+            // Create data URL from base64 data
+            mediaUrl = `data:${tweet.mediaType};base64,${tweet.mediaData}`
+          } else if (tweet.mediaUrl) {
+            // Fallback for old tweets that still have mediaUrl
+            mediaUrl = await getSignedUrl(tweet.mediaUrl)
+          }
+          
+          return {
+            ...tweet.serialize(),
+            shortTime: tweet.createdAt.toRelative(),
+            mediaUrl: mediaUrl,
+          }
+        })
       ),
 
       isFollowing,

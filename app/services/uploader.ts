@@ -44,12 +44,28 @@ export async function getSignedUrl(filePath: string | null): Promise<string> {
   try {
     const cleanPath = filePath.replace(/^\/|\/$/g, '')
     
+    // Handle old file paths that might be missing extensions or have wrong paths
+    let finalPath = cleanPath
+    
+    // If the path doesn't have an extension, skip it
+    if (!cleanPath.includes('.')) {
+      return ''
+    }
+    
+    // If the path starts with 'uploads/', convert it to the new format
+    if (cleanPath.startsWith('uploads/')) {
+      const filename = cleanPath.split('/').pop()
+      if (filename) {
+        finalPath = `tweets/${filename}`
+      }
+    }
+    
     const { data, error } = await supabase.storage
       .from(BUCKET)
-      .createSignedUrl(cleanPath, 60 * 60)
+      .createSignedUrl(finalPath, 60 * 60)
 
     if (error || !data?.signedUrl) {
-      logger.error(`URL generation failed for ${cleanPath}`, error)
+      logger.error(`URL generation failed for ${finalPath}`, error)
       return ''
     }
 

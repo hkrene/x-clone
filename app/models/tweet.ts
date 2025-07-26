@@ -19,6 +19,12 @@ export default class Tweet extends BaseModel {
   @column()
   declare mediaUrl: string | null
 
+  @column()
+  declare mediaData: string | null // Base64 encoded media data
+
+  @column()
+  declare mediaType: string | null // MIME type of the media
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 

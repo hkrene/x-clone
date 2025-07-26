@@ -32,15 +32,16 @@ export const supabase = createClient(supabaseConfig.url, supabaseConfig.key)
 // Verify bucket exists on startup
 export async function verifyBucket() {
   try {
+    const bucketName = process.env.SUPABASE_BUCKET || 'xclone-database'
+    
     const { data, error } = await supabase
       .storage
-      .getBucket(process.env.SUPABASE_BUCKET || 'xclone-database')
+      .getBucket(bucketName)
     
     if (error) {
       logger.error(`Supabase bucket verification failed: ${error.message}`)
       throw error
     }
-    
     
     logger.info(`Verified Supabase bucket: ${data.name}`)
     return true

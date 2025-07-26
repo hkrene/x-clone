@@ -233,28 +233,57 @@
                 </div>
                 <p class="mt-1 text-white text-base leading-snug break-words overflow-hidden text-ellipsis box-border">{{ tweet.content }}</p>
 
-                @if(tweet.mediaUrl)
+                @if(tweet.mediaUrl && tweet.mediaUrl.length > 0)
                   <div class="mt-3 rounded-xl overflow-hidden">
-                    @let(fileExtension = tweet.mediaUrl.split('.').pop()?.toLowerCase() ?? '')
-                    @if(['jpg', 'jpeg', 'png', 'gif'].includes(fileExtension))
-                      <img 
-                        src="{{ tweet.mediaUrl }}" 
-                        alt="Tweet media" 
-                        class="max-h-96 w-full object-cover rounded-xl border border-gray-800"
-                        loading="lazy"
-                      >
-                    @elseif(['mp4', 'webm'].includes(fileExtension))
-                      <video 
-                        controls 
-                        class="max-h-96 w-full rounded-xl border border-gray-800"
-                        preload="metadata"
-                      >
-                        <source src="{{ tweet.mediaUrl }}" type="video/{{ fileExtension }}">
-                        Your browser does not support the video tag.
-                      </video>
+                    @if(tweet.mediaUrl.startsWith('data:'))
+                      @let(mediaType = tweet.mediaUrl.split(';')[0].split(':')[1])
+                      @if(['image/jpeg', 'image/jpg', 'image/png', 'image/gif'].includes(mediaType))
+                        <img 
+                          src="{{ tweet.mediaUrl }}" 
+                          alt="Tweet media" 
+                          class="max-h-96 w-full object-cover rounded-xl border border-gray-800"
+                          loading="lazy"
+                        >
+                      @elseif(['video/mp4', 'video/webm'].includes(mediaType))
+                        <video 
+                          controls 
+                          class="max-h-96 w-full rounded-xl border border-gray-800"
+                          preload="metadata"
+                        >
+                          <source src="{{ tweet.mediaUrl }}" type="{{ mediaType }}">
+                          Your browser does not support the video tag.
+                        </video>
+                      @else
+                        <div class="bg-gray-800 p-4 text-gray-400 rounded-xl">
+                          Unable to display media ({{ mediaType || 'unknown type' }})
+                        </div>
+                      @endif
+                    @elseif(tweet.mediaUrl.startsWith('http'))
+                      @let(fileExtension = tweet.mediaUrl.split('.').pop()?.toLowerCase() ?? '')
+                      @if(['jpg', 'jpeg', 'png', 'gif'].includes(fileExtension))
+                        <img 
+                          src="{{ tweet.mediaUrl }}" 
+                          alt="Tweet media" 
+                          class="max-h-96 w-full object-cover rounded-xl border border-gray-800"
+                          loading="lazy"
+                        >
+                      @elseif(['mp4', 'webm'].includes(fileExtension))
+                        <video 
+                          controls 
+                          class="max-h-96 w-full rounded-xl border border-gray-800"
+                          preload="metadata"
+                        >
+                          <source src="{{ tweet.mediaUrl }}" type="video/{{ fileExtension }}">
+                          Your browser does not support the video tag.
+                        </video>
+                      @else
+                        <div class="bg-gray-800 p-4 text-gray-400 rounded-xl">
+                          Unable to display media ({{ fileExtension || 'unknown type' }})
+                        </div>
+                      @endif
                     @else
                       <div class="bg-gray-800 p-4 text-gray-400 rounded-xl">
-                        Unable to display media ({{ fileExtension || 'unknown type' }})
+                        Unable to display media (invalid URL format)
                       </div>
                     @endif
                   </div>
@@ -364,26 +393,53 @@
                 <p class="mt-1 text-white text-base leading-snug break-words overflow-hidden text-ellipsis box-border">{{ tweet.content }}</p>
 
                 <!-- Media Attachment -->
-                @if(tweet.mediaUrl)
+                @if(tweet.mediaUrl && tweet.mediaUrl.length > 0)
                   <div class="mt-3 rounded-xl overflow-hidden">
-                    @let(ext = tweet.mediaUrl.split('.').pop().toLowerCase())
-                    @if(['jpg', 'jpeg', 'png', 'gif'].includes(ext))
-                      <img 
-                        src="{{ tweet.mediaUrl }}" 
-                        alt="Tweet media" 
-                        class="max-h-96 w-full object-cover rounded-xl border border-gray-800"
-                      >
-                    @elseif(['mp4', 'webm'].includes(ext))
-                      <video 
-                        controls 
-                        class="max-h-96 w-full rounded-xl border border-gray-800"
-                        preload="none"
-                      >
-                        <source src="{{ tweet.mediaUrl }}" type="video/{{ ext }}">
-                      </video>
+                    @if(tweet.mediaUrl.startsWith('data:'))
+                      @let(mediaType = tweet.mediaUrl.split(';')[0].split(':')[1])
+                      @if(['image/jpeg', 'image/jpg', 'image/png', 'image/gif'].includes(mediaType))
+                        <img 
+                          src="{{ tweet.mediaUrl }}" 
+                          alt="Tweet media" 
+                          class="max-h-96 w-full object-cover rounded-xl border border-gray-800"
+                        >
+                      @elseif(['video/mp4', 'video/webm'].includes(mediaType))
+                        <video 
+                          controls 
+                          class="max-h-96 w-full rounded-xl border border-gray-800"
+                          preload="none"
+                        >
+                          <source src="{{ tweet.mediaUrl }}" type="{{ mediaType }}">
+                        </video>
+                      @else
+                        <div class="bg-gray-800 p-4 text-gray-400 rounded-xl">
+                          Unable to display media ({{ mediaType || 'unknown type' }})
+                        </div>
+                      @endif
+                    @elseif(tweet.mediaUrl.startsWith('http'))
+                      @let(ext = tweet.mediaUrl.split('.').pop().toLowerCase())
+                      @if(['jpg', 'jpeg', 'png', 'gif'].includes(ext))
+                        <img 
+                          src="{{ tweet.mediaUrl }}" 
+                          alt="Tweet media" 
+                          class="max-h-96 w-full object-cover rounded-xl border border-gray-800"
+                        >
+                      @elseif(['mp4', 'webm'].includes(ext))
+                        <video 
+                          controls 
+                          class="max-h-96 w-full rounded-xl border border-gray-800"
+                          preload="none"
+                        >
+                          <source src="{{ tweet.mediaUrl }}" type="video/{{ ext }}">
+                        </video>
+                      @else
+                        <div class="bg-gray-800 p-4 text-gray-400 rounded-xl">
+                          Unsupported media type
+                        </div>
+                      @endif
                     @else
                       <div class="bg-gray-800 p-4 text-gray-400 rounded-xl">
-                        Unsupported media type
+                        Unable to display media (invalid URL format)
                       </div>
                     @endif
                   </div>
