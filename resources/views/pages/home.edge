@@ -8,44 +8,83 @@
 <section class="flex-1 border-x border-gray-800 max-w-2xl w-full">
   
   <header class="sticky top-0 bg-black/80 backdrop-blur-md border-b border-gray-800 z-10">
-    <div class="max-w-2xl flex items-center justify-between p-4 md:hidden">
-      <!-- Left side - Profile icon -->
-      <div class="flex-shrink-0 w-10 h-10 md:hidden">
-        <a href="/profile" class="block w-full h-full rounded-full overflow-hidden">
-          @if(user?.avatar)
-            <img 
-              src="{{ user.avatar }}"
-              alt="Profile picture"
-              class="w-full h-full object-cover"
-            >
-          @else
-            <div class="w-full h-full bg-gray-700 flex items-center justify-center text-white text-lg font-bold uppercase">
-              {{ user?.firstName?.charAt(0) }}
-            </div>
-          @endif
-        </a>
-      </div>
+    <!-- Mobile Header -->
+<div class="max-w-2xl flex items-center justify-between p-4 md:hidden">
+  <!-- Profile Icon Button (now toggles sidebar) -->
+  <div class="flex-shrink-0 w-10 h-10 md:hidden">
+    <button id="mobileMenuToggle" class="block w-full h-full rounded-full overflow-hidden focus:outline-none">
+      @if(user?.avatar)
+        <img 
+          src="{{ user.avatar }}"
+          alt="Profile picture"
+          class="w-full h-full object-cover"
+        >
+      @else
+        <div class="w-full h-full bg-gray-700 flex items-center justify-center text-white text-lg font-bold uppercase">
+          {{ user?.firstName?.charAt(0) }}
+        </div>
+      @endif
+    </button>
+  </div>
 
-      <!-- Center - X logo -->
-      <div class="flex-1 flex justify-center md:hidden">
-        <a href="#">
-          <svg viewBox="0 0 24 24" aria-hidden="true" class="w-8 h-8 text-white">
-          <g>
-            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" fill="currentColor"></path>
-          </g>
-        </svg>
-        </a>
-      </div>
+  <!-- X Logo -->
+  <div class="flex-1 flex justify-center md:hidden">
+    <a href="#">
+      <svg viewBox="0 0 24 24" aria-hidden="true" class="w-8 h-8 text-white">
+        <g>
+          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" fill="currentColor"></path>
+        </g>
+      </svg>
+    </a>
+  </div>
+</div>
 
-      <!-- Right side - Settings/More icon -->
-      <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center md:hidden">
-        <svg viewBox="0 0 24 24" width="24" height="24" class="text-white">
-          <circle cx="12" cy="6" r="2" fill="currentColor"/>
-          <circle cx="12" cy="12" r="2" fill="currentColor"/>
-          <circle cx="12" cy="18" r="2" fill="currentColor"/>
-        </svg>
+<!-- Sidebar Overlay -->
+<div id="mobileMenuOverlay" class="fixed inset-0 bg-black/60 z-40 hidden backdrop-blur-sm"></div>
+
+<!-- Sidebar Menu (like in your reference image) -->
+<div id="mobileMenu" class="fixed left-0 top-0 h-full w-72 bg-black z-50 transform -translate-x-full transition-transform duration-300">
+  <div class="p-4 h-full overflow-y-auto">
+    <!-- User Profile Section -->
+    <div class="flex items-center gap-3 mb-6">
+      <div class="w-12 h-12 rounded-full overflow-hidden">
+        @if(user?.avatar)
+          <img src="{{ user.avatar }}" alt="Profile" class="w-full h-full object-cover">
+        @else
+          <div class="w-full h-full bg-gray-700 flex items-center justify-center text-white text-xl font-bold uppercase">
+            {{ user?.firstName?.charAt(0) }}
+          </div>
+        @endif
+      </div>
+      <div>
+        <p class="font-bold text-white">{{ user?.firstName }} {{ user?.surname }}</p>
+        <p class="text-gray-400 text-sm">
+
+        {{ user.username.startsWith('@') ? user.username : `@${user.username}` }}
+
+        </p>
       </div>
     </div>
+
+    <!-- Follow Stats -->
+    <div class="flex gap-4 mb-6 text-sm">
+      <div><span class="font-bold text-white">{{ user?.following_count }}</span> <span class="text-gray-400">Following</span></div>
+      <div><span class="font-bold text-white">{{ user?.followers_count }}</span> <span class="text-gray-400">Followers</span></div>
+    </div>
+
+    <!-- Menu Items (matching your reference image) -->
+    <nav class="space-y-1">
+      <a href="#" class="block py-3 px-2 rounded-lg hover:bg-gray-800 text-white">Premium</a>
+      <a href="#" class="block py-3 px-2 rounded-lg hover:bg-gray-800 text-white">Chat</a>
+      <a href="#" class="block py-3 px-2 rounded-lg hover:bg-gray-800 text-white">Bookmarks</a>
+      <a href="#" class="block py-3 px-2 rounded-lg hover:bg-gray-800 text-white">Jobs</a>
+      <a href="#" class="block py-3 px-2 rounded-lg hover:bg-gray-800 text-white">Lists</a>
+      <a href="#" class="block py-3 px-2 rounded-lg hover:bg-gray-800 text-white">Spaces</a>
+      <div class="border-t border-gray-800 my-2"></div>
+      <a href="#" class="block py-3 px-2 rounded-lg hover:bg-gray-800 text-white">Settings & Support</a>
+    </nav>
+  </div>
+</div>
 
     <!-- For You / Following Tabs -->
     <div class="flex border-b border-gray-800" x-data="{ activeTab: 'forYou' }">
@@ -524,3 +563,31 @@
 @end
 
 @!component('components/navbar')
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const menuToggle = document.getElementById('mobileMenuToggle');
+    const menu = document.getElementById('mobileMenu');
+    const overlay = document.getElementById('mobileMenuOverlay');
+
+    // Toggle menu
+    menuToggle.addEventListener('click', () => {
+      menu.classList.toggle('-translate-x-full');
+      overlay.classList.toggle('hidden');
+    });
+
+    // Close menu when clicking overlay
+    overlay.addEventListener('click', () => {
+      menu.classList.add('-translate-x-full');
+      overlay.classList.add('hidden');
+    });
+
+    // Close menu when pressing Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        menu.classList.add('-translate-x-full');
+        overlay.classList.add('hidden');
+      }
+    });
+  });
+</script>

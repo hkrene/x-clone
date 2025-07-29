@@ -39,19 +39,25 @@ export default class ProfilesController {
   })))
 }
 
-
 public async showHome({ view, auth }: HttpContext) {
   const user = await auth.use('web').authenticate()
   const avatarUrl = user.avatar ? await getSignedUrl(user.avatar) : ''
 
   // Get suggested users
   const suggestedUsers = await this.getSuggestedUsers(user.id)
-  
+
   // Get users that the current user is following
   const following = await Following.query()
     .where('id_user', user.id)
     .select('id_user_following')
   const followingIds = following.map(f => f.idUserFollowing)
+
+  // Get users who are following the current user
+  const followers = await Following.query()
+    .where('id_user_following', user.id)
+    .count('* as total')
+    .first()
+  const followersCount = followers?.$extras?.total ?? 0
 
   // For You feed - shows ALL tweets from all users
   const forYouTweets = await Tweet.query()
@@ -73,17 +79,15 @@ public async showHome({ view, auth }: HttpContext) {
     return Promise.all(tweets.map(async (tweet) => {
       let mediaUrl = null
       if (tweet.mediaData && tweet.mediaType) {
-        // Create data URL from base64 data
         mediaUrl = `data:${tweet.mediaType};base64,${tweet.mediaData}`
       } else if (tweet.mediaUrl) {
-        // Fallback for old tweets that still have mediaUrl
         mediaUrl = await getSignedUrl(tweet.mediaUrl)
       }
-      
+
       return {
         ...tweet.serialize(),
         shortTime: this.formatShortTime(tweet.createdAt),
-        mediaUrl: mediaUrl,
+        mediaUrl,
         author: {
           ...tweet.author.serialize(),
           avatar: tweet.author.avatar ? await getSignedUrl(tweet.author.avatar) : null
@@ -98,16 +102,16 @@ public async showHome({ view, auth }: HttpContext) {
       avatar: avatarUrl,
       firstName: user.firstName || '',
       surname: user.surname || '',
-      username: user.username || '', 
+      username: user.username || '',
       isVerified: user.isVerified || false,
-      following_count: followingIds.length
+      following_count: followingIds.length,
+      followers_count: followersCount
     },
     forYouTweets: await processTweets(forYouTweets),
     followingTweets: await processTweets(followingTweets),
-    suggestedUsers,  
+    suggestedUsers,
   })
 }
-
 
   
 
