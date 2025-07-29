@@ -9,42 +9,53 @@
   
   <header class="sticky top-0 bg-black/80 backdrop-blur-md border-b border-gray-800 z-10">
     <!-- Mobile Header -->
-<div class="max-w-2xl flex items-center justify-between p-4 md:hidden ">
-  <!-- Profile Icon Button (now toggles sidebar) -->
-  <div class="flex-shrink-0 w-10 h-10 md:hidden">
-    <button id="mobileMenuToggle" class="block w-full h-full rounded-full overflow-hidden focus:outline-none">
-      @if(user?.avatar)
-        <img 
-          src="{{ user.avatar }}"
-          alt="Profile picture"
-          class="w-full h-full object-cover"
-        >
-      @else
-        <div class="w-full h-full bg-gray-700 flex items-center justify-center text-white text-lg font-bold uppercase">
-          {{ user?.firstName?.charAt(0) }}
-        </div>
-      @endif
-    </button>
-  </div>
-
-  <!-- X Logo -->
-  <div class="flex-1 flex justify-center md:hidden">
-    <a href="#">
-      <svg viewBox="0 0 24 24" aria-hidden="true" class="w-8 h-8 text-white">
-        <g>
-          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" fill="currentColor"></path>
-        </g>
-      </svg>
-    </a>
-  </div>
-</div>
+    <div class="max-w-2xl flex items-center justify-between p-4 md:hidden">
+      <!-- Left: Profile Button (1/3 width) -->
+      <div class="flex-1 flex justify-start">
+        <button id="mobileMenuToggle" class="w-10 h-10 rounded-full overflow-hidden focus:outline-none">
+          @if(user?.avatar)
+            <img 
+              src="{{ user.avatar }}"
+              alt="Profile picture"
+              class="w-full h-full object-cover"
+            >
+          @else
+            <div class="w-full h-full bg-gray-700 flex items-center justify-center text-white text-lg font-bold uppercase">
+              {{ user?.firstName?.charAt(0) }}
+            </div>
+          @endif
+        </button>
+      </div>
+      
+      <!-- Center: X Logo (1/3 width) -->
+      <div class="flex-1 flex justify-center">
+        <a href="#" class="flex justify-center">
+          <svg viewBox="0 0 24 24" aria-hidden="true" class="w-8 h-8 text-white">
+            <g>
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" fill="currentColor"></path>
+            </g>
+          </svg>
+        </a>
+      </div>
+      
+      <!-- Right: Settings Icon (1/3 width) -->
+      <div class="flex-1 flex justify-end">
+        <a href="#" class="flex justify-end">
+          <svg viewBox="0 0 24 24" class="w-6 h-6 text-white">
+            <g>
+              <path d="M19.738 10.981c-.186-.283-.465-.51-.8-.646l-2.534-.954-.12-2.67c-.01-.252-.1-.493-.255-.683-.308-.373-.83-.54-1.3-.388l-2.464.784-1.774-2.074c-.22-.256-.52-.414-.848-.44-.35-.027-.693.09-.95.322l-1.99 1.73-2.535-.955c-.334-.126-.7-.12-1.03.017-.33.137-.6.39-.763.71L2.05 8.677c-.163.32-.2.69-.103 1.04.098.35.33.65.642.832l2.305 1.522v1.86l-2.305 1.52c-.312.183-.544.483-.642.833-.097.35-.06.72.103 1.04l1.674 3.26c.163.32.433.573.763.71.33.137.696.143 1.03.017l2.535-.954 1.99 1.73c.257.232.6.35.95.322.328-.026.628-.184.848-.44l1.774-2.074 2.464.784c.47.152.992-.015 1.3-.388.155-.19.245-.43.255-.683l.12-2.67 2.534-.954c.335-.136.614-.363.8-.646.186-.283.27-.615.237-.947-.033-.332-.17-.64-.388-.876l-1.984-2.13 1.984-2.13c.218-.235.355-.544.388-.876.033-.332-.05-.664-.237-.947zm-7.738 4.02c-1.105 0-2-.895-2-2s.895-2 2-2 2 .895 2 2-.895 2-2 2z"></path>
+            </g>
+          </svg>
+        </a>
+      </div>
+    </div>
 
 <!-- Sidebar Overlay -->
 <div id="mobileMenuOverlay" class="fixed inset-0 bg-black/60 z-40 hidden backdrop-blur-sm"></div>
 
-<!-- Sidebar Menu (like in your reference image) -->
-<div id="mobileMenu" class="fixed left-0 top-0 h-full w-72 bg-black z-50 transform -translate-x-full transition-transform duration-300">
-  <div class="p-4 h-full overflow-y-auto">
+<!-- Sidebar Menu - Updated to cover full height -->
+<div id="mobileMenu" class="fixed left-0 top-0 h-screen w-72 bg-black z-50 transform -translate-x-full transition-transform duration-300 overflow-y-auto">
+  <div class="p-4 min-h-screen">
     <!-- User Profile Section -->
     <div class="flex items-center gap-3 mb-6">
       <a href="/profile" class="w-12 h-12 rounded-full overflow-hidden">
@@ -59,9 +70,7 @@
       <div>
         <p class="font-bold text-white">{{ user?.firstName }} {{ user?.surname }}</p>
         <p class="text-gray-400 text-sm">
-
-        {{ user.username.startsWith('@') ? user.username : `@${user.username}` }}
-
+          {{ user.username.startsWith('@') ? user.username : `@${user.username}` }}
         </p>
       </div>
     </div>
@@ -72,16 +81,62 @@
       <div><span class="font-bold text-white">{{ user?.followers_count }}</span> <span class="text-gray-400">Followers</span></div>
     </div>
 
-    <!-- Menu Items (matching your reference image) -->
+    <!-- Menu Items -->
     <nav class="space-y-1">
-      <a href="#" class="block py-3 px-2 rounded-lg hover:bg-gray-800 text-white">Premium</a>
-      <a href="#" class="block py-3 px-2 rounded-lg hover:bg-gray-800 text-white">Chat</a>
-      <a href="#" class="block py-3 px-2 rounded-lg hover:bg-gray-800 text-white">Bookmarks</a>
-      <a href="#" class="block py-3 px-2 rounded-lg hover:bg-gray-800 text-white">Jobs</a>
-      <a href="#" class="block py-3 px-2 rounded-lg hover:bg-gray-800 text-white">Lists</a>
-      <a href="#" class="block py-3 px-2 rounded-lg hover:bg-gray-800 text-white">Spaces</a>
+      <!-- Premium -->
+      <a href="#" class="flex items-center py-3 px-2 rounded-lg hover:bg-gray-800 text-white">
+        <svg viewBox="0 0 24 24" class="w-6 h-6 mr-4" fill="currentColor">
+          <g><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></g>
+        </svg>
+        Premium
+      </a>
+      
+      <!-- Chat -->
+      <a href="#" class="flex items-center py-3 px-2 rounded-lg hover:bg-gray-800 text-white">
+        <svg viewBox="0 0 24 24" class="w-6 h-6 mr-4" fill="currentColor">
+          <g><path d="M1.751 10c0-4.42 3.584-8 8.005-8h4.366c4.49 0 8.129 3.64 8.129 8.13 0 2.96-1.607 5.68-4.196 7.11l-8.054 4.46v-3.69h-.067c-4.49.1-8.183-3.51-8.183-8.01zm8.005-6c-3.317 0-6.005 2.69-6.005 6 0 3.37 2.77 6.08 6.138 6.01l.351-.01h1.761v2.3l5.087-2.81c1.951-1.08 3.163-3.13 3.163-5.36 0-3.39-2.744-6.13-6.129-6.13H9.756z"></path></g>
+        </svg>
+        Chat
+      </a>
+      
+      <!-- Bookmarks -->
+      <a href="#" class="flex items-center py-3 px-2 rounded-lg hover:bg-gray-800 text-white">
+        <svg viewBox="0 0 24 24" class="w-6 h-6 mr-4" fill="currentColor">
+          <g><path d="M4 4.5C4 3.12 5.119 2 6.5 2h11C18.881 2 20 3.12 20 4.5v18.44l-8-5.71-8 5.71V4.5zM6.5 4c-.276 0-.5.22-.5.5v14.56l6-4.29 6 4.29V4.5c0-.28-.224-.5-.5-.5h-11z"></path></g>
+        </svg>
+        Bookmarks
+      </a>
+      
+      <!-- Jobs -->
+      <a href="#" class="flex items-center py-3 px-2 rounded-lg hover:bg-gray-800 text-white">
+        <svg viewBox="0 0 24 24" class="w-6 h-6 mr-4" fill="currentColor">
+          <g><path d="M19.25 2H4.75C3.233 2 2 3.233 2 4.75v14.5C2 20.767 3.233 22 4.75 22h14.5c1.517 0 2.75-1.233 2.75-2.75V4.75C22 3.233 20.767 2 19.25 2zm-7.48 13.03l-1.5-1.5L17 8.47l1.5 1.5-6.73 6.06z"></path></g>
+        </svg>
+        Jobs
+      </a>
+      
+      <!-- Lists -->
+      <a href="#" class="flex items-center py-3 px-2 rounded-lg hover:bg-gray-800 text-white">
+        <svg viewBox="0 0 24 24" class="w-6 h-6 mr-4" fill="currentColor">
+          <g><path d="M3 4.5C3 3.12 4.12 2 5.5 2h13C19.88 2 21 3.12 21 4.5v15c0 1.38-1.12 2.5-2.5 2.5h-13C4.12 22 3 20.88 3 19.5v-15zM5.5 4c-.28 0-.5.22-.5.5v15c0 .28.22.5.5.5h13c.28 0 .5-.22.5-.5v-15c0-.28-.22-.5-.5-.5h-13zM16 10H8V8h8v2zm-8 2h8v2H8v-2z"></path></g>
+        </svg>
+        Lists
+      </a>
+      
+      <!-- Spaces -->
+      <a href="#" class="flex items-center py-3 px-2 rounded-lg hover:bg-gray-800 text-white">
+        <svg viewBox="0 0 24 24" class="w-6 h-6 mr-4" fill="currentColor">
+          <g><path d="M12 7c-1.93 0-3.5 1.57-3.5 3.5S10.07 14 12 14s3.5-1.57 3.5-3.5S13.93 7 12 7zm0 5c-.827 0-1.5-.673-1.5-1.5S11.173 9 12 9s1.5.673 1.5 1.5S12.827 12 12 12zm0-10C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 18c-4.418 0-8-3.582-8-8s3.582-8 8-8 8 3.582 8 8-3.582 8-8 8z"></path></g>
+        </svg>
+        Spaces
+      </a>
+      
       <div class="border-t border-gray-800 my-2"></div>
-      <a href="#" class="block py-3 px-2 rounded-lg hover:bg-gray-800 text-white">Settings & Support</a>
+      
+      <!-- Settings & Support -->
+      <a href="#" class="flex items-center py-3 px-2 rounded-lg hover:bg-gray-800 text-white">
+        Settings & Support
+      </a>
     </nav>
   </div>
 </div>
@@ -571,15 +626,18 @@
     const overlay = document.getElementById('mobileMenuOverlay');
 
     // Toggle menu
-    menuToggle.addEventListener('click', () => {
+    menuToggle.addEventListener('click', (e) => {
+      e.stopPropagation(); // Prevent event bubbling
       menu.classList.toggle('-translate-x-full');
       overlay.classList.toggle('hidden');
+      document.body.classList.toggle('overflow-hidden'); // Prevent scrolling when menu is open
     });
 
     // Close menu when clicking overlay
     overlay.addEventListener('click', () => {
       menu.classList.add('-translate-x-full');
       overlay.classList.add('hidden');
+      document.body.classList.remove('overflow-hidden');
     });
 
     // Close menu when pressing Escape
@@ -587,7 +645,13 @@
       if (e.key === 'Escape') {
         menu.classList.add('-translate-x-full');
         overlay.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
       }
+    });
+
+    // Prevent menu from closing when clicking inside it
+    menu.addEventListener('click', (e) => {
+      e.stopPropagation();
     });
   });
 </script>
