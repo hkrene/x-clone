@@ -15,6 +15,9 @@ type SuggestedUser = {
   isVerified: boolean
 }
 export default class ProfilesController {
+  public async showMessage({ view }: HttpContext) {
+    return view.render('pages/message')
+  }
 
   public async getSuggestedUsers(authUserId: number) {
   const following = await Following.query()

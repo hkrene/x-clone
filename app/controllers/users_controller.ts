@@ -9,6 +9,8 @@ export default class ProfilesController {
   public async showEditProfile({ view }: HttpContext) {
     return view.render('pages/editProfil')
   }
+
+  
   // Affiche la page d'accueil avec les tweets de l'utilisateur et de ceux qu'il suit
   public async showHome({ view, auth }: HttpContext) {
     const user = await auth.use('web').authenticate().catch(() => null)

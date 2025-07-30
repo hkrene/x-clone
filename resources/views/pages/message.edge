@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messages | X</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .message-item:hover { background-color: rgba(22, 24, 28, 0.5); }
+        .search-input:focus { outline: none; }
+    </style>
+</head>
+<body class="bg-black text-white">
+    <div class="max-w-2xl mx-auto h-screen flex flex-col border-x border-gray-800">
+        <!-- Header -->
+        <div class="sticky top-0 z-10 bg-black/80 backdrop-blur-md p-4 border-b border-gray-800">
+            <h1 class="font-bold text-xl">Messages</h1>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="p-3 border-b border-gray-800">
+            <div class="relative">
+                <input type="text" placeholder="Search Direct Messages" 
+                       class="w-full bg-gray-800 rounded-full py-2 px-4 pl-10 text-white search-input">
+                <svg viewBox="0 0 24 24" class="w-5 h-5 text-gray-400 absolute left-3 top-2.5" fill="currentColor">
+                    <g><path d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z"></path></g>
+                </svg>
+            </div>
+        </div>
+
+        <!-- Message List -->
+        <div class="flex-1 overflow-y-auto">
+            <!-- Message Item 1 -->
+            <div class="message-item p-4 border-b border-gray-800 cursor-pointer">
+                <div class="flex items-center">
+                    <div class="w-12 h-12 rounded-full overflow-hidden mr-3 flex-shrink-0">
+                        <img src="https://pbs.twimg.com/profile_images/1234567890/sample1_normal.jpg" alt="Hirwa Rene" class="w-full h-full object-cover">
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex justify-between items-baseline">
+                            <p class="font-bold text-white truncate">Hirwa Rene <span class="text-gray-400 font-normal">@hkRene</span></p>
+                            <span class="text-xs text-gray-400 ml-2">02 Jul</span>
+                        </div>
+                        <p class="text-gray-400 text-sm truncate">You sent a link</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Message Item 2 -->
+            <div class="message-item p-4 border-b border-gray-800 cursor-pointer">
+                <div class="flex items-center">
+                    <div class="w-12 h-12 rounded-full overflow-hidden mr-3 flex-shrink-0">
+                        <img src="https://pbs.twimg.com/profile_images/0987654321/sample2_normal.jpg" alt="UBA RDC" class="w-full h-full object-cover">
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex justify-between items-baseline">
+                            <p class="font-bold text-white truncate">UBA RDC <span class="text-gray-400 font-normal">@UBARDC</span></p>
+                            <span class="text-xs text-gray-400 ml-2">29 May</span>
+                        </div>
+                        <p class="text-gray-400 text-sm truncate">You added Reaction 💬: @hamster_keyz</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

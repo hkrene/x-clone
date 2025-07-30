@@ -39,6 +39,8 @@ router.group(() => {
   router.post('/tweets', [TweetsController, 'store'])
   router.post('/logout', [AuthController, 'logout'])    
   router.get('/otherProfile/:id', [ProfilesController, 'showOtherProfile'])
-router.post('/follow/:id', [FollowsController, 'follow']).as('follow.user')
+  router.post('/follow/:id', [FollowsController, 'follow']).as('follow.user')
+  router.get('/message', [ProfilesController, 'showMessage'])
+  
 
 }).use(middleware.auth())
