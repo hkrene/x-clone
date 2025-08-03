@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Notifications</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white text-gray-900 max-w-xl mx-auto p-4 min-h-screen font-sans">
+
+  <h1 class="text-3xl font-bold mb-6 border-b border-gray-300 pb-2">Notifications</h1>
+
+  @if(notifications.length === 0)
+    <p class="text-center text-gray-500">No notifications yet.</p>
+  @else
+    <ul class="divide-y divide-gray-200">
+      @each(notification in notifications)
+        <li
+          class="flex items-start space-x-4 py-4 cursor-pointer hover:bg-gray-50 rounded-md
+            @if(!notification.isRead) bg-blue-50 @endif"
+          onclick="window.location.href='@if(notification.type === 'follow')/users/{{notification.user.username}}@else/tweets/{{notification.tweetId}}@endif'"
+        >
+          <img
+            src="{{ notification.user.avatarUrl }}"
+            alt="{{ notification.user.username }} avatar"
+            class="w-12 h-12 rounded-full object-cover flex-shrink-0"
+          />
+
+          <div class="flex-1">
+            <p class="text-sm text-gray-800">
+              <a
+                href="/users/{{ notification.user.username }}"
+                class="font-semibold text-blue-600 hover:underline"
+              >
+                {{ notification.user.username }}
+              </a>
+
+              @if(notification.type === 'like')
+                liked your tweet:
+                <span class="italic text-gray-700">"{{ notification.content }}"</span>
+              @elseif(notification.type === 'retweet')
+                retweeted your tweet:
+                <span class="italic text-gray-700">"{{ notification.content }}"</span>
+              @elseif(notification.type === 'follow')
+                started following you.
+              @elseif(notification.type === 'mention')
+                mentioned you in a tweet:
+                <span class="italic text-gray-700">"{{ notification.content }}"</span>
+              @elseif(notification.type === 'reply')
+                replied to your tweet:
+                <span class="italic text-gray-700">"{{ notification.content }}"</span>
+              @else
+                sent a notification.
+              @endif
+            </p>
+
+            <p class="text-xs text-gray-500 mt-1">{{ notification.createdAt.fromNow() }}</p>
+          </div>
+        </li>
+      @endeach
+    </ul>
+  @endif
+
+</body>
+</html>
