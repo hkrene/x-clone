@@ -1,16 +1,3 @@
-// import type { HttpContext } from '@adonisjs/core/http'
-// import app from '@adonisjs/core/services/app'
-// import { cuid } from '@adonisjs/core/helpers'
-// import Tweet from '#models/tweet'
-// import mime from 'mime-types'
- 
-
-
-
-
-
-
-
 
 import type { HttpContext } from '@adonisjs/core/http'
 import app from '@adonisjs/core/services/app'
