@@ -30,15 +30,6 @@
 
   //   let mediaUrl: string | null = null
 
-  //   if (media) {
-  //     const fileName = `${cuid()}.${media.extname}`
-  //     await media.move(app.publicPath('uploads'), {
-  //       name: fileName,
-  //       overwrite: true,
-  //     })
-
-  //     mediaUrl = `/uploads/${fileName}`
-  //   }
 
 
 
