@@ -16,13 +16,6 @@
 //     return view.render('home', { tweets })
 //   }
 
-  /**
-   * Store a new tweet with optional media (image/video)
-   */
-  // public async store({ request, auth, response }: HttpContext) {
-  //   const tweetText = request.input('tweet')
-  //   const user = auth.user!
-
 
 
 
