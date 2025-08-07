@@ -8,13 +8,7 @@
 
 // export default class TweetsController {
 //   
-//   public async index({ view }: HttpContext) {
-//     const tweets = await Tweet.query()
-//       .preload('author')
-//       .orderBy('createdAt', 'desc')
 
-//     return view.render('home', { tweets })
-//   }
 
 
 
