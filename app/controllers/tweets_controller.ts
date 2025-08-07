@@ -3,11 +3,7 @@
 // import { cuid } from '@adonisjs/core/helpers'
 // import Tweet from '#models/tweet'
 // import mime from 'mime-types'
-// // import path from 'node:path'
-// import { uploadToSupabase } from '#services/uploader'
-
-// export default class TweetsController {
-//   
+ 
 
 
 
