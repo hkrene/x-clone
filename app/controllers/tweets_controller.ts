@@ -66,21 +66,6 @@
 //       const contentType = mime.lookup(media.extname!) || 'application/octet-stream'
 //       const uploadPath = `tweets/${fileName}`
 
-//       await uploadToSupabase(tmpPath, uploadPath, contentType)
-//       mediaUrl = uploadPath
-//     } catch (error) {
-//       console.error('Failed to move/upload media:', error)
-//       return response.internalServerError('Media upload failed')
-//     }
-//   }
-
-//   await user.related('tweets').create({
-//     content: tweetText,
-//     mediaUrl,
-//   })
-
-//   return response.redirect('/home')
-// }
 
 
 import type { HttpContext } from '@adonisjs/core/http'
