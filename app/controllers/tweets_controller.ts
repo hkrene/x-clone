@@ -40,14 +40,6 @@
   //     mediaUrl = `/uploads/${fileName}`
   //   }
 
-  //   await user.related('tweets').create({
-  //     content: tweetText,
-  //     mediaUrl,
-  //   })
-
-  //   return response.redirect('/home')
-  // }
-
 
 
 
