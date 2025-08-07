@@ -58,13 +58,6 @@
 
 //   let mediaUrl: string | null = null
 
-//   if (media) {
-//     try {
-//       await media.move(app.tmpPath()) // Throws on failure
-//       const fileName = `${cuid()}.${media.extname}`
-//       const tmpPath = media.filePath! // Only available after move
-//       const contentType = mime.lookup(media.extname!) || 'application/octet-stream'
-//       const uploadPath = `tweets/${fileName}`
 
 
 
